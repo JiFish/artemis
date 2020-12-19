@@ -28,6 +28,7 @@ from artemis import tass
 _activation_time = time.time()
 
 debug = False
+fps_flag = False
 
 _CURSOR = ord("_")
 _SPACE = ord(" ")
@@ -277,8 +278,9 @@ def tick():
     global ins_cnt, ticktime
     ins_cnt = 0
 
-    print ("{} fps".format(1/max(0.00000000001,time.time()-ticktime)))
-    ticktime = time.time()
+    if fps_flag:
+        print ("{} fps".format(1/max(0.00000000001,time.time()-ticktime)))
+        ticktime = time.time()
 
     clock.tick(30)
 
