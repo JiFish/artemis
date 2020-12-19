@@ -58,8 +58,7 @@ def main():
 
         artemis.ui_print("\n")
 
-        #try:
-        if True:
+        try:
             tokenlist = lexer.tokenize(stmt)
 
             # Execute commands directly, otherwise
@@ -184,10 +183,10 @@ def main():
 
         # Trap all exceptions so that interpreter
         # keeps running
-        #except KeyError as e:
-        #    artemis.ui_print(str(e)[1:-1]+"\n")
-        #except Exception as e:
-        #    artemis.ui_print(str(e)+"\n")
+        except KeyError as e:
+            artemis.ui_print(str(e)[1:-1]+"\n")
+        except Exception as e:
+            artemis.ui_print(str(e)+"\n")
 
 
 
