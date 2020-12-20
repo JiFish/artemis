@@ -137,6 +137,7 @@ class BASICToken:
         LOADS           = 126 # LOADS command
         DUMPS           = 127 # DUMPS command
         HELP            = 128 # HELP command
+        PRINTW          = 129 # PRINTW command
 
 
         # Displayable names for each token category
@@ -165,7 +166,7 @@ class BASICToken:
         'EXPORT', 'FILEIN', 'FILEOUT', 'FILEREAD',
         'DSKLIST', 'DSKMOUNT', 'DSKFORMAT', 'DSKRM',
         'MUSICPLAY', 'MUSICSTOP', 'KEY', 'SYSTIME',
-        'LOADS', 'DUMPS', 'HELP']
+        'LOADS', 'DUMPS', 'HELP', 'PRINTW']
 
         smalltokens = {'=': ASSIGNOP, '(': LEFTPAREN, ')': RIGHTPAREN,
                        '+': PLUS, '-': MINUS, '*': TIMES, '/': DIVIDE,
@@ -212,7 +213,7 @@ class BASICToken:
                     'MUSICPLAY': MUSICPLAY, 'MUSICSTOP': MUSICSTOP,
                     'KEY': KEY, 'SYSTIME': SYSTIME,
                     'LOADS': LOADS, 'DUMPS': DUMPS,
-                    'HELP': HELP}
+                    'HELP': HELP, 'PRINTW': PRINTW}
 
         # Functions
         functions = {ABS, ATN, COS, EXP, INT, LOG, POW, RND, SIN, SQR, TAN,

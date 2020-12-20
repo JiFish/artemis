@@ -441,6 +441,7 @@ Hello world!
 * **BORDER** x - Set the screen's border color to *x*
 * **CURSOR** x, y - Move the cursor to position *x*, *y*
 * **INK** x, red, green, blue - Sets the color of palette entry *x*. *red*,*green* and *blue* can be from 0 to 4, giving a total of 125 possible colors.
+* **PRINTW** x$[, y...] - Works as **PRINT** above, but will attempt to word-wrap output. i.e. This command will try to prevent words from being split across lines.
 * **SYMBOL** x, y$ - Redefine the bitmap of the character with the code *x*. *y$* is a string that represents the new bitmap. Each character in the string represents one pixel starting at the top-left. Use a space for the background and any other character for the foreground. If *y$* is an empty string, the character will be reset to the default.
 * **SYMBOL** x, b1[, b2, b3, b4, b5, b6, b7, b8] - Alternate syntax for above, more like classic BASIC variants. Provide 1 - 8 integers from 0 - 255. Each integer's binary value defines one row of pixels, top to bottom. Missing rows are considered empty.
 

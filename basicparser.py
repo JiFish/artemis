@@ -163,6 +163,10 @@ class BASICParser:
             self.__printstmt()
             return None
 
+        elif self.__token.category == Token.PRINTW:
+            self.__printstmt(wrapped = True)
+            return None
+
         elif self.__token.category == Token.LET:
             self.__letstmt()
             return None
@@ -282,22 +286,24 @@ class BASICParser:
                 raise RuntimeError('Expecting program statement in line '
                                    + str(self.__line_number))
 
-    def __printstmt(self, linebreak = False):
+    def __printstmt(self, wrapped = False):
         """Parses a PRINT statement, causing
         the value that is on top of the
         operand stack to be printed on
         the screen.
 
         """
-        self.__advance()   # Advance past PRINT token
+        self.__advance()   # Advance past PRINT/PRINTW token
+
+        output = ""
+        linebreak = True
 
         # Check there are items to print
         if not self.__tokenindex >= len(self.__tokenlist):
             self.__logexpr()
 
-            artemis.ui_print(self.__operand_stack.pop())
+            output += str(self.__operand_stack.pop())
 
-            linebreak = True
             while self.__token.category == Token.COMMA:
                 self.__advance()
                 if self.__token.category == Token.COMMA:
@@ -305,10 +311,15 @@ class BASICParser:
                     break
                 else:
                     self.__logexpr()
-                    artemis.ui_print(self.__operand_stack.pop())
+                    output += str(self.__operand_stack.pop())
 
         # Final newline
-        if linebreak: artemis.ui_print("\n")
+        if linebreak: output += "\n"
+
+        if wrapped:
+            artemis.ui_print_wrapped(output)
+        else:
+            artemis.ui_print(output)
         artemis.draw()
         artemis.tick()
 

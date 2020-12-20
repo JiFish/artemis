@@ -22,6 +22,7 @@ import pygame
 import pygame.locals
 import time
 import json
+import textwrap
 from artemis import dos
 from artemis import tass
 
@@ -376,6 +377,27 @@ def ui_print(text, pos = -1):
     cursor_pos += textlen
     # Scroll screen
     scroll_screen()
+
+def ui_print_wrapped(text):
+    global cursor_pos
+    print(cursor_pos)
+    # We have to start at the beginning of the row
+    if (cursor_pos%_SCREEN_WIDTH) > 0:
+        cursor_pos += _SCREEN_WIDTH-(cursor_pos%_SCREEN_WIDTH)
+        cursor_pos = min(cursor_pos, _SCREEN_BUFFER_SIZE-_SCREEN_WIDTH)
+
+    pieces = []
+    output = ""
+    for p in text.splitlines():
+        pieces += textwrap.wrap(p, width=_SCREEN_WIDTH,
+                                replace_whitespace=False,
+                                drop_whitespace=False)
+
+    for p in pieces:
+        output += p.ljust(_SCREEN_WIDTH, " ")
+
+    ui_print(output)
+
 
 def ui_print_breaking_list(plist):
     line_row = 0
