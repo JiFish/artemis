@@ -32,8 +32,9 @@ import webbrowser
 
 dos = artemis.dos
 
-def main():
+_help_url = "https://github.com/JiFish/artemis#disk-system-and-commands"
 
+def main():
     artemis.set_color(6)
     artemis.set_caption("Artemis Fantasy Microcomputer")
     artemis.ui_print("Artemis Fantasy Microcomputer "+chr(176)+"2020\n\n")
@@ -172,7 +173,7 @@ def main():
                 # HELP!
                 elif tokenlist[0].category == Token.HELP:
                     # TODO: Send to docs page
-                    webbrowser.open('https://jifish.co.uk/')
+                    webbrowser.open(_help_url)
 
                 # Unrecognised input
                 else:
