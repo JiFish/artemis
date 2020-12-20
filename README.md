@@ -608,7 +608,7 @@ The logical operators **AND** and **OR** are also provided to allow you to join 
 *=* and *<>* can also be considered logical operators. However, unlike **AND** or **OR** they can't be used to join more than two expressions.
 
 | Inputs |       | *AND* | *OR*  | *=*   | *<>* / *!=* |
-|----------------|-------|-------|-------|-------------|
+|--------|-------|-------|-------|-------|-------------|
 | FALSE  | FALSE | FALSE | FALSE | TRUE  | FALSE       |
 | TRUE   | FALSE | FALSE | TRUE  | FALSE | TRUE        |
 | TRUE   | TRUE  | TRUE  | TRUE  | TRUE  | FALSE       |
@@ -821,13 +821,13 @@ A - 65
 Variables can be saved and retrieved from disk using a similar method to the **DATA** and **READ** commands.
 
 - **FILEOUT** fn$, mode, value[, value$]... - Write a file with a list of values
--- *fn$* is the file you wish to write. It will be automatically given the `.dfa` extension. Filenames are case insensitive and will always been written to the local filesystem UPPERCASE
--- *mode* is the file overwrite mode. *0* replaces an existing file, *1* appends to an existing file
--- A list of values you want to write to the file. These can be either numeric or string expressions.
+    - *fn$* is the file you wish to write. It will be automatically given the `.dfa` extension. Filenames are case insensitive and will always been written to the local filesystem UPPERCASE
+    - *mode* is the file overwrite mode. *0* replaces an existing file, *1* appends to an existing file
+    - A list of values you want to write to the file. These can be either numeric or string expressions.
 - **FILEIN** fn$[, start[, end]] - Retrieve a list of values from a file and store them
--- *fn$* is as above. Don't include the extension.
--- *start* the position of the first value to read. If omitted 0 is used.
--- *end* the position of the last value to read. If omitted, the rest of the file is read.
+    - *fn$* is as above. Don't include the extension.
+    - *start* the position of the first value to read. If omitted 0 is used.
+    - *end* the position of the last value to read. If omitted, the rest of the file is read.
 - **FILEREAD** variable[, variable$]... - Read variables retrieved by **FILEIN**. This command works exactly the same way as the **READ** command.
 
 ### Music
@@ -835,8 +835,8 @@ Variables can be saved and retrieved from disk using a similar method to the **D
 Commands are provided to play very basic music.
 
 - **MUSICPLAY** note$[, mode] - Play some music
--- *note$* a string representing the music to play. This is a subset of MML format and is described below.
--- *mode* the play mode. *0*: Music will play in the background. *1*: Execution will halt until music playback is complete. *2*: As 0, but the music loops until **MUSICSTOP** is called.
+    - *note$* a string representing the music to play. This is a subset of MML format and is described below.
+    - *mode* the play mode. *0*: Music will play in the background. *1*: Execution will halt until music playback is complete. *2*: As 0, but the music loops until **MUSICSTOP** is called.
 - **MUSICSTOP** - Stop any currently playing music.
 
 #### MML format
