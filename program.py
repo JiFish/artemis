@@ -159,7 +159,6 @@ class Program:
             # Run through the program until the
             # has line number has been reached
             while True:
-                if artemis.ui_is_breaking(): raise KeyboardInterrupt()
                 artemis.ins_tick()
                 flowsignal = self.__execute(self.get_next_line_number())
 

@@ -395,15 +395,6 @@ def ui_print_breaking_list(plist):
             line_row = lines_in_row
         ui_print(line+"\n")
 
-def ui_is_breaking():
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            return True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
-                return True
-    return False
-
 def ui_input(prompt = "", max_len = 0):
     global screen, cursor_pos, foreground_col, background_col
     ui_print(prompt + chr(_CURSOR))
