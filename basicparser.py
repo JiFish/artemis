@@ -836,16 +836,10 @@ class BASICParser:
         self.__expr()
         ypos = self.__operand_stack.pop()
 
-        if not isinstance(xpos, int):
-            raise ValueError('X position provided to CURSOR not a number in line '+ str(self.__line_number))
-        if not isinstance(ypos, int):
-            raise ValueError('Y position provided to CURSOR not a number in line '+ str(self.__line_number))
-        if xpos < 0 or xpos >= artemis._SCREEN_WIDTH:
-            raise ValueError('X position provided to CURSOR out of range in line '+ str(self.__line_number))
-        if ypos < 0 or ypos >= artemis._SCREEN_HEIGHT:
-            raise ValueError('Y position provided to CURSOR out of range in line '+ str(self.__line_number))
-
-        artemis.set_cursor(xpos, ypos)
+        try:
+            artemis.set_cursor(xpos, ypos)
+        except ValueError as e:
+            raise ValueError(str(e) + ' in line '+ str(self.__line_number))
 
 
     def __pokesstmt(self):
