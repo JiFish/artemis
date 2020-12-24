@@ -12,32 +12,26 @@ import pickle
 import zlib
 from shutil import copy
 
-_home = os.path.expanduser('~/Documents/artemis')
+__HOME = os.path.expanduser('~/Documents/artemis')
 #_disc_capacity = 360 * 1024
-_max_name_size = 32
-_default_disk = "HOME"
-_current_disk = _default_disk
-_examples_path = os.path.dirname(os.path.realpath(__file__))+'/../../examples'
-
-# Update examples disk
-if not os.path.exists(_home+"/EXAMPLES"):
-    os.makedirs(_home+"/EXAMPLES")
-for entry in os.scandir(_examples_path):
-    copy(_examples_path+"/"+entry.name, _home+"/EXAMPLES")
+__MAX_NAME_SIZE = 32
+__DEFAULT_DISK = "HOME"
+__CURRENT_DISK = __DEFAULT_DISK
+__EXAMPLES_PATH = 'examples/'
 
 def change_disk(diskname):
-    global _current_disk
-    _current_disk = clean_filename(diskname)
-    if not os.path.exists(_home+"/"+_current_disk):
-        os.makedirs(_home+"/"+_current_disk)
-    os.chdir(_home+"/"+_current_disk)
+    global __CURRENT_DISK
+    __CURRENT_DISK = clean_filename(diskname)
+    if not os.path.exists(__HOME+"/"+__CURRENT_DISK):
+        os.makedirs(__HOME+"/"+__CURRENT_DISK)
+    os.chdir(__HOME+"/"+__CURRENT_DISK)
 
 def get_valid_files():
     files = []
     for entry in os.scandir('.'):
         if not entry.is_file(): continue
         fn, ext = os.path.splitext(entry.name)
-        if len(fn) > _max_name_size: continue
+        if len(fn) > __MAX_NAME_SIZE: continue
         if not fn.isalnum(): continue
 
         # If we get this far, we recongise the file
@@ -52,7 +46,7 @@ def format_disk():
 
 def list_disk():
     filelist = []
-    filelist.append('Listing contents of "'+_current_disk+'".')
+    filelist.append('Listing contents of "'+__CURRENT_DISK+'".')
     filelist.append('')
     tsize = 0
     fcount = 0
@@ -71,10 +65,10 @@ def list_all_disks():
     filelist.append('Listing diskettes.')
     filelist.append('')
     fcount = 0
-    for entry in os.scandir(_home):
+    for entry in os.scandir(__HOME):
         if not entry.is_dir(): continue
         fn = entry.name
-        if len(fn) > _max_name_size: continue
+        if len(fn) > __MAX_NAME_SIZE: continue
         if not fn.isalnum(): continue
 
         # If we get this far, we recongise the disk
@@ -134,7 +128,7 @@ def test_filename(filename):
         raise OSError("Invalid filename")
 
 def clean_filename(filename):
-    if not filename.isalnum() or len(filename) > _max_name_size:
+    if not filename.isalnum() or len(filename) > __MAX_NAME_SIZE:
         raise OSError("Invalid filename")
     return filename.upper()
 
@@ -150,4 +144,12 @@ def append_data_file(data, filename, ext = "dfa"):
         data = read_data_file(filename, ext) + data
     write_data_file(data, filename, ext)
 
-change_disk(_current_disk)
+# Update examples disk
+if not os.path.exists(__HOME+"/EXAMPLES"):
+    os.makedirs(__HOME+"/EXAMPLES")
+if os.path.exists(__EXAMPLES_PATH):
+    for entry in os.scandir(__EXAMPLES_PATH):
+        copy(__EXAMPLES_PATH+"/"+entry.name, __HOME+"/EXAMPLES")
+
+# Switch to, and create, HOME disk
+change_disk(__CURRENT_DISK)
