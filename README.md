@@ -8,12 +8,14 @@ TODO
 
 ### Why Artemis?
 
-Artemis is supposed to be a challenging fantasy computer to develop for. Can you create a game with the following limitations?
+Artemis is supposed to be a challenging fantasy computer. Can you create a fun game with the following limitations?
 
 - Using a fairly limited and slow BASIC language. (Though improvements to the language are incoming...)
 - With no graphical commands at all, only text
 - 125 possible colors and 255 redefinable character glyphs
 - 7 text modes to choose from, each a different compromise between number of characters and colors on the screen
+
+As mentioned above JiBASIC is slow. This isn't a bug, it's a feature - or to be more accurate not a priority. Artemis is explicitly not designed to be friendly to developing real-time action games.
 
 ### Inspirations
 
@@ -35,7 +37,7 @@ Artemis is also powered by pygame2 (https://www.pygame.org/news) and midiutil (h
 
 ### To start...
 
-Run `interpreter.exe` under Windows.
+Run `artemis.exe` under Windows.
 
 Other platforms will require you to install Python 3, then use pip to install the required libraries:
 ```
@@ -138,7 +140,7 @@ Program terminated
 
 ## Disk system and commands
 
-Aretmis uses a virtual disk system. By default, the disk HOME is loaded. Files will be saved and loaded from the currently selected disk.
+Artemis uses a virtual disk system. By default, the disk HOME is loaded. Files will be saved and loaded from the currently selected disk.
 
 The disks contents are stored in the user's documents directory in a folder called `artemis`. There is one directory per disk.
 
@@ -441,9 +443,9 @@ Hello world!
 * **BORDER** x - Set the screen's border color to *x*
 * **CURSOR** x, y - Move the cursor to position *x*, *y*
 * **INK** x, red, green, blue - Sets the color of palette entry *x*. *red*,*green* and *blue* can be from 0 to 4, giving a total of 125 possible colors.
-* **PRINTW** x$[, y...] - Works as **PRINT** above, but will attempt to word-wrap output. i.e. This command will try to prevent words from being split across lines.
+* **PRINTW** t$, x1, y1, x2, y2[, wrap] - Print text *t$* to a virtual "Window" on-screen. The window's top-left position is defined by *x1* and *y1*, and it's bottom-right by *x2* and *y2*. If *wrap* is non-zero, *t$* will be wrapped cleanly - avoiding line-breaks in the middle of words. (This is the default behaviour.) If *t$* is too long, it will be cropped, if it is too short it will be padded with spaces.
 * **SYMBOL** x, y$ - Redefine the bitmap of the character with the code *x*. *y$* is a string that represents the new bitmap. Each character in the string represents one pixel starting at the top-left. Use a space for the background and any other character for the foreground. If *y$* is an empty string, the character will be reset to the default.
-* **SYMBOL** x, b1[, b2, b3, b4, b5, b6, b7, b8] - Alternate syntax for above, more like classic BASIC variants. Provide 1 - 8 integers from 0 - 255. Each integer's binary value defines one row of pixels, top to bottom. Missing rows are considered empty.
+* **SYMBOL** x, b1[, b2] ... [, b8] - Alternate syntax for above, more like classic BASIC variants. Provide 1 - 8 integers from 0 - 255. Each integer's binary value defines one row of pixels, top to bottom. Missing rows are considered empty.
 
 Tip: if you change the symbol for character 239, you will also change Artemis' icon.
 
@@ -468,9 +470,10 @@ Number | Characters | Colors | Pixel shape | Notes
 
 * **PEEKS**(x, mode) - Inspect screen cell in position *x*. Where *0* is the top-left of the screen. Return value depends on *mode*. *0*: The code of the character. *1*: The foreground color. *2*: The background color.
 * **POKES** x, mode, val - Change the values of screen cell. *x* and *mode* use the same values as **PEEK**, above. *val* is the value that will be set. Note that any changes made won't be visible until the screen is next drawn.
-* **REFRESH** - Force the screen to re-draw.
 * **DUMPS** x$ - Dump the screen to a file with name *x$*. Do not provide an extension, `.sda` will be added automatically.
 * **LOADS** x$ - Load screen data from a file with name *x$*. `.sda` will be added automatically. Like **POKES** the change won't be visible until the screen is next drawn.
+* **REFRESH** - Force the screen to draw.
+* **REFRESH WAIT** - Prevent the screen from drawing until the next **REFRESH** or user input command.
 
 Tip: A tool is provided to convert playscii (http://vectorpoem.com/playscii/) `.psci` files to `.sda` files, along with files to allow the tool to use the Artemis character set and palette. See tools/playscii
 
@@ -708,7 +711,7 @@ within an **INPUT** statement, only simple variables.
 #### Other User Input functions
 
 - **WAITKEY** [x] - Pauses execution until the user presses a key. If variable *x* is provided, it will be set to the key-code of the pressed key.
-- **KEY** x - As **WAITKEY**, but only waits one tick (see timing below). If no key is pressed, returns -1
+- **KEY** x - As **WAITKEY**, but only waits one tick (see timing below). If no key is pressed, gives -1
 
 ### Numeric functions
 
@@ -819,7 +822,9 @@ A - 65
 
 ### Saving and Loading from disk
 
-Variables can be saved and retrieved from disk using a similar method to the **DATA** and **READ** commands.
+Variables can be saved and retrieved from disk using a similar method to the **DATA** and **READ** commands. This can be used for example for savegames, or referencing pre-created data you don't wish to define in code.
+
+Datafiles are simply json text files, allowing easy creation outside of artemis.
 
 - **FILEOUT** fn$, mode, value[, value$]... - Write a file with a list of values
     - *fn$* is the file you wish to write. It will be automatically given the `.dfa` extension. Filenames are case insensitive and will always been written to the local filesystem UPPERCASE
@@ -839,6 +844,8 @@ Commands are provided to play very basic music.
     - *note$* a string representing the music to play. This is a subset of MML format and is described below.
     - *mode* the play mode. *0*: Music will play in the background. *1*: Execution will halt until music playback is complete. *2*: As 0, but the music loops until **MUSICSTOP** is called.
 - **MUSICSTOP** - Stop any currently playing music.
+
+Music is actually played via pygame which uses your system's midi. It may sound different depending on platform.
 
 #### MML format
 - `cdefgab` - Play the given note. Appending `+` or `#` makes the note sharp, `-` is makes it flat. The length of the note can be altered by appending a number. The number will be the fraction of the whole note. Finally a `.` can be appended to make a dotted note. e.g. `c#2` plays a c sharp for 1/2 note.

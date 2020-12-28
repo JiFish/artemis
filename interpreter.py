@@ -34,13 +34,22 @@ dos = artemis.dos
 
 _help_url = "https://github.com/JiFish/artemis#disk-system-and-commands"
 
+# Discord Presence. Fails gracefully if module does not exist
+try:
+    from pypresence import Presence
+    RPC = Presence('792576960923828255')
+    RPC.connect()
+    RPC.update(state="On the CLI", large_image="artemis_icon")
+except ImportError:
+    RPC = None
+
 def main():
-    artemis.set_color(6)
     artemis.set_caption("Artemis Fantasy Microcomputer")
-    artemis.ui_print("Artemis Fantasy Microcomputer "+chr(176)+"2020\n\n")
-    artemis.ui_print(" JiBASIC 0.5\n\n")
+    artemis.set_color(6)
+    artemis.ui_print("Artemis Fantasy Microcomputer "+chr(176)+"2020\n\n", do_draw=False)
+    artemis.ui_print(" JiBASIC 0.5\n\n", do_draw=False)
     artemis.set_color(1)
-    artemis.ui_print("READY\n")
+    artemis.ui_print("READY\n", do_draw=False)
     for i in range(0,8):
         artemis.screen[111+i] = [214,(i+1)%8,i]
 
@@ -85,11 +94,15 @@ def main():
 
                 # Execute the program
                 elif tokenlist[0].category == Token.RUN:
+                    if RPC: RPC.update(state="Running a program", large_image="artemis_icon")
                     try:
                         program.execute()
 
                     except KeyboardInterrupt:
                         artemis.ui_print("\nProgram terminated\n")
+
+                    finally:
+                        if RPC: RPC.update(state="On the CLI", large_image="artemis_icon")
 
                 # List the program
                 elif tokenlist[0].category == Token.LIST:
@@ -124,8 +137,8 @@ def main():
                             infile.close()
                         program.delete()
                         for line in lines:
+                            if line == "\n": continue
                             artemis.ui_print(line)
-                            artemis.draw()
                             program.add_stmt(lexer.tokenize(line.strip()))
                         artemis.ui_print("\nProgram imported from file\n")
 
@@ -155,6 +168,17 @@ def main():
                     diskname = tokenlist[1].lexeme
                     dos.change_disk(diskname)
                     artemis.ui_print('DISKETTE "'+diskname+'" mounted.\n')
+                    if dos.disk_has_autorun():
+                        program.load("AUTORUN")
+                        if RPC: RPC.update(state="Running disk "+diskname, large_image="artemis_icon")
+                        try:
+                            program.execute()
+
+                        except KeyboardInterrupt:
+                            artemis.ui_print("\nProgram terminated\n")
+
+                        finally:
+                            if RPC: RPC.update(state="On the CLI", large_image="artemis_icon")
 
                 # Format current disk
                 elif tokenlist[0].category == Token.DSKFORMAT:
@@ -177,9 +201,9 @@ def main():
 
                 # Unrecognised input
                 else:
-                    artemis.ui_print("Unrecognised input\n")
+                    artemis.ui_print("Unrecognised input: ")
                     for token in tokenlist:
-                        token.print_lexeme()
+                        artemis.ui_print(token.lexeme+" ")
                     artemis.ui_print("\n")
 
         # Trap all exceptions so that interpreter

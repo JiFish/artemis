@@ -144,6 +144,9 @@ def append_data_file(data, filename, ext = "dfa"):
         data = read_data_file(filename, ext) + data
     write_data_file(data, filename, ext)
 
+def disk_has_autorun():
+    return os.path.isfile("AUTORUN.pfa")
+
 # Update examples disk
 if not os.path.exists(__HOME+"/EXAMPLES"):
     os.makedirs(__HOME+"/EXAMPLES")

@@ -164,7 +164,7 @@ class BASICParser:
             return None
 
         elif self.__token.category == Token.PRINTW:
-            self.__printstmt(wrapped = True)
+            self.__printwstmt()
             return None
 
         elif self.__token.category == Token.LET:
@@ -286,14 +286,14 @@ class BASICParser:
                 raise RuntimeError('Expecting program statement in line '
                                    + str(self.__line_number))
 
-    def __printstmt(self, wrapped = False):
+    def __printstmt(self):
         """Parses a PRINT statement, causing
         the value that is on top of the
         operand stack to be printed on
         the screen.
 
         """
-        self.__advance()   # Advance past PRINT/PRINTW token
+        self.__advance()   # Advance past PRINT token
 
         output = ""
         linebreak = True
@@ -316,12 +316,32 @@ class BASICParser:
         # Final newline
         if linebreak: output += "\n"
 
-        if wrapped:
-            artemis.ui_print_wrapped(output)
-        else:
-            artemis.ui_print(output)
-        artemis.draw()
-        artemis.tick()
+        artemis.ui_print(output)
+
+    def __printwstmt(self, wrapped = False):
+        """Parses a PRINTW statement"""
+        self.__advance()   # Advance past PRINTW token
+
+        # Get the string to print
+        self.__logexpr()
+        printw_args = [str(self.__operand_stack.pop())]
+
+        # Get the four position args
+        for _ in range(4):
+            self.__consume(Token.COMMA)
+            self.__expr()
+            printw_args.append(self.__operand_stack.pop())
+
+        # Optional wrap flag
+        if self.__token.category == Token.COMMA:
+            self.__advance()
+            self.__logexpr()
+            printw_args.append(self.__operand_stack.pop())
+
+        try:
+            artemis.ui_print_window(*printw_args)
+        except ValueError as e:
+            raise Exception(str(e) + ' in line '+ str(self.__line_number))
 
     def __letstmt(self):
         """Parses a LET statement,
@@ -799,8 +819,6 @@ class BASICParser:
         self.__advance()  # Advance past CLS token
 
         artemis.cls()
-        artemis.draw()
-        artemis.tick()
 
     def __colstmt(self):
         """Parses a COL statement"""
@@ -968,8 +986,12 @@ class BASICParser:
 
             self.__advance()  # Advance past REFRESH token
 
-            artemis.draw()
-            artemis.tick()
+            if self.__token.category == Token.WAIT:
+                self.__advance()  # Advance past WAIT token
+                artemis.disable_auto_draw()
+            else:
+                artemis.draw()
+                artemis.tick()
 
 
     def __modestmt(self):
@@ -1090,7 +1112,7 @@ class BASICParser:
                 BASICarray = self.__symbol_table[arrayname]
                 arrayval = self.__get_array_val(BASICarray, indexvars)
 
-                if arrayval:
+                if arrayval != None:
                     self.__operand_stack.append(self.__sign*arrayval)
 
                 else:

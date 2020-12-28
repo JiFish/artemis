@@ -31,6 +31,9 @@ __activation_time = time.time()
 debug = False
 fps_flag = False
 
+# automatically draw after some commands
+__AUTO_DRAW = True
+
 __CURSOR = ord("_")
 __SPACE = ord(" ")
 
@@ -84,7 +87,6 @@ __CURSOR_POS = 0
 
 __FULLSCREEN = False
 
-
 def __load_tile_table(filename, width, height):
     image = pygame.image.load(filename)#.convert()
     image_width, image_height = image.get_size()
@@ -137,6 +139,10 @@ def cls():
     global screen, __FOREGROUND_COL, __BACKGROUND_COL, __CURSOR_POS
     screen = [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_BUFFER_SIZE)]
     __CURSOR_POS = 0
+
+    if __AUTO_DRAW:
+        draw()
+        tick()
 
 def set_mode(mode):
     global __SCREEN_WIDTH, __SCREEN_HEIGHT, __SCREEN_COLS, __SCREEN_BUFFER_SIZE
@@ -241,8 +247,9 @@ def manipulate_cell(pos, key, val):
 def set_border(col):
     global __BORDER_COL
     __BORDER_COL = col;
-    draw()
-    tick()
+    if __AUTO_DRAW:
+        draw()
+        tick()
 
 __ticktime = __activation_time
 def tick():
@@ -269,6 +276,8 @@ def tick():
     return events
 
 def wait(secs = 1):
+    if __AUTO_DRAW:
+        draw()
     loops = round(secs*30)
     for _ in range(loops):
         tick()
@@ -276,15 +285,16 @@ def wait(secs = 1):
 def scroll_screen():
     global screen, __CURSOR_POS
 
-    if (len(screen) <= __SCREEN_BUFFER_SIZE): return
+    if __CURSOR_POS < __SCREEN_BUFFER_SIZE: return
 
-    while (len(screen) > __SCREEN_BUFFER_SIZE):
-        screen = screen[__SCREEN_WIDTH:]
-        __CURSOR_POS = __CURSOR_POS - __SCREEN_WIDTH
-    screen = screen + [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_BUFFER_SIZE-len(screen))]
-
+    screen = screen[__SCREEN_WIDTH:]
+    screen += [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_WIDTH)]
+    __CURSOR_POS -= __SCREEN_WIDTH
 
 def draw():
+    global __AUTO_DRAW
+    # Switch auto_draw back on if it has been disabled
+    if not __AUTO_DRAW: __AUTO_DRAW = True
     xpos = 0
     ypos = 0
     for x in screen:
@@ -306,7 +316,7 @@ def draw():
     __SCREEN_SURFACE.blit(__TEXT_SCALED_SURFACE, [16,16])
     pygame.display.flip()
 
-def set_cusor(x, y):
+def set_cursor(x, y):
     global __CURSOR_POS
 
     if not isinstance(x, int) or not isinstance(y, int):
@@ -325,56 +335,54 @@ def set_color(f, b = -1):
     __FOREGROUND_COL = f
     if (b != -1): __BACKGROUND_COL = b
 
-def ui_print(text, pos = -1):
-    global screen, __CURSOR_POS, __FOREGROUND_COL, __BACKGROUND_COL
+def ui_print(text, do_draw = None, pos = None):
+    global screen, __CURSOR_POS
+
+    if do_draw == None: do_draw = __AUTO_DRAW
     text = str(text)
-    if pos >= 0:
-        __CURSOR_POS = pos
 
-    # Deal with newlines
-    if "\n" in text:
-        p = __CURSOR_POS % __SCREEN_WIDTH
-        st = list(text)
-        for i in range(len(st)):
-            if st[i] == "\n":
-                st[i] = " "*(__SCREEN_WIDTH-p)
-                p = -1
-            p = (p + 1) % __SCREEN_WIDTH
-        text = "".join(st)
-
-    # Build subbuffer
-    newbuff = []
     for i in list(text):
-        newbuff.append([ord(i), __FOREGROUND_COL, __BACKGROUND_COL])
-    # Update Screen Buffer
-    textlen = len(text)
-    screen = screen[:__CURSOR_POS]+newbuff+screen[(__CURSOR_POS+textlen):]
-    # Move cursor
-    __CURSOR_POS += textlen
-    # Scroll screen
-    scroll_screen()
+        # Deal with newlines
+        if i == "\n":
+            __CURSOR_POS +=  __SCREEN_WIDTH - (__CURSOR_POS % __SCREEN_WIDTH)
+        else:
+            screen[__CURSOR_POS] = [ord(i), __FOREGROUND_COL, __BACKGROUND_COL]
+            __CURSOR_POS += 1
+        scroll_screen()
 
-def ui_print_wrapped(text):
-    global __CURSOR_POS
-    # We have to start at the beginning of the row
-    if (__CURSOR_POS%__SCREEN_WIDTH) > 0:
-        __CURSOR_POS += __SCREEN_WIDTH-(__CURSOR_POS%__SCREEN_WIDTH)
-        __CURSOR_POS = min(__CURSOR_POS, __SCREEN_BUFFER_SIZE-__SCREEN_WIDTH)
+    if do_draw:
+        draw()
+        tick()
+
+def ui_print_window(text, x1, y1, x2, y2, wrap = True):
+    if y2 < y1 or x2 < y1 or x1 < 0 or x2 >= __SCREEN_WIDTH or y1 < 0 or y2 >= __SCREEN_HEIGHT:
+        raise ValueError("Invalid window position")
+
+    max_width = x2 - x1 + 1
+    max_height = y2 - y1 + 1
+    text = text.splitlines()
 
     pieces = []
-    output = ""
-    for p in text.splitlines():
-        pieces += textwrap.wrap(p, width=__SCREEN_WIDTH,
-                                replace_whitespace=False,
-                                drop_whitespace=False)
+    if wrap:
+        for p in text:
+            pieces += textwrap.wrap(p, width=max_width,
+                                    replace_whitespace=False,
+                                    drop_whitespace=False)
+    else:
+        for p in text:
+            pieces += [p[i:i+max_width] for i in range(0, len(p), max_width)]
+    # Pad the pieces to fill the window
+    pieces += [' '*max_width] * (max_height - len(pieces))
+    for i in range(y1,y2+1):
+        set_cursor(x1,i)
+        ui_print(pieces.pop(0).ljust(max_width," "), do_draw=False)
 
-    for p in pieces:
-        output += p.ljust(__SCREEN_WIDTH, " ")
-
-    ui_print(output)
-
+    if __AUTO_DRAW:
+        draw()
+        tick()
 
 def ui_print_breaking_list(plist):
+    global __AUTO_DRAW
     line_row = 0
     # Blank link at end
     plist.append("")
@@ -386,40 +394,44 @@ def ui_print_breaking_list(plist):
         lines_in_row = max(1,-(-len(line)//__SCREEN_WIDTH))
         line_row += lines_in_row
         if line_row >= __SCREEN_HEIGHT:
-            ui_print(pak_str)
+            ui_print(pak_str, do_draw=False)
             ui_input_key()
-            set__CURSOR(0,__SCREEN_HEIGHT-1)
+            set_cursor(0,__SCREEN_HEIGHT-1)
             line_row = lines_in_row
-        ui_print(line+"\n")
+        ui_print(line+"\n", do_draw=False)
+    draw()
+    tick()
 
 def ui_input(prompt = "", max_len = 0):
     global screen, __CURSOR_POS, __FOREGROUND_COL, __BACKGROUND_COL
-    ui_print(prompt + chr(__CURSOR))
+    ui_print(prompt + chr(__CURSOR), do_draw=False)
     __CURSOR_POS -= 1
     if max_len == 0:
-        max_len = 1024
+        max_len = __SCREEN_BUFFER_SIZE - __SCREEN_WIDTH
     input = ''
     draw()
-    cursorbuff = [[__CURSOR, __FOREGROUND_COL, __BACKGROUND_COL]]
     pygame.key.set_repeat(500,33)
     while True:
         events = tick()
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                    screen[__CURSOR_POS] = [__SPACE,  __FOREGROUND_COL, __BACKGROUND_COL]
                     pygame.key.set_repeat(0)
                     return input
                 elif event.key == pygame.K_BACKSPACE or event.key == pygame.K_DELETE:
                     if (input != ''):
+                        screen[__CURSOR_POS] = [__SPACE,  __FOREGROUND_COL, __BACKGROUND_COL]
                         __CURSOR_POS -= 1
-                        screen = screen[:__CURSOR_POS] + cursorbuff + [[__SPACE, __FOREGROUND_COL, __BACKGROUND_COL]] + screen[__CURSOR_POS+2:]
+                        screen[__CURSOR_POS] = [__CURSOR, __FOREGROUND_COL, __BACKGROUND_COL]
                         input = input[:-1]
                         draw()
                 elif event.unicode != '' and ord(event.unicode) < 255 and event.unicode != "\n" and len(input) < max_len:
-                    screen = screen[:__CURSOR_POS] + [[ord(event.unicode), __FOREGROUND_COL, __BACKGROUND_COL]] + cursorbuff + screen[__CURSOR_POS+2:]
+                    screen[__CURSOR_POS] = [ord(event.unicode), __FOREGROUND_COL, __BACKGROUND_COL]
                     __CURSOR_POS += 1
-                    input = input + event.unicode
                     scroll_screen()
+                    screen[__CURSOR_POS] = [__CURSOR, __FOREGROUND_COL, __BACKGROUND_COL]
+                    input = input + event.unicode
                     draw()
 
 def ui_input_key(impatient = False):
@@ -433,10 +445,10 @@ def ui_input_key(impatient = False):
                 if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
                     raise KeyboardInterrupt()
                 return event.key
-    if impatient: return -1
+        if impatient: return -1
 
 def ui_are_you_sure():
-    ui_print("Are you sure? (Y/N)")
+    ui_print("Are you sure? (Y/N)", do_draw=False)
     result = (ui_input_key() == pygame.K_y)
     ui_print("\n")
     return result
@@ -493,3 +505,7 @@ def flip_fullscreen():
     else:
         __SCREEN_SURFACE = pygame.display.set_mode((672, 432), flags=0)
     draw()
+
+def disable_auto_draw():
+    global __AUTO_DRAW
+    __AUTO_DRAW = False
