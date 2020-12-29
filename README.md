@@ -858,14 +858,14 @@ Music is actually played via pygame which uses your system's midi. It may sound 
 
 ### Timing
 
-* **WAIT** x - Pauses execution for *x* seconds. *x* can be float to allow sub-second waiting. Note: this command is not particularly accurate and you should expect the actual wait time to be +/-0.04 seconds at the least.
-* **SYSTIME** - Return the time the system has been active in seconds. This value is a float to allow sub-second timing.
+* **WAIT** x - Pauses execution for *x* seconds. *x* can include a decimal point to allow sub-second waiting. Note: this command is not particularly accurate and you should expect the actual wait time to be +/-0.04 seconds at the least.
+* **SYSTIME** - Return the time the system has been active in seconds. This value includes fractions of a second.
 
 ### A note about system timing
 
-The screen can be drawn at most 30 times a second. This is a 'tick'. The **PRINT**, **REFRESH**, **BORDER**, **KEY** and **CLS** commands cause a tick. Executing 10,000 lines of code are the last tick will also cause a tick.
+The screen can be drawn at most 30 times a second. This is a 'tick'. The **PRINT**, **BORDER**, **KEY** and **CLS** commands cause a tick, unless **REFRESH WAIT** is called first. Executing 10,000 lines of code since the last tick will also cause a tick.
 
-JiBASIC is not particularly optimised. Your program will probably get far less than 30 ticks/second. You should NOT assume you can draw the screen in a timely manner.
+JiBASIC is not particularly optimised. Your program may get far less than 30 ticks/second. You should NOT assume you can draw the screen in a timely manner.
 
 Commands that halt execution of the program such as **INPUT** and **WAIT** will cause many ticks before control is handed back to the program.
 

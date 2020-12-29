@@ -710,11 +710,17 @@ class BASICParser:
                 end = self.__operand_stack.pop()
 
         try:
-            data = dos.read_data_file(fn)
+            # Retrieve file data and slice
+            data = dos.read_data_file(fn)[start:end]
+            # Verify data before we store it
+            for i in data:
+                if type(i) not in [int, float, str]: raise TypeError()
             # overwrite existing values
-            self.__file_values = data[start:end]
+            self.__file_values = data
         except OSError as e:
             raise ValueError(str(e) + ' in line '+ str(self.__line_number))
+        except TypeError:
+            raise TypeError('Invalid data file in line '+ str(self.__line_number))
 
     def __fileoutstmt(self):
         """Parses a FILEOUT statement"""
@@ -783,32 +789,24 @@ class BASICParser:
         # Gather input from the DATA statement into the variables
         for variable in variables:
             left = variable
+            right = readlist.pop(0)
 
-            try:
-                right = readlist.pop(0)
+            if left.endswith('$'):
+                # Python inserts quotes around input data
+                if isinstance(right, int):
+                    raise ValueError('Non-string input provided to a string variable ' +
+                                     'in line ' + str(self.__line_number))
 
-                if left.endswith('$'):
-                    # Python inserts quotes around input data
-                    if isinstance(right, int):
-                        raise ValueError('Non-string input provided to a string variable ' +
-                                         'in line ' + str(self.__line_number))
+                else:
+                    self.__symbol_table[left] = right
 
-                    else:
-                        # Strip the quotes from the stored string
-                        stripped = right.strip()  # May be space before or after quotes
-                        self.__symbol_table[left] = stripped.replace('"', '')
+            elif not left.endswith('$'):
+                try:
+                    self.__symbol_table[left] = int(right)
 
-                elif not left.endswith('$'):
-                    try:
-                        self.__symbol_table[left] = int(right)
-
-                    except ValueError:
-                        raise ValueError('String input provided to a numeric variable ' +
-                                         'in line ' + str(self.__line_number))
-
-            except IndexError:
-                # No more input to process
-                pass
+                except ValueError:
+                    raise ValueError('String input provided to a numeric variable ' +
+                                     'in line ' + str(self.__line_number))
 
     def __filereadstmt(self):
         self.__readstmt(True)

@@ -27,8 +27,9 @@ from basictoken import BASICToken as Token
 from lexer import Lexer
 from program import Program
 from sys import stderr
-import os, io, artemis
-import webbrowser
+import artemis
+import os, io, webbrowser
+from datetime import date
 
 dos = artemis.dos
 
@@ -46,7 +47,7 @@ except ImportError:
 def main():
     artemis.set_caption("Artemis Fantasy Microcomputer")
     artemis.set_color(6)
-    artemis.ui_print("Artemis Fantasy Microcomputer "+chr(176)+"2020\n\n", do_draw=False)
+    artemis.ui_print("Artemis Fantasy Microcomputer {}{}\n\n".format(chr(176), date.today().year), do_draw=False)
     artemis.ui_print(" JiBASIC {}\n\n".format(artemis.version), do_draw=False)
     artemis.set_color(1)
     artemis.ui_print("READY\n", do_draw=False)
