@@ -393,10 +393,10 @@ def ui_print_breaking_list(plist):
     for line in plist:
         lines_in_row = max(1,-(-len(line)//__SCREEN_WIDTH))
         line_row += lines_in_row
-        if line_row >= __SCREEN_HEIGHT:
+        if line_row >= __SCREEN_HEIGHT-1:
             ui_print(pak_str, do_draw=False)
             ui_input_key()
-            set_cursor(0,__SCREEN_HEIGHT-1)
+            set_cursor(0,__SCREEN_HEIGHT-2)
             line_row = lines_in_row
         ui_print(line+"\n", do_draw=False)
     draw()
