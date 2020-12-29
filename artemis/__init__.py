@@ -397,6 +397,8 @@ def ui_print_breaking_list(plist):
             ui_print(pak_str, do_draw=False)
             ui_input_key()
             set_cursor(0,__SCREEN_HEIGHT-2)
+            ui_print(" "*__SCREEN_WIDTH, do_draw=False)
+            set_cursor(0,__SCREEN_HEIGHT-2)
             line_row = lines_in_row
         ui_print(line+"\n", do_draw=False)
     draw()
