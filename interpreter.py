@@ -47,7 +47,7 @@ def main():
     artemis.set_caption("Artemis Fantasy Microcomputer")
     artemis.set_color(6)
     artemis.ui_print("Artemis Fantasy Microcomputer "+chr(176)+"2020\n\n", do_draw=False)
-    artemis.ui_print(" JiBASIC 0.5\n\n", do_draw=False)
+    artemis.ui_print(" JiBASIC {}\n\n".format(artemis.version), do_draw=False)
     artemis.set_color(1)
     artemis.ui_print("READY\n", do_draw=False)
     for i in range(0,8):
