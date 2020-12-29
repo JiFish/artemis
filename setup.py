@@ -4,7 +4,7 @@ import sys
 # Dependencies are automatically detected, but it might need
 # fine tuning.
 buildOptions = dict(packages = [],
-                    excludes = ['email', 'html', 'http', 'logging', 'pydoc_data', 'unittest', 'urllib', 'xml'],
+                    excludes = ['email', 'html', 'http', 'logging', 'pydoc_data', 'unittest', 'urllib', 'xml', 'numpy'],
                     include_files = ['README.md', 'examples/', 'tools/'])
 
 bdist_msi_options = {
@@ -26,5 +26,5 @@ setup(name='Artemis',
       version = '0.5',
       description = '',
       options = {'bdist_msi': bdist_msi_options,
-                     'build_exe': buildOptions},
+                 'build_exe': buildOptions},
       executables = executables)
