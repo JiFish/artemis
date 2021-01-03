@@ -106,16 +106,37 @@ def main():
                     finally:
                         if RPC: RPC.update(state="On the CLI", large_image="artemis_icon")
 
-                # List the program
+                # List commands
                 elif tokenlist[0].category == Token.LIST:
-                    artemis.ui_print_breaking_list(program.list().splitlines())
+                    try:
+                        type = tokenlist[1].lexeme[0].upper()
+                        assert type in ['P','F','D']
+                    except:
+                        type = 'P'
+
+                    if type == 'F':     # List files on the disk
+                        list = dos.list_disk()
+                    elif type == 'D':   # List all disks
+                        list = dos.list_all_disks()
+                    else:               # List Program
+                        list = program.list().splitlines()
+
+                    artemis.ui_print_breaking_list(list)
 
                 # Export the program to disk
                 elif tokenlist[0].category == Token.EXPORT:
-                    if len(tokenlist) == 1: raise ValueError("EXPORT command missing input")
-                    with open(tokenlist[1].lexeme, 'w') as outfile:
-                        outfile.write(program.list())
-                    artemis.ui_print("Program exported to file\n")
+                    # Use home dir as default instead of current disk
+                    dos.chdir_home()
+                    try:
+                        if len(tokenlist) == 1: raise ValueError("EXPORT command missing input")
+                        fn = tokenlist[1].lexeme
+                        if '.' not in fn: fn += ".bas"
+                        fn = os.path.realpath(fn)
+                        with open(fn, 'w') as outfile:
+                            outfile.write(program.list())
+                        artemis.ui_print('Program exported to "{}"\n'.format(fn))
+                    finally:    # Make sure we set the default location back
+                        dos.chdir_disk()
 
                 # Load the program from disk
                 # Save the program to disk
@@ -133,19 +154,25 @@ def main():
                 # Load the program from disk
                 elif tokenlist[0].category == Token.IMPORT:
                     if len(tokenlist) == 1: raise ValueError("IMPORT command missing input")
+                    # Use home dir as default instead of current disk
+                    dos.chdir_home()
                     try:
                         with open(tokenlist[1].lexeme, 'r') as infile:
                             lines = infile.readlines()
                             infile.close()
                         program.delete()
                         for line in lines:
-                            if line == "\n": continue
-                            artemis.ui_print(line)
-                            program.add_stmt(lexer.tokenize(line.strip()))
+                            line = line.strip()
+                            if line == "": continue
+                            artemis.ui_print(line+"\n")
+                            program.add_stmt(lexer.tokenize(line))
                         artemis.ui_print("\nProgram imported from file\n")
 
                     except OSError:
-                        raise OSError("Could not read file")
+                        raise OSError("File not found")
+
+                    finally:    # Make sure we set the default location back
+                        dos.chdir_disk()
 
                 # Delete the program from memory
                 elif tokenlist[0].category == Token.NEW:
@@ -155,21 +182,17 @@ def main():
                 elif tokenlist[0].category == Token.CLS:
                     artemis.cls()
 
-                # List the disk
-                elif tokenlist[0].category == Token.DSKLIST:
-                    # List files on the disk
-                    if len(tokenlist) < 2:
-                        artemis.ui_print_breaking_list(dos.list_disk())
-                    # List all disks
-                    else:
-                        artemis.ui_print_breaking_list(dos.list_all_disks())
-
                 # Mount a new or existing disk
-                elif tokenlist[0].category == Token.DSKMOUNT:
-                    if len(tokenlist) == 1: raise ValueError("DSKMOUNT command missing input")
+                elif tokenlist[0].category == Token.MOUNT:
+                    if len(tokenlist) == 1: raise ValueError("MOUNT command missing input")
                     diskname = tokenlist[1].lexeme
+
+                    if not dos.disk_exists(diskname):
+                        if not artemis.ui_are_you_sure("That disk does not exist.\nCreate it? (Y/N)"):
+                            continue
+
                     dos.change_disk(diskname)
-                    artemis.ui_print('DISKETTE "'+diskname+'" mounted.\n')
+                    artemis.ui_print('Diskette "'+diskname+'" mounted.\n')
                     if dos.disk_has_autorun():
                         program.load("AUTORUN")
                         if RPC: RPC.update(state="Running disk "+diskname, large_image="artemis_icon")
@@ -183,15 +206,15 @@ def main():
                             if RPC: RPC.update(state="On the CLI", large_image="artemis_icon")
 
                 # Format current disk
-                elif tokenlist[0].category == Token.DSKFORMAT:
+                elif tokenlist[0].category == Token.FORMAT:
                     artemis.ui_print('Format "'+dos._current_disk+'" and destroy all contents? ')
                     if artemis.ui_are_you_sure():
                         dos.format_disk()
                         artemis.ui_print('Format complete!\n')
 
                 # Remove file from disk
-                elif tokenlist[0].category == Token.DSKRM:
-                    if len(tokenlist) == 1: raise ValueError("DSKRM command missing input")
+                elif tokenlist[0].category == Token.UNLINK:
+                    if len(tokenlist) == 1: raise ValueError("UNLINK command missing input")
                     fn = tokenlist[1].lexeme
                     dos.file_remove(fn)
                     artemis.ui_print('"'+fn+'" deleted.\n')

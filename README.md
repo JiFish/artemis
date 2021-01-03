@@ -140,33 +140,37 @@ Program terminated
 
 ## Disk system and commands
 
-Artemis uses a virtual disk system. By default, the disk HOME is loaded. Files will be saved and loaded from the currently selected disk.
+Artemis uses a virtual disk system. By default, the disk HOME is selected. Files will be saved and loaded from the currently selected disk.
 
 The disks contents are stored in the user's documents directory in a folder called `artemis`. There is one directory per disk.
 
 Disk names and file names are limited to 32-characters. There is no size or file limit on disks.
 
+Quotes around filenames are normally optional, unless a file extension is included.
+
 The following disk commands are available:
-- **DSKLIST** - Lists all the files on the current disk.
-- **DSKLIST 1** - Lists available disks.
-- **DSKMOUNT** x - Set the current disk to *x*. If it doesn't exist, create it.
-- **DSKRM** x - Delete the file called *x* on the current disk.
-- **DSKFORMAT** - Delete all files on the current disk.
+- **LIST F** - Lists all the files on the current disk.
+- **LIST D** - Lists available disks.
+- **MOUNT** x - Set the current disk to *x*. If it doesn't exist, create it.
+- **UNLINK** x - Delete the file called *x* on the current disk. The file extension must be included.
+- **FORMAT** - Delete all files on the current disk.
 
-## IMPORT and EXPORT
+## Importing and Exporting
 
-**IMPORT** allows you to load a text file of basic instructions as a program. Note that no interpretation is done as such. Instead this file in fed in line by line, aborting on an error.
+Unlike other commands, these allow you to specify a path anywhere on your computer and are not subject to the Disk system rules above. Paths must be in quotes. The default directory is `artemis` in your Documents directory.
 
-**EXPORT** allows you to export the current program's instructions to a text file. This is not a recommended way of saving a program.
+**IMPORT** x - Load *x*, a text file of basic instructions as a program. Note that no interpretation is done as such. Instead this file in fed in line by line, aborting on an error. The file extension must be included.
 
-Unlike other commands, **IMPORT** and **EXPORT** allow you to specify filenames anywhere on your computer and are not subject to the Disk system rules above.
+TIP: You can also drag and drop `.bas` files on to the Artemis window to import them.
+
+**EXPORT** x - Export the current program's instructions to text file *x*. This is not a recommended way of saving a program. Uses `.bas` if an extension is not provided.
 
 ```
 > 10 PRINT "HELLO WORLD"
-> EXPORT "../../myfile.bas"
-Program exported.
+> EXPORT "myfile.bas"
+Program exported to "c:\users\you\Documents\artemis\myfile.bas"
 ```
-This exports to the user's documents directory.
+
 
 # Programming language
 

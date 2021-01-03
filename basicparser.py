@@ -223,6 +223,10 @@ class BASICParser:
             self.__filereadstmt()
             return None
 
+        elif self.__token.category == Token.UNLINK:
+            self.__unlinkstmt()
+            return None
+
         elif self.__token.category == Token.COL:
             self.__colstmt()
             return None
@@ -757,6 +761,21 @@ class BASICParser:
         except OSError as e:
             raise ValueError(str(e) + ' in line '+ str(self.__line_number))
 
+    def __unlinkstmt(self):
+        """Parses a UNLINK statement"""
+
+        self.__advance()  # Advance past UNLINK token
+
+        self.__expr()
+        fn = self.__operand_stack.pop()
+
+        try:
+            dos.file_remove(fn)
+        except: pass    # Fail silently
+
+    def __filereadstmt(self):
+        self.__readstmt(True)
+
     def __readstmt(self, fromfile = False):
         """Parses a READ/FILEREAD statement."""
 
@@ -807,9 +826,6 @@ class BASICParser:
                 except ValueError:
                     raise ValueError('String input provided to a numeric variable ' +
                                      'in line ' + str(self.__line_number))
-
-    def __filereadstmt(self):
-        self.__readstmt(True)
 
     def __clsstmt(self):
         """Parses a CLS statement"""
