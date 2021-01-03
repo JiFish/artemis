@@ -139,6 +139,8 @@ class BASICToken:
         DUMPS           = 127 # DUMPS command
         HELP            = 128 # HELP command
         PRINTW          = 129 # PRINTW command
+        DSKEXPORT       = 130 # DSKEXPORT command
+        DSKIMPORT       = 131 # DSKIMPORT command
 
 
         # Displayable names for each token category
@@ -211,6 +213,7 @@ class BASICToken:
                     'EXPORT':EXPORT, 'FILEIN':FILEIN,
                     'FILEOUT': FILEOUT, 'FILEREAD': FILEREAD,
                     'MOUNT': MOUNT, 'FORMAT': FORMAT, 'UNLINK': UNLINK,
+                    'DSKIMPORT': DSKIMPORT, 'DSKEXPORT': DSKEXPORT,
                     'MUSICPLAY': MUSICPLAY, 'MUSICSTOP': MUSICSTOP,
                     'KEY': KEY, 'SYSTIME': SYSTIME,
                     'LOADS': LOADS, 'DUMPS': DUMPS,

@@ -10,6 +10,7 @@ import os
 import json
 import pickle
 import zlib
+import zipfile
 from shutil import copy
 
 __HOME = os.path.expanduser('~/Documents/artemis')
@@ -21,10 +22,17 @@ __EXAMPLES_PATH = 'examples/'
 
 def change_disk(diskname):
     global __CURRENT_DISK
-    __CURRENT_DISK = clean_filename(diskname)
-    if not os.path.exists(__HOME+"/"+__CURRENT_DISK):
-        os.makedirs(__HOME+"/"+__CURRENT_DISK)
-    os.chdir(__HOME+"/"+__CURRENT_DISK)
+    diskname = clean_filename(diskname)
+    path = __HOME+"/"+diskname
+    if os.path.isfile(path):
+        raise OSError("Given diskname is a file.")
+    if not os.path.exists(path):
+        os.makedirs(path)
+    os.chdir(path)
+    __CURRENT_DISK = diskname
+
+def disk_exists(diskname):
+    return os.path.isdir(__HOME+"/"+diskname)
 
 def get_valid_files():
     files = []
@@ -146,6 +154,34 @@ def append_data_file(data, filename, ext = "dfa"):
 
 def disk_has_autorun():
     return os.path.isfile("AUTORUN.pfa")
+
+def disk_export(fn = None):
+    if fn == None: fn = __HOME+'/'+__CURRENT_DISK+'.adi'
+    with zipfile.ZipFile(fn, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zipf:
+        chdir_disk() # Switch to the current disk
+        for f in get_valid_files():
+            zipf.write(f['name'])
+
+def disk_import(fn):
+    if not os.path.isfile(fn):
+        raise OSError("File not found")
+    diskname = os.path.basename(fn)
+    diskname = os.path.splitext(diskname)[0]
+    change_disk(diskname)
+    try:
+        with zipfile.ZipFile(fn, 'r') as zipf:
+            zipf.extractall()
+    except:
+        raise Exception("File is invalid.")
+
+def get_current_disk():
+    return __CURRENT_DISK
+
+def chdir_home():
+    os.chdir(__HOME)
+
+def chdir_disk():
+    os.chdir(__HOME+"/"+__CURRENT_DISK)
 
 # Update examples disk
 if not os.path.exists(__HOME+"/EXAMPLES"):

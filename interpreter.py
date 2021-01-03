@@ -219,6 +219,30 @@ def main():
                     dos.file_remove(fn)
                     artemis.ui_print('"'+fn+'" deleted.\n')
 
+                # Export current disk
+                elif tokenlist[0].category == Token.DSKEXPORT:
+                    # Use home dir as default instead of current disk
+                    dos.chdir_home()
+                    try:
+                        if len(tokenlist) == 1:
+                            fn = dos.get_current_disk()+".dia"
+                        else:
+                            fn = tokenlist[1].lexeme
+                            if '.' not in fn: fn += '.dia'
+                        fn = os.path.realpath(fn)
+                        artemis.ui_print('Exporting to "{}"... '.format(fn))
+                        dos.disk_export(fn)
+                        artemis.ui_print("Done!\n")
+                    finally:    # Make sure we set the default location back
+                        dos.chdir_disk()
+
+                # Import disk from file
+                elif tokenlist[0].category == Token.DSKIMPORT:
+                    if len(tokenlist) == 1: raise ValueError("DSKIMPORT command missing input")
+                    artemis.ui_print('Importing "{}"... '.format(tokenlist[1].lexeme))
+                    dos.disk_import(tokenlist[1].lexeme)
+                    artemis.ui_print("Done!\nDiskette {} mounted.\n".format(dos.get_current_disk()))
+
                 # HELP!
                 elif tokenlist[0].category == Token.HELP:
                     # TODO: Send to docs page
