@@ -1095,7 +1095,11 @@ class BASICParser:
                 # Capture the index variables
                 self.__advance()  # Advance past the array name
 
-                self.__consume(Token.LEFTPAREN)
+                try:
+                    self.__consume(Token.LEFTPAREN)
+                except RuntimeError:
+                    raise RuntimeError('Array used without index in line ' +
+                                     str(self.__line_number))
 
                 indexvars = []
                 if not self.__tokenindex >= len(self.__tokenlist):
