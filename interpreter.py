@@ -63,7 +63,7 @@ def main():
     while True:
 
         try:
-            stmt = artemis.ui_input('>')
+            stmt = artemis.ui_input('>', file_drop = True)
 
         except KeyboardInterrupt:
             break

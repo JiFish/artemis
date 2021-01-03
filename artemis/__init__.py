@@ -411,7 +411,7 @@ def ui_print_breaking_list(plist):
     draw()
     tick()
 
-def ui_input(prompt = "", max_len = 0):
+def ui_input(prompt = "", max_len = 0, file_drop = False):
     global screen, __CURSOR_POS, __FOREGROUND_COL, __BACKGROUND_COL
     ui_print(prompt + chr(__CURSOR), do_draw=False)
     __CURSOR_POS -= 1
@@ -442,6 +442,20 @@ def ui_input(prompt = "", max_len = 0):
                     screen[__CURSOR_POS] = [__CURSOR, __FOREGROUND_COL, __BACKGROUND_COL]
                     input = input + event.unicode
                     draw()
+            # Drag and drop .bas file
+            elif file_drop and event.type == pygame.DROPFILE:
+                extension = os.path.basename(event.file)
+                extension = os.path.splitext(extension)[-1].lower()
+                # Detected BASIC text file (BAS)
+                if extension == '.bas':
+                    clear_cell(__CURSOR_POS)
+                    pygame.key.set_repeat(0)
+                    return 'IMPORT "{}"'.format(event.file)
+                # Detected Artemis Disk Image (ADI)
+                elif extension in ['.adi', '.zip']:
+                    clear_cell(__CURSOR_POS)
+                    pygame.key.set_repeat(0)
+                    return 'DSKIMPORT "{}"'.format(event.file)
 
 def ui_input_key(impatient = False):
     draw()
