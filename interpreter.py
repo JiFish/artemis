@@ -33,7 +33,7 @@ from datetime import date
 
 dos = artemis.dos
 
-_help_url = "https://github.com/JiFish/artemis#disk-system-and-commands"
+_help_url = "https://github.com/JiFish/artemis#the-main-interface"
 
 # Discord Presence. Fails gracefully if module does not exist
 try:
@@ -50,6 +50,7 @@ def main():
     artemis.ui_print("Artemis Fantasy Microcomputer {}{}\n\n".format(chr(176), date.today().year), do_draw=False)
     artemis.ui_print(" JiBASIC {}\n\n".format(artemis.version), do_draw=False)
     artemis.set_color(1)
+    artemis.ui_print("Type HELP to open documentation.\n\n", do_draw=False)
     artemis.ui_print("READY\n", do_draw=False)
     for i in range(0,8):
         artemis.screen[111+i] = [214,(i+1)%8,i]
