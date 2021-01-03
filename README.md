@@ -31,9 +31,9 @@ Artemis is currently beta software. However, an important goal is to maintain fo
 
 JiBASIC is a fork of PyBasic by richpl (https://github.com/richpl/PyBasic) with many platform-dependent features added. Fixes and improvements from PyBasic will be pulled in to JiBASIC, and any fixes here will be sent back via pull-request. Much of the following documentation is also forked from PyBasic.
 
-Currently programs written for, or saved in, PyBasic will run in Artemis. But this may not be the case in the future.
+Currently most programs written for, or saved in, PyBasic will run in Artemis. But this may not be the case in the future.
 
-Artemis is also powered by pygame2 (https://www.pygame.org/news) and midiutil (https://github.com/MarkCWirt/MIDIUtil)
+Artemis is also powered by pygame2 (https://www.pygame.org/) and midiutil (https://github.com/MarkCWirt/MIDIUtil)
 
 ### To start...
 
@@ -116,6 +116,8 @@ The program may be erased entirely from memory using the **NEW** command:
 > LIST
 >
 ```
+
+If you're writing a complex program, you'll probably want to use an external editor. See "Importing and Exporting" below for help on getting externally written code in to Artemis.
 
 The **EXIT** command closes Artemis.
 
@@ -485,7 +487,7 @@ Number | Characters | Colors | Pixel shape | Notes
 * **REFRESH** - Force the screen to draw.
 * **REFRESH WAIT** - Prevent the screen from drawing until the next **REFRESH** or user input command.
 
-Tip: A tool is provided to convert playscii (http://vectorpoem.com/playscii/) `.psci` files to `.sda` files, along with files to allow the tool to use the Artemis character set and palette. See tools/playscii
+TIP: Resources are provided to help you create `.sda` screen files using playscii (http://vectorpoem.com/playscii/) See `tools/playscii` in the install directory.
 
 ### Unconditional branching
 
@@ -834,7 +836,7 @@ A - 65
 
 Variables can be saved and retrieved from disk using a similar method to the **DATA** and **READ** commands. This can be used for example for savegames, or referencing pre-created data you don't wish to define in code.
 
-Datafiles are simply json text files, allowing easy creation outside of artemis.
+Files are written to a read from the currently selected disk. See "Disk system and commands", above.
 
 - **FILEOUT** fn$, mode, value[, value$]... - Write a file with a list of values
     - *fn$* is the file you wish to write. It will be automatically given the `.dfa` extension. Filenames are case insensitive and will always been written to the local filesystem UPPERCASE
@@ -845,6 +847,9 @@ Datafiles are simply json text files, allowing easy creation outside of artemis.
     - *start* the position of the first value to read. If omitted 0 is used.
     - *end* the position of the last value to read. If omitted, the rest of the file is read.
 - **FILEREAD** variable[, variable$]... - Read variables retrieved by **FILEIN**. This command works exactly the same way as the **READ** command.
+- **UNLINK** fn$ - Delete the file specified by *fn$*. Extension must be included. This command fails silently if the file does not exist, or otherwise cannot be removed.
+
+TIP: Datafiles are simply json text files, allowing easy creation outside of Artemis.
 
 ### Music
 
