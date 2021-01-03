@@ -30,7 +30,7 @@ __activation_time = time.time()
 
 debug = False
 fps_flag = False
-version = "0.5"
+version = "0.6"
 
 # automatically draw after some commands
 __AUTO_DRAW = True

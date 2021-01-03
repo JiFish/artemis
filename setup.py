@@ -23,7 +23,7 @@ executables = [
 ]
 
 setup(name='Artemis',
-      version = '0.5',
+      version = '0.6',
       description = '',
       options = {'bdist_msi': bdist_msi_options,
                  'build_exe': buildOptions},
