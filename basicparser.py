@@ -885,22 +885,30 @@ class BASICParser:
         self.__consume(Token.COMMA)
 
         self.__expr()
-        key = self.__operand_stack.pop()
+        param_one = self.__operand_stack.pop()
 
         self.__consume(Token.COMMA)
 
         self.__expr()
-        val = self.__operand_stack.pop()
+        param_two = self.__operand_stack.pop()
+
+        # If we have a third comma, this is the alternate syntax
+        param_three = None
+        if self.__token.category == Token.COMMA:
+            self.__advance()  # Advance past comma
+            self.__expr()
+            param_three = self.__operand_stack.pop()
 
         try:
-            artemis.manipulate_cell(pos, key, val)
+            if param_three == None:
+                artemis.manipulate_cell(pos, param_one, param_two)
+            else:   # alternate syntax
+                artemis.manipulate_cell(pos, 0, param_one)
+                artemis.manipulate_cell(pos, 1, param_two)
+                artemis.manipulate_cell(pos, 2, param_three)
 
-        except ValueError:
-            raise ValueError("Invalid value supplied to POKES in line " +
-                             str(self.__line_number))
-
-        except IndexError:
-            raise IndexError("Value supplied to POKES out of range in line " +
+        except ValueError as e:
+            raise ValueError(e+" in POKES in line " +
                              str(self.__line_number))
 
 
