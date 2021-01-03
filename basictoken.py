@@ -174,9 +174,9 @@ class BASICToken:
         smalltokens = {'=': ASSIGNOP, '(': LEFTPAREN, ')': RIGHTPAREN,
                        '+': PLUS, '-': MINUS, '*': TIMES, '/': DIVIDE,
                        '\n': NEWLINE, '<': LESSER,
-                       '>': GREATER, '<>': NOTEQUAL,
+                       '>': GREATER, '<>': NOTEQUAL, '!=': NOTEQUAL,
                        '<=': LESSEQUAL, '>=': GREATEQUAL, ',': COMMA,
-                       ':': COLON, '%': MODULO, '!=': NOTEQUAL}
+                       ':': COLON, '%': MODULO}
 
         # Dictionary of BASIC reserved words
         keywords = {'LET': LET, 'LIST': LIST, 'PRINT': PRINT,

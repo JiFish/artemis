@@ -193,6 +193,7 @@ def main():
 
                     dos.change_disk(diskname)
                     artemis.ui_print('Diskette "'+diskname+'" mounted.\n')
+
                     if dos.disk_has_autorun():
                         program.load("AUTORUN")
                         if RPC: RPC.update(state="Running disk "+diskname, large_image="artemis_icon")
@@ -245,7 +246,6 @@ def main():
 
                 # HELP!
                 elif tokenlist[0].category == Token.HELP:
-                    # TODO: Send to docs page
                     webbrowser.open(_help_url)
 
                 # Unrecognised input
