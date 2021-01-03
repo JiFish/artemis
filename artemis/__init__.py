@@ -371,9 +371,10 @@ def ui_print_window(text, x1, y1, x2, y2, wrap = True):
     pieces = []
     if wrap:
         for p in text:
-            pieces += textwrap.wrap(p, width=max_width,
-                                    replace_whitespace=False,
-                                    drop_whitespace=False)
+            wrapped_p = textwrap.wrap(p, width=max_width, replace_whitespace=False)
+            # Detect zero length returns, so we don't lose empty lines
+            if len(wrapped_p) == 0: pieces.append("")
+            else: pieces += wrapped_p
     else:
         for p in text:
             pieces += [p[i:i+max_width] for i in range(0, len(p), max_width)]
