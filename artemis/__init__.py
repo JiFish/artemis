@@ -237,13 +237,18 @@ def set_cell(pos, cell):
 def manipulate_cell(pos, key, val):
     global screen
     if pos < 0 or pos >= __SCREEN_BUFFER_SIZE or key < 0 or key > 2:
-        raise IndexError()
+        raise ValueError("Cell position out of range")
     if key == 0 and (val < 0 or val > 255):
-        raise ValueError()
+        raise ValueError("Value out of range")
     if key > 0 and (val < 0 or val >= __SCREEN_COLS):
-        raise ValueError()
+        raise ValueError("Value out of range")
 
     screen[pos][key] = val
+
+def clear_cell(pos):
+    if pos < 0 or pos >= __SCREEN_BUFFER_SIZE:
+        raise IndexError()
+    screen[pos] = [__SPACE,  __FOREGROUND_COL, __BACKGROUND_COL]
 
 def set_border(col):
     global __BORDER_COL
@@ -286,7 +291,7 @@ def wait(secs = 1):
 def scroll_screen():
     global screen, __CURSOR_POS
 
-    if __CURSOR_POS < __SCREEN_BUFFER_SIZE: return
+    while __CURSOR_POS < __SCREEN_BUFFER_SIZE: return
 
     screen = screen[__SCREEN_WIDTH:]
     screen += [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_WIDTH)]
@@ -409,7 +414,7 @@ def ui_input(prompt = "", max_len = 0):
     global screen, __CURSOR_POS, __FOREGROUND_COL, __BACKGROUND_COL
     ui_print(prompt + chr(__CURSOR), do_draw=False)
     __CURSOR_POS -= 1
-    if max_len == 0:
+    if max_len < 1:
         max_len = __SCREEN_BUFFER_SIZE - __SCREEN_WIDTH
     input = ''
     draw()
@@ -419,12 +424,12 @@ def ui_input(prompt = "", max_len = 0):
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-                    screen[__CURSOR_POS] = [__SPACE,  __FOREGROUND_COL, __BACKGROUND_COL]
+                    clear_cell(__CURSOR_POS)
                     pygame.key.set_repeat(0)
                     return input
                 elif event.key == pygame.K_BACKSPACE or event.key == pygame.K_DELETE:
                     if (input != ''):
-                        screen[__CURSOR_POS] = [__SPACE,  __FOREGROUND_COL, __BACKGROUND_COL]
+                        clear_cell(__CURSOR_POS)
                         __CURSOR_POS -= 1
                         screen[__CURSOR_POS] = [__CURSOR, __FOREGROUND_COL, __BACKGROUND_COL]
                         input = input[:-1]
@@ -450,8 +455,8 @@ def ui_input_key(impatient = False):
                 return event.key
         if impatient: return -1
 
-def ui_are_you_sure():
-    ui_print("Are you sure? (Y/N)", do_draw=False)
+def ui_are_you_sure(msg = "Are you sure? (Y/N)"):
+    ui_print(msg)
     result = (ui_input_key() == pygame.K_y)
     ui_print("\n")
     return result
