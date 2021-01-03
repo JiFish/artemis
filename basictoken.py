@@ -106,6 +106,7 @@ class BASICToken:
         AND             = 73  # AND operator
         OR              = 74  # OR operator
         NOT             = 75  # NOT operator
+        PI              = 76  # PI constant
 
         # JiBasic specific from here. Leaving gap for easier code sharing with PyBasic
         COL             = 100 # Set colors command
@@ -154,7 +155,7 @@ class BASICToken:
         'LOG', 'SIN', 'TAN', 'DATA', 'READ', 'INT',
         'CHR', 'ASC', 'STR', 'MID', 'MODULO', 'TERNARY',
         'VAL', 'LEN', 'UPPER', 'LOWER', 'ROUND',
-        'MAX', 'MIN', 'INSTR', 'AND', 'OR', 'NOT']
+        'MAX', 'MIN', 'INSTR', 'AND', 'OR', 'NOT', 'PI']
 
         # Pad the list up to 99
         catnames += [''] * (99 - len(catnames))
@@ -196,7 +197,8 @@ class BASICToken:
                     'UPPER$': UPPER, 'LOWER$': LOWER,
                     'ROUND': ROUND, 'MAX': MAX, 'MIN': MIN,
                     'INSTR': INSTR, 'END': STOP,
-                    'AND': AND, 'OR': OR, 'NOT': NOT}
+                    'AND': AND, 'OR': OR, 'NOT': NOT,
+                    'PI': PI}
 
         # JiBasic Dictionary of BASIC reserved words
         keywords = {**keywords,
@@ -218,7 +220,7 @@ class BASICToken:
         # Functions
         functions = {ABS, ATN, COS, EXP, INT, LOG, POW, RND, SIN, SQR, TAN,
                      CHR, ASC, MID, TERNARY, STR, VAL, LEN, UPPER, LOWER,
-                     ROUND, MAX, MIN, INSTR}
+                     ROUND, MAX, MIN, INSTR, PI}
 
         # JiBasic Functions
         functions = functions.union({RNDINT, PEEKS, WAITKEY, KEY, SYSTIME})

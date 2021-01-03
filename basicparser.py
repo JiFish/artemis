@@ -1455,6 +1455,9 @@ class BASICParser:
         if category == Token.RND:
             return random.random()
 
+        if category == Token.PI:
+            return math.pi
+
         if category == Token.SYSTIME:
             return artemis.get_system_time()
 
