@@ -183,10 +183,9 @@ def chdir_home():
 def chdir_disk():
     os.chdir(__HOME+"/"+__CURRENT_DISK)
 
-# Update examples disk
-if not os.path.exists(__HOME+"/EXAMPLES"):
+# Import examples disk
+if not os.path.exists(__HOME+"/EXAMPLES") and os.path.exists(__EXAMPLES_PATH):
     os.makedirs(__HOME+"/EXAMPLES")
-if os.path.exists(__EXAMPLES_PATH):
     for entry in os.scandir(__EXAMPLES_PATH):
         copy(__EXAMPLES_PATH+"/"+entry.name, __HOME+"/EXAMPLES")
 
