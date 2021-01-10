@@ -72,7 +72,7 @@ class Program:
         try:
             dos.file_pickle(file, "pfa", self.__program)
 
-        except OSError:
+        except OSError as e:
             raise OSError("Could not save to file: " + str(e))
 
     def load(self, file):
