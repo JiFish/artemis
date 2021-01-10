@@ -4,7 +4,7 @@ import sys
 # Dependencies are automatically detected, but it might need
 # fine tuning.
 buildOptions = dict(packages = [],
-                    excludes = ['email', 'html', 'http', 'logging', 'pydoc_data', 'unittest', 'urllib', 'xml', 'numpy'],
+                    excludes = ['email', 'html', 'http', 'pydoc_data', 'unittest', 'urllib', 'xml', 'numpy'],
                     include_files = ['README.md', 'examples/', 'MAZE/', 'tools/'])
 
 bdist_msi_options = {
