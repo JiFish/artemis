@@ -1,0 +1,364 @@
+START:
+    name: "The start of the maze"
+    desc: "You see the entrance to the maze to the north. Legend says there is a great treasure at it's end for brave adventurers that can best it. You steel your nerves.\n\nPress the arrow keys to move around, or use N E S W.\n\nPress keys 1 - 9 to use items in your inventory."
+    img: entrance.psci
+    exits:
+        n:
+            load: branch
+            desc: "As you walk through the entrance, branches close the way behind you. You won't be returning this way..."
+
+BRANCH:
+    name: "Branching pathways"
+    desc: "Your view deeper in to the maze is obscured by a permanent fog. The muddy path branches multiple ways here."
+    img: branch.psci
+    exits:
+        e:
+            load: doorway
+        n:
+            load: stone
+        w:
+            load: pool
+
+DOORWAY:
+    name: "Doorway"
+    desc: "Here, set in to a stone surface at the east, is a mysterious wooden door with brass fittings. The door is locked."
+    img: doorway.psci
+    puzzle:
+        item: Key
+        use_desc: "You try the key in the brass lock. With a click, it opens."
+        new_desc: "Here, set in to a stone surface at the east, is a mysterious wooden door with brass fittings. The door is unlocked."
+    exits:
+        e:
+            load: chest
+            desc: "You walk through the door in to a dark passage."
+            prereq: Key
+        w:
+            load: branch
+            
+STONE:
+    name: Standing Stone
+    desc: "There is a large standing stone here. A green-brown moss is creeping up the stone from the ground. Ancient symbols carved in to the stone have been worn down by the passage of time. The path continues past the stone."
+    img: stone.psci
+    exits:
+        s:
+            load: branch
+        n:
+            load: mushrooms
+        w:
+            load: tree
+
+POOL:
+    name: The Pool
+    desc: "There is a small pool of water here. The still surface of the water is occasionally ripples. The pool is fed from a small stream to the west."
+    img: pool.psci
+    puzzle:
+        item: Net
+        use_desc: "You dip the net in to the pool and wait. After a few minutes a the net twitches with a catch. Pulling the net from the pool reveals a fish."
+        new_desc: "There is a small pool of water here. The still surface of the water is still."
+        reward: Fish
+    exits:
+        e:
+            load: branch
+        w:
+            load: stream
+            
+STREAM:
+    name: The Stream
+    desc: "A gentle stream flows here. North is upstream and the water collects at a pool to the east."
+    img: stream.psci
+    exits:
+        n:
+            load: waterfall
+        e:
+            load: pool
+            
+WATERFALL:
+    name: The Waterfall
+    desc: "A wonderful waterfall is here. The droplets of water cause a rainbows to shimmer near the water's edge. The fall feeds a stream to the south."
+    img: waterfall.psci
+    exits:
+        e:
+            load: tree
+        s:
+            load: stream
+
+MUSHROOMS:
+    name: Mushroom Patch
+    desc: "You find yourself in a small patch of mushrooms."
+    img: mushrooms.psci
+    item_give: Mushroom
+    item_desc: "You pick one of the mushrooms and place it in your pack. Perhaps it will be useful later."
+    exits:
+        s:
+            load: stone
+        n:
+            load: pixie
+        e:
+            load: mud
+            
+CHEST:
+    name: Dark passageway
+    desc: "A dark passageway spans from west to east. In the gloomy light, you can see a chest here."
+    img: chest.psci
+    puzzle:
+        item: Rock
+        use_desc: "You smash the chest to splinters with the stone. Inside you find some gold coins."
+        new_desc: "A dark passageway spans from west to east. In the gloomy light, you can see a the splintered remains of a chest here."
+        reward: Gold
+    exits:
+        w:
+            load: doorway
+        e:
+            load: dark
+            
+DARK:
+    name: Darkness
+    desc: "It is dark here. You are likely to be eaten by a grue."
+    puzzle:
+        item: Torch
+        use_desc: "You light your torch."
+        new_desc: "You are in a dark cave. Your torch illuminates a tiny crack to the north."
+    exits:
+        w:
+            load: chest
+        n:
+            load: tunnel
+            prereq: Torch
+            
+TUNNEL:
+    name: Tight Tunnel
+    desc: "This north/south tunnel is extremely claustrophobic. The walls push in on your chest as you squeeze through it."
+    img: tunnel.psci
+    exits:
+        n:
+            load: garden
+        s:
+            load: dark
+            
+GARDEN:
+    name: The Secret Garden
+    desc: "Amazingly, deep within the cave you come across a beautiful garden. The area is lit by an unseen source. Colourful flowers, herbs and grasses coat the cavern floor."
+    img: garden.psci
+    item_give: Orb
+    item_desc: "Floating in the garden, is a glowing purple orb. You take it."
+    exits:
+        s:
+            load: tunnel
+
+TREE:
+    name: Giant Tree
+    desc: "An ancient tree looks over this area. It's knotted branches and leaves provides this area with shade. You can hear the sound of flowing water to the west."
+    img: tree.psci
+    item_give: Key
+    item_desc: "You see a glint of polished metal on the ground. Kneeling down, and brushing some dead leaves aside, you find a bronze key. You put it in your pocket."
+    exits:
+        e:
+            load: stone
+        w:
+            load: waterfall
+
+PIXIE:
+    name: The Pixie's Picnic
+    desc: "A small man sits here on a red cloth.\n \n'Hey friend. Have ye got anything to eat?'"
+    img: pixie.psci
+    puzzle:
+        item: Mushroom
+        use_desc: "You offer the man a mushroom.\n\n'Ah, thank ye! Perhaps you will find this useful.'\n\nHe hands you a net."
+        new_desc: "A small man sits here on a red cloth."
+        reward: Net
+    exits:
+        s:
+            load: mushrooms
+        n:
+            load: crossroad
+            
+MUD:
+    name: Bog
+    desc: "The area is nothing more than a bog of mud. The slime is so deep that you have to wade to cross it."
+    img: mud.psci
+    exits:
+        w:
+            load: mushrooms
+        e:
+            load: grave
+            
+GRAVE:
+    name: The Grave
+    desc: "A mound of dirt and a makeshift grave marker is here. Perhaps the last resting place of an unlucky adventurer."
+    img: grave.psci
+    puzzle:
+        item: Shovel
+        use_desc: "Hoping the adventurer will understand, you begin to dig. You expose a hand clutching a torch. You take it."
+        new_desc: "A mound of dirt and a makeshift grave marker is here. Perhaps the last resting place of an unlucky adventurer. A small hole has been dug here."
+        reward: Torch
+    exits:
+        w:
+            load: mud
+        n:
+            load: shackles
+            
+SHACKLES:
+    name: The Shackles
+    desc: "A set of shackles is set in to the floor here. An unfortunate prisoner was once locked here, but is now no more than a skeleton."
+    img: shackles.psci
+    exits:
+        s:
+            load: grave
+        w:
+            load: music
+            
+GROVE:
+    name: The Grove
+    desc: "This is a small grove of trees. To the north is a small woods, a waterfall plummets to the south. It looks as if someone has started to dig a pit here, but gave up."
+    item_give: Shovel
+    item_desc: "In the pit you find a shovel, which you take."
+    img: grove.psci
+    exits:
+        s:
+            load: waterfall
+            desc: "You dive in to the waterfall."
+        n:
+            load: bear
+            
+BEAR:
+    name: The Bear's Spot
+    desc: "You enter a shaded woods. To your shock, you see a sleeping bear here. It is blocking the exit to the east."
+    img: bear.psci
+    puzzle:
+        item: Fish
+        use_desc: "Smelling the fish, the bear stirs from it's slumber. You manage to coax it away from the east exit before it chows down on the meal."
+        new_desc: "You enter a shaded woods. You see a sleeping bear here."
+    exits:
+        s:
+            prereq: Fish
+            load: grove
+        e:
+            load: crossroad
+            
+CROSSROAD:
+    name: The Crossroads
+    desc: "You are at a crossroads. A sign points four ways, but the painted text has long since faded."
+    img: sign.psci
+    exits:
+        n:
+            load: barrier
+        e:
+            load: hill
+        s:
+            load: pixie
+        w:
+            load: bear
+            
+HILL:
+    name: The Hill
+    desc: "You are atop a small hill, above the fog that permeates the maze."
+    item_give: Rock
+    item_desc: "There is a sturdy looking rock here that might make a good bashing tool. You take it."
+    img: hill.psci
+    exits:
+        w:
+            load: crossroad
+        s:
+            load: music
+            
+MUSIC:
+    name: Mysterious Music
+    desc: "Sweet music is playing here, with no obvious source. The light melody calms your nerves. A hat sits upside-down on the grass. You instinctively feel you should leave it here."
+    img: music.psci
+    puzzle:
+        item: Gold
+        use_desc: "You put the gold in the hat.\n\n'Thanks for the tip!' says a disembodied voice. 'Here's one in return: The way forward is to turn around. Remember these words!'"
+        new_desc: "Sweet music is playing here, with no obvious source. The light melody calms your nerves. A hat sits upside-down on the grass, with your gold inside. A disembodied voice sings:\n'The way forward is to turn around.'"
+    exits:
+        n:
+            load: hill
+        e:
+            load: shackles
+            
+ENDLESSN:
+    name: Endless Passages
+    desc: "You are in a series of passageways without end. There are exits to all directions."
+    img: endless.psci
+    exits:
+        n:
+            load: branch
+            desc: "You find yourself back at the entrance to the maze."
+        e:
+            load: endlesse
+            desc: "These passages seem to be without end..."
+        s:
+            load: end
+        w:
+            load: endlessw
+            desc: "These passages seem to be without end..."
+
+ENDLESSE:
+    name: Endless Passages
+    desc: "You are in a series of passageways without end. There are exits to all directions."
+    img: endless.psci
+    exits:
+        e:
+            load: branch
+            desc: "You find yourself back at the entrance to the maze."
+        n:
+            load: endlessn
+            desc: "These passages seem to be without end..."
+        w:
+            load: end
+        s:
+            load: endlesss
+            desc: "These passages seem to be without end..."
+
+ENDLESSW:
+    name: Endless Passages
+    desc: "You are in a series of passageways without end. There are exits to all directions."
+    img: endless.psci
+    exits:
+        w:
+            load: branch
+            desc: "You find yourself back at the entrance to the maze."
+        n:
+            load: endlesss
+            desc: "These passages seem to be without end..."
+        e:
+            load: end
+        s:
+            load: endlessn
+            desc: "These passages seem to be without end..."
+
+ENDLESSS:
+    name: Endless Passages
+    desc: "You are in a series of passageways without end. There are exits to all directions."
+    img: endless.psci
+    exits:
+        s:
+            load: branch
+            desc: "You find yourself back at the entrance to the maze."
+        e:
+            load: endlesse
+            desc: "These passages seem to be without end..."
+        n:
+            load: end
+        w:
+            load: endlessw
+            desc: "These passages seem to be without end..."
+
+BARRIER:
+    name: The Barrier
+    desc: "You can see the exit of the maze to the north. It is protected by a barrier of purple energy."
+    img: barrier.psci
+    puzzle:
+        item: Orb
+        use_desc: "You hold aloft the orb and it glows even brighter. The barrier shimmers in response. You think you can now pass the barrier."
+        new_desc: "You can see the exit of the maze to the north. It is protected by a barrier of purple energy. The barrier shimmers in response to your orb."
+    exits:
+        s:
+            load: crossroad
+        n:
+            load: endlessn
+            prereq: orb
+
+END:
+    name: The End of The Maze
+    desc: "Congratulations. You made it. At the end of the maze, piles of gemstones for the taking.\n \nTHE END."
+    img: end.psci

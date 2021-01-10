@@ -19,6 +19,7 @@ __MAX_NAME_SIZE = 32
 __DEFAULT_DISK = "HOME"
 __CURRENT_DISK = __DEFAULT_DISK
 __EXAMPLES_PATH = 'examples/'
+__MAZE_PATH = 'MAZE/'
 
 def change_disk(diskname):
     global __CURRENT_DISK
@@ -188,6 +189,12 @@ if not os.path.exists(__HOME+"/EXAMPLES") and os.path.exists(__EXAMPLES_PATH):
     os.makedirs(__HOME+"/EXAMPLES")
     for entry in os.scandir(__EXAMPLES_PATH):
         copy(__EXAMPLES_PATH+"/"+entry.name, __HOME+"/EXAMPLES")
+
+# Import MAZE disk
+if not os.path.exists(__HOME+"/MAZE") and os.path.exists(__MAZE_PATH):
+    os.makedirs(__HOME+"/MAZE")
+    for entry in os.scandir(__MAZE_PATH):
+        copy(__MAZE_PATH+"/"+entry.name, __HOME+"/MAZE")
 
 # Switch to, and create, HOME disk
 change_disk(__CURRENT_DISK)
