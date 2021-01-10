@@ -1,0 +1,24 @@
+10 C$ = ""
+20 C$ = C$ + "        "
+30 C$ = C$ + "   XXXX "
+40 C$ = C$ + "X XXX XX"
+50 C$ = C$ + "XXXXXXXX"
+60 C$ = C$ + "XXXXXXXX"
+70 C$ = C$ + "X XXXXXX"
+80 C$ = C$ + "   XXXX "
+90 C$ = C$ + "        "
+100 SYMBOL 239 , C$
+110 COL 6 , 3
+120 BORDER 3
+130 CLS
+140 FOR I = 1 TO 20
+150 CURSOR RNDINT ( 0 , 39 ) , RNDINT ( 0 , 24 )
+160 PRINT CHR$ ( 239 )
+170 NEXT I
+180 CURSOR 0 , 24
+190 PRINT "PRESS ANY KEY" ,
+200 WAITKEY
+210 SYMBOL 239 , ""
+220 PRINT ""
+230 COL 1 , 0
+240 BORDER 0

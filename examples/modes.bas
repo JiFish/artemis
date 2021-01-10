@@ -1,0 +1,20 @@
+10 DIM MAXCOL ( 7 )
+20 MAXCOL ( 0 ) = 16
+30 MAXCOL ( 1 ) = 8
+40 MAXCOL ( 2 ) = 4
+50 MAXCOL ( 3 ) = 2
+60 MAXCOL ( 4 ) = 4
+70 MAXCOL ( 5 ) = 16
+80 MAXCOL ( 6 ) = 32
+100 FOR I = 0 TO 6
+110 MODE I
+120 PRINT "Mode " , I
+130 FOR C = 0 TO MAXCOL ( I ) - 1
+140 COL IFF ( C = 0 , 1 , 0 ) , C
+150 PRINT "C " , C ,
+160 NEXT C
+170 COL 1 , 0
+180 PRINT CHR$ ( 10 ) + " Press any key"
+190 WAITKEY
+200 NEXT I
+210 MODE 1
