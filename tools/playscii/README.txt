@@ -2,7 +2,7 @@ Simply copy these files in to your Document/Playscii folder. The following featu
 
 - Artemis default character set
 - Artemis default palette
-- SDA (Artemis screen dump format) export
+- SDA (Artemis screen dump format) export and import
 
 TIPS:
 
