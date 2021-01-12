@@ -1,0 +1,3 @@
+10 FOR A = 0 TO 255
+20 SYMBOL A , ""
+30 NEXT A

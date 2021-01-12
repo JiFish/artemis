@@ -127,7 +127,7 @@ class BASICToken:
         FILEIN          = 115 # FILEIN command
         FILEOUT         = 116 # FILEOUT command
         FILEREAD        = 117 # FILEREAD command
-
+        SYMBOLIMG       = 118 # SYMBOLIMG command
         MOUNT           = 119 # MOUNT command
         FORMAT          = 120 # FORMAT command
         UNLINK          = 121 # UNLINK command
@@ -167,7 +167,7 @@ class BASICToken:
         'BORDER', 'CURSOR', 'RNDINT', 'WAITKEY', 'PEEKS',
         'POKES', 'SYMBOL', 'REFRESH', 'INK', 'MODE',
         'EXPORT', 'FILEIN', 'FILEOUT', 'FILEREAD',
-        'MOUNT', 'FORMAT', 'UNLINK',
+        'SYMBOLIMG', 'MOUNT', 'FORMAT', 'UNLINK',
         'MUSICPLAY', 'MUSICSTOP', 'KEY', 'SYSTIME',
         'LOADS', 'DUMPS', 'HELP', 'PRINTW']
 
@@ -212,6 +212,7 @@ class BASICToken:
                     'REFRESH': REFRESH, 'INK':INK, 'MODE':MODE,
                     'EXPORT':EXPORT, 'FILEIN':FILEIN,
                     'FILEOUT': FILEOUT, 'FILEREAD': FILEREAD,
+                    'SYMBOLIMG': SYMBOLIMG,
                     'MOUNT': MOUNT, 'FORMAT': FORMAT, 'UNLINK': UNLINK,
                     'DSKIMPORT': DSKIMPORT, 'DSKEXPORT': DSKEXPORT,
                     'MUSICPLAY': MUSICPLAY, 'MUSICSTOP': MUSICSTOP,

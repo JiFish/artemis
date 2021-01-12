@@ -263,6 +263,10 @@ class BASICParser:
             self.__symbolstmt()
             return None
 
+        elif self.__token.category == Token.SYMBOLIMG:
+            self.__symbolimgstmt()
+            return None
+
         elif self.__token.category == Token.REFRESH:
             self.__refreshstmt()
             return None
@@ -947,6 +951,20 @@ class BASICParser:
         except IndexError:
             raise IndexError("Value supplied to SYMBOL out of range in line " +
                              str(self.__line_number))
+
+
+    def __symbolimgstmt(self):
+        """Parses a SYMBOLIMG statement"""
+
+        self.__advance()  # Advance past SYMBOLIMG token
+
+        self.__expr()
+        fn = self.__operand_stack.pop()
+
+        try:
+            artemis.load_charset(fn)
+        except Exception as e:
+            raise Exception(str(e) + ' in line '+ str(self.__line_number))
 
 
     def __inkstmt(self):

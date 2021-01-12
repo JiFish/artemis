@@ -87,19 +87,41 @@ __BORDER_COL = 0;
 screen = [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_BUFFER_SIZE)]
 __CURSOR_POS = 0
 
+__ICON_CHARACTER = 239
+
 __FULLSCREEN = False
 
-def __load_tile_table(filename, width, height):
-    image = pygame.image.load(filename)#.convert()
-    image_width, image_height = image.get_size()
+def __load_tile_table(filename, width = 8, height = 8):
+    image = pygame.image.load(filename)
+    image_size = (128, 128)
+
+    # Check image size
+    if image.get_size() != image_size:
+        raise Exception("Character set image is not 128x128")
+
+    # Convert the surface to a mask and back
+    # This ensures we get a nice 1-bit image
+    # no matter the input
+    image.set_colorkey([0,0,0])
+    mask = pygame.mask.from_surface(image)
+    image = pygame.Surface(size=image_size, depth=8)
+    image.set_palette([[0,0,0],[255,255,255]])
+    image = mask.to_surface(image)
+    del mask
+
+    # Chop image to tile table
     tile_table = []
-    for tile_y in range(0, int(image_height/height)):
-        #line = []
-        #tile_table.append(line)
-        for tile_x in range(0, int(image_width/width)):
+    for tile_y in range(0, 16):
+        for tile_x in range(0, 16):
             rect = (tile_x*width, tile_y*height, width, height)
             tile_table.append(image.subsurface(rect))
+
     return tile_table
+
+def set_icon():
+    __CHR_TILE_TABLE[__ICON_CHARACTER].set_palette_at(0, [0, 0, 0])
+    __CHR_TILE_TABLE[__ICON_CHARACTER].set_palette_at(1, [255, 255, 255])
+    pygame.display.set_icon(pygame.transform.scale(__CHR_TILE_TABLE[__ICON_CHARACTER], (64, 64)))
 
 # Some pygame initalisation
 # TODO: Variable sized window?
@@ -108,7 +130,9 @@ __SCREEN_SURFACE = pygame.display.set_mode((672, 432))
 __TEXT_SURFACE = pygame.Surface((__SCREEN_WIDTH*8, __SCREEN_HEIGHT*8))
 __TEXT_SURFACE.fill((0, 0, 0))
 __TEXT_SCALED_SURFACE = pygame.Surface((640, 400))
-__CHR_TILE_TABLE = __load_tile_table(os.path.dirname(os.path.realpath(__file__))+"/charset.png", 8, 8)
+__CHR_TILE_TABLE = __load_tile_table(os.path.dirname(os.path.realpath(__file__))+"/charset.png")
+__MASTER_CHR_TILE_TABLE = [chr.copy() for chr in __CHR_TILE_TABLE]
+
 __MASTER_CHR_TILE_TABLE = __load_tile_table(os.path.dirname(os.path.realpath(__file__))+"/charset.png", 8, 8)
 __CLOCK = pygame.time.Clock()
 
@@ -226,10 +250,8 @@ def redefine_char(chr, charstring):
             pix = 0 if charstring[i] == ' ' else 1
             __CHR_TILE_TABLE[chr].set_at((i % 8, i // 8), pix)
     # Special case for char 239
-    if chr == 239:
-        __CHR_TILE_TABLE[239].set_palette_at(0, [0, 0, 0])
-        __CHR_TILE_TABLE[239].set_palette_at(1, [255, 255, 255])
-        pygame.display.set_icon(pygame.transform.scale(__CHR_TILE_TABLE[239], (64, 64)))
+    if chr == __ICON_CHARACTER:
+        set_icon()
 
 def redefine_char_from_int_list(chr, intlist):
     charstring = ""
@@ -556,6 +578,17 @@ def rgb_to_ink(rgb):
         round(rgb[1]/63.75),
         round(rgb[2]/63.75),
     ]
+
+def load_charset(filename):
+    global __CHR_TILE_TABLE
+    dos.test_filename(filename)
+    if not os.path.isfile(filename):
+        raise OSError("File not found")
+    try:
+        __CHR_TILE_TABLE = __load_tile_table(filename)
+        set_icon()
+    except:
+        raise Exception("Invalid character set image")
 
 # This seems buggy, switching back from fullscreen leaves the window partly off-screen
 def flip_fullscreen():
