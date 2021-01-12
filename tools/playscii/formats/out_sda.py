@@ -6,14 +6,22 @@ class ArtemisExporter(ArtExporter):
     format_description = """
 Artemis screen dump format.
 Assumes single frame, single layer document.
+Attempts to figure out the screen mode from width and height
     """
     file_extension = 'sda'
     def run_export(self, out_filename, options):
-        outjson = []
+
+        # Determine image mode
+        modes = [[20,25], [40,25], [80,25], [80,50],
+                 [40,50], [24,15], [16,10]]
+        try: mode = modes.index([self.art.width,self.art.height])
+        except: mode = 1    # Assume mode 1 if we can't figure it out
+
+        outjson = {'mode': mode, 'data': []}
         for y in range(self.art.height):
             for x in range(self.art.width):
                 char, fg, bg, xform = self.art.get_tile_at(0, 0, x, y)
-                outjson.append([char, fg-1, bg-1])
+                outjson['data'].append([char, fg-1, bg-1])
 
         outfile = open(out_filename, 'w', encoding='utf-8')
         outfile.write(json.dumps(outjson, separators=(',', ':')))

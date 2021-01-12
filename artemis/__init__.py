@@ -42,6 +42,7 @@ __SCREEN_WIDTH = 40
 __SCREEN_HEIGHT = 25
 __SCREEN_BUFFER_SIZE = __SCREEN_WIDTH*__SCREEN_HEIGHT
 __SCREEN_COLS = 8
+__SCREEN_MODE = 1
 
 __MASTER_PALLETTE = [
 [0, 0, 0],
@@ -148,6 +149,16 @@ def cls():
 def set_mode(mode):
     global __SCREEN_WIDTH, __SCREEN_HEIGHT, __SCREEN_COLS, __SCREEN_BUFFER_SIZE
     global __TEXT_SURFACE, __BACKGROUND_COL, __FOREGROUND_COL, __BORDER_COL, __PALLETTE
+    global __SCREEN_MODE
+
+    if mode == __SCREEN_MODE:
+        return  # Nothing to do
+
+    if mode < 0 or mode > 6:
+        raise ValueError("Invalid Mode")
+
+    __SCREEN_MODE = mode
+
     if mode == 0:
         __SCREEN_WIDTH = 20
         __SCREEN_HEIGHT = 25
@@ -178,6 +189,8 @@ def set_mode(mode):
         __SCREEN_COLS = 32
     else:
         raise ValueError("Invalid Mode")
+
+    # Set buffer size and recreate text surface
     __SCREEN_BUFFER_SIZE = __SCREEN_WIDTH*__SCREEN_HEIGHT
     __TEXT_SURFACE = pygame.Surface((__SCREEN_WIDTH*8, __SCREEN_HEIGHT*8))
 
@@ -192,6 +205,8 @@ def set_mode(mode):
     elif len(__PALLETTE) < __SCREEN_COLS:
         # Pad the pallete with the master pallete to reach the new max colours
         __PALLETTE = __PALLETTE+__MASTER_PALLETTE[len(__PALLETTE):__SCREEN_COLS]
+
+    # Clear the existing screen contents
     cls()
 
 def set_caption(caption):
@@ -502,9 +517,22 @@ def load_screen(filename):
     global screen
 
     screendump = dos.read_data_file(filename, "sda")
+
     try:
+        # Screen Mode
+        set_mode(screendump['mode'])
+
+        # INK, presence of ink in a dump is optional
+        if 'ink' in screendump:
+            for i, cols in enumerate(screendump['ink']):
+                set_palette(i, *cols)
+
+        # BORDER, also optional
+        if 'border' in screendump:
+            set_border(screendump['border'])
+
         pos = 0
-        for i in screendump:
+        for i in screendump['data']:
             char = min(255,max(0,i[0]))
             fg = min(__SCREEN_COLS-1,max(0,i[1]))
             bg = min(__SCREEN_COLS-1,max(0,i[2]))
@@ -516,7 +544,18 @@ def load_screen(filename):
         raise Exception("Invalid File Format")
 
 def dump_screen(filename):
-    dos.write_data_file(screen, filename, "sda")
+    # v is format version number
+    data = {'v': 1, 'mode': __SCREEN_MODE,
+            'ink': [rgb_to_ink(i) for i in __PALLETTE],
+            'border': __BORDER_COL, 'data': screen}
+    dos.write_data_file(data, filename, "sda")
+
+def rgb_to_ink(rgb):
+    return [
+        round(rgb[0]/63.75),
+        round(rgb[1]/63.75),
+        round(rgb[2]/63.75),
+    ]
 
 # This seems buggy, switching back from fullscreen leaves the window partly off-screen
 def flip_fullscreen():

@@ -483,7 +483,7 @@ Number | Characters | Colors | Pixel shape | Notes
 * **POKES** x, mode, val - Change the values of screen cell. *x* and *mode* use the same values as **PEEK**, above. *val* is the value that will be set. Note that any changes made won't be visible until the screen is next drawn.
 * **POKES** x, c, f, b - Alternate syntax of the above, allows you to set the *c*haracter, *f*oreground and *b*ackground will be set all at once.
 * **DUMPS** x$ - Dump the screen to a file with name *x$*. Do not provide an extension, `.sda` will be added automatically.
-* **LOADS** x$ - Load screen data from a file with name *x$*. `.sda` will be added automatically. Like **POKES** the change won't be visible until the screen is next drawn.
+* **LOADS** x$ - Load screen data from a file with name *x$*. `.sda` will be added automatically. The screen mode, ink and border color is changed if needed. Like **POKES** the change won't be visible until the screen is next drawn.
 * **REFRESH** - Force the screen to draw.
 * **REFRESH WAIT** - Prevent the screen from drawing until the next **REFRESH** or user input command.
 
