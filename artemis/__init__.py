@@ -590,15 +590,18 @@ def load_charset(filename):
     except:
         raise Exception("Invalid character set image")
 
-# This seems buggy, switching back from fullscreen leaves the window partly off-screen
 def flip_fullscreen():
     global __FULLSCREEN, __SCREEN_SURFACE
     __FULLSCREEN = not __FULLSCREEN
 
     if __FULLSCREEN:
-        __SCREEN_SURFACE = pygame.display.set_mode((672, 432), pygame.FULLSCREEN)
+        # Setting the display to SCALED allows
+        # us toggle fullscreen at this resolution
+        __SCREEN_SURFACE = pygame.display.set_mode((672, 432), pygame.SCALED)
+        pygame.display.toggle_fullscreen()
     else:
-        __SCREEN_SURFACE = pygame.display.set_mode((672, 432), flags=0)
+        pygame.display.toggle_fullscreen()
+        __SCREEN_SURFACE = pygame.display.set_mode((672, 432))
     draw()
 
 def disable_auto_draw():
