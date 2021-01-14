@@ -125,20 +125,20 @@ def set_icon():
 
 # Some pygame initalisation
 # TODO: Variable sized window?
+pygame.display.set_caption("Artemis Fantasy Microcomputer")
+pygame.display.set_icon(pygame.Surface((0,0)))
+pygame.mouse.set_visible(False)
 pygame.init()
 __SCREEN_SURFACE = pygame.display.set_mode((672, 432))
 __TEXT_SURFACE = pygame.Surface((__SCREEN_WIDTH*8, __SCREEN_HEIGHT*8))
 __TEXT_SURFACE.fill((0, 0, 0))
 __TEXT_SCALED_SURFACE = pygame.Surface((640, 400))
 __CHR_TILE_TABLE = __load_tile_table(os.path.dirname(os.path.realpath(__file__))+"/charset.png")
+set_icon()
 __MASTER_CHR_TILE_TABLE = [chr.copy() for chr in __CHR_TILE_TABLE]
 
 __MASTER_CHR_TILE_TABLE = __load_tile_table(os.path.dirname(os.path.realpath(__file__))+"/charset.png", 8, 8)
 __CLOCK = pygame.time.Clock()
-
-pygame.display.set_caption("Artemis Fantasy Microcomputer")
-pygame.display.set_icon(pygame.transform.scale(__CHR_TILE_TABLE[239], (64, 64)))
-pygame.mouse.set_visible(False)
 
 # Maximum instructions before forcing a tick
 __MAX_INSTRUCTIONS = 10000
