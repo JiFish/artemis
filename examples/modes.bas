@@ -1,11 +1,11 @@
 10 DIM MAXCOL ( 7 )
-20 MAXCOL ( 0 ) = 16
+20 MAXCOL ( 0 ) = 32
 30 MAXCOL ( 1 ) = 8
 40 MAXCOL ( 2 ) = 4
 50 MAXCOL ( 3 ) = 2
 60 MAXCOL ( 4 ) = 4
-70 MAXCOL ( 5 ) = 16
-80 MAXCOL ( 6 ) = 32
+70 MAXCOL ( 5 ) = 32
+80 MAXCOL ( 6 ) = 125
 100 FOR I = 0 TO 6
 110 MODE I
 120 PRINT "Mode " , I

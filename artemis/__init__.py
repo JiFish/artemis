@@ -155,7 +155,7 @@ def set_mode(mode):
     if mode == 0:
         __SCREEN_WIDTH = 20
         __SCREEN_HEIGHT = 25
-        __SCREEN_COLS = 16
+        __SCREEN_COLS = 32
     elif mode == 1:
         __SCREEN_WIDTH = 40
         __SCREEN_HEIGHT = 25
@@ -175,11 +175,11 @@ def set_mode(mode):
     elif mode == 5:
         __SCREEN_WIDTH = 24
         __SCREEN_HEIGHT = 15
-        __SCREEN_COLS = 16
+        __SCREEN_COLS = 32
     elif mode == 6:
         __SCREEN_WIDTH = 16
         __SCREEN_HEIGHT = 10
-        __SCREEN_COLS = 32
+        __SCREEN_COLS = 125
     else:
         raise ValueError("Invalid Mode")
 

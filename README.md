@@ -467,15 +467,15 @@ You can change the screen mode with the **MODE** x command. Where *x* is the mod
 e.g. `MODE 2` to change to mode 2.
 
 Available modes:
-Number | Characters | Colors | Pixel shape | Notes
--------|------------|--------|-------------|------
-0      | 20 x 25    | 16     | 2 x 1       |
-1      | 40 x 25    | 8      | 1 x 1       | Default
-2      | 80 x 25    | 4      | 1 x 2       |
-3      | 80 x 50    | 2      | 1 x 1       |
-4      | 40 x 50    | 4      | 2 x 1       |
-5      | 24 x 15    | 16     | 1 x 1       | Compromise version of mode 0
-6      | 16 x 10    | 32     | 1 x 1       |
+Mode | Characters | Colors | Pixel shape | Notes
+-----|------------|--------|-------------|------
+0    | 20 x 25    | 32     | 2 x 1       |
+1    | 40 x 25    | 8      | 1 x 1       | Default
+2    | 80 x 25    | 4      | 1 x 2       |
+3    | 80 x 50    | 2      | 1 x 1       |
+4    | 40 x 50    | 4      | 2 x 1       |
+5    | 24 x 15    | 32     | 1 x 1       |
+6    | 16 x 10    | 125    | 1 x 1       |
 
 #### Direct Screen Access Commands
 
