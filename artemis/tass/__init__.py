@@ -46,7 +46,6 @@ def __new_song():
     __CURRENT_NOTE_LEN = 1
 
 def __add_tempo(tempo):
-    if (__MIDI_BUILDER == None): __new_song()
     __MIDI_BUILDER.addTempo(0, __POSITION, tempo)
 
 def __add_note(pitch, length = 1, volume = 127):
@@ -54,18 +53,16 @@ def __add_note(pitch, length = 1, volume = 127):
     if pitch > 131:
         raise ValueError("Pitch too high!")
     global __POSITION, __MIDI_BUILDER
-    if (__MIDI_BUILDER == None): __new_song()
     __MIDI_BUILDER.addNote(0, 0, pitch, __POSITION, length, volume)
     __POSITION += length
 
 def __add_pause(length):
     global __POSITION, __MIDI_BUILDER
-    if (__MIDI_BUILDER == None): __new_song()
     __POSITION += length
 
 def process_string(s):
     global __CURRENT_OCTAVE, __CURRENT_NOTE_LEN
-    if (__MIDI_BUILDER == None): __new_song()
+    __new_song()
     # Remove all whitespace
     s = ''.join(s.split()).upper()
     while len(s) > 0:
@@ -131,7 +128,6 @@ def process_string(s):
 
 def play(loops):
     global __POSITION, __MIDI_BUILDER
-    if (__MIDI_BUILDER == None): __new_song()
     midi_file = tempfile.TemporaryFile()
     __MIDI_BUILDER.writeFile(midi_file)
     __MIDI_BUILDER = None
