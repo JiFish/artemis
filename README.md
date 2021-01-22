@@ -4,18 +4,18 @@
 
 ### What is a Fantasy Computer?
 
-TODO
+A Fantasy Computer is neither a recreation of a computer that never existed. Providing a platform to create software with the limitations of older machines. The idea is to be inspired and challenged by these constants.
 
 ### Why Artemis?
 
 Artemis is supposed to be a challenging fantasy computer. Can you create a fun game with the following limitations?
 
-- Using a fairly limited and slow BASIC language. (Though improvements to the language are incoming...)
+- Using a fairly limited and slow BASIC language. (Though improvements to the language may be incoming...)
 - With no graphical commands at all, only text
 - 125 possible colors and 255 redefinable character glyphs
 - 7 text modes to choose from, each a different compromise between number of characters and colors on the screen
 
-As mentioned above JiBASIC is slow. This isn't a bug, it's a feature - or to be more accurate not a priority. Artemis is explicitly not designed to be friendly to developing real-time action games.
+As mentioned above JiBASIC is slow. This isn't a bug, it's a feature (or to be more accurate not a priority.) Artemis is explicitly not designed to be friendly to developing real-time action games. Turn-based, menu-driven and text-heavy games would be ideal.
 
 ### Inspirations
 
@@ -88,7 +88,7 @@ Program read from file
 >
 ```
 
-To load a text file of program statements, see **IMPORT**.
+Actually writing a large program in this interface is not recommended. See the **IMPORT** command below to load a text file of program statements.
 
 Files are saved to the user's documents directory in the subdirectory `artemis/HOME/`. See below for more information.
 
@@ -142,18 +142,14 @@ Program terminated
 
 ## Disk system and commands
 
-Artemis uses a virtual disk system. By default, the disk HOME is selected. Files will be saved and loaded from the currently selected disk.
+Artemis uses a virtual disk system. By default, the disk HOME is selected. Files will be saved and loaded from the currently selected disk. Disk names and file names are limited to 32-characters. There are no directories.
 
-The disks contents are stored in the user's documents directory in a folder called `artemis`. There is one directory per disk.
-
-Disk names and file names are limited to 32-characters. There is no size or file limit on disks.
-
-Quotes around filenames are normally optional, unless a file extension is included.
+The disk's contents are stored in your documents directory in a folder called `artemis`. There is one directory per disk.
 
 The following disk commands are available:
 - **LIST F** - Lists all the files on the current disk.
 - **LIST D** - Lists available disks.
-- **MOUNT** x - Set the current disk to *x*. If it doesn't exist, create it.
+- **MOUNT** x - Set the current disk to *x*. If it doesn't exist, you will be asked if you want to create it.
 - **UNLINK** x - Delete the file called *x* on the current disk. The file extension must be included.
 - **FORMAT** - Delete all files on the current disk.
 
@@ -163,7 +159,7 @@ Unlike other commands, these allow you to specify a path anywhere on your comput
 
 **IMPORT** x - Load *x*, a text file of basic instructions as a program. Note that no interpretation is done as such. Instead this file in fed in line by line, aborting on an error. The file extension must be included.
 
-TIP: You can also drag and drop `.bas` files on to the Artemis window to import them.
+**TIP: You can also drag and drop `.bas` files on to the Artemis window to import them.**
 
 **EXPORT** x - Export the current program's instructions to text file *x*. This is not a recommended way of saving a program. Uses `.bas` if an extension is not provided.
 
@@ -453,17 +449,20 @@ Hello world!
 * **CLS** - Clears the screen. This command can also be used in the main interface.
 * **BORDER** x - Set the screen's border color to *x*
 * **CURSOR** x, y - Move the cursor to position *x*, *y*
-* **INK** x, red, green, blue - Sets the color of palette entry *x*. *red*,*green* and *blue* can be from 0 to 4, giving a total of 125 possible colors.
 * **PRINTW** t$, x1, y1, x2, y2[, wrap] - Print text *t$* to a virtual "Window" on-screen. The window's top-left position is defined by *x1* and *y1*, and it's bottom-right by *x2* and *y2*. If *wrap* is non-zero, *t$* will be wrapped cleanly - avoiding line-breaks in the middle of words. (This is the default behaviour.) If *t$* is too long, it will be cropped, if it is too short it will be padded with spaces.
+
+### Redefining characters and colors
+
+* **INK** x, red, green, blue - Sets the color of palette entry *x*. *red*,*green* and *blue* can be from 0 to 4, giving a total of 125 possible colors.
 * **SYMBOL** x, y$ - Redefine the bitmap of the character with the code *x*. *y$* is a string that represents the new bitmap. Each character in the string represents one pixel starting at the top-left. Use a space for the background and any other character for the foreground. If *y$* is an empty string, the character will be reset to the default.
 * **SYMBOL** x, b1[, b2] ... [, b8] - Alternate syntax for above, more like classic BASIC variants. Provide 1 - 8 integers from 0 - 255. Each integer's binary value defines one row of pixels, top to bottom. Missing rows are considered empty.
-* **SYMBOLIMG** x$ - Load a complete set of characters from image with filename specified by *x$*. This image should be 128 x 128 pixels, with each 8x8 cell containing a character. Black is treated as the background color and any other color is as foreground. The file should be placed in a disk directory and use a artemis-style filename (alphanumeric, maximum 32 characters.) A number of image types are supported, but a PNG is recommended.
+* **SYMBOLIMG** x$ - Load a complete set of characters from image with filename specified by *x$*. This image should be 128 x 128 pixels, with each 8x8 cell containing a character. Black is treated as the background and any other color as foreground. The file should be placed in a disk directory and using a artemis-friendly filename (alphanumeric, maximum 32 characters.) A number of image types are supported, but a PNG is recommended.
 
 Tip: if you change the symbol for character 239, you will also change Artemis' icon.
 
 ### Screen Modes
 
-You can change the screen mode with the **MODE** x command. Calling **MODE** will also clear the screen. Different modes offer compromises between number of characters and colors on the screen.
+You can change the screen mode with the **MODE** x command. Where *x* is the mode you want to switch to. Changing mode will clear the screen. Different modes offer compromises between number of characters and colors on the screen.
 
 e.g. `MODE 2` to change to mode 2.
 
@@ -480,15 +479,17 @@ Number | Characters | Colors | Pixel shape | Notes
 
 #### Direct Screen Access Commands
 
+These commands allow you to access and modify the current contents of the screen and control when the screen is drawn.
+
 * **PEEKS**(x, mode) - Inspect screen cell in position *x*. Where *0* is the top-left of the screen. Return value depends on *mode*. *0*: The code of the character. *1*: The foreground color. *2*: The background color.
 * **POKES** x, mode, val - Change the values of screen cell. *x* and *mode* use the same values as **PEEK**, above. *val* is the value that will be set. Note that any changes made won't be visible until the screen is next drawn.
-* **POKES** x, c, f, b - Alternate syntax of the above, allows you to set the *c*haracter, *f*oreground and *b*ackground will be set all at once.
+* **POKES** x, c, f, b - Alternate syntax of the above, allows you to set the *c*haracter, *f*oreground and *b*ackground all at once.
 * **DUMPS** x$ - Dump the screen to a file with name *x$*. Do not provide an extension, `.sda` will be added automatically.
-* **LOADS** x$ - Load screen data from a file with name *x$*. `.sda` will be added automatically. The screen mode, ink and border color is changed if needed. Like **POKES** the change won't be visible until the screen is next drawn.
+* **LOADS** x$ - Load screen data from a file with name *x$* in to the screen. `.sda` will be added automatically. The screen mode, ink and border color is changed if needed. Like **POKES** the change won't be visible until the screen is next drawn.
 * **REFRESH** - Force the screen to draw.
 * **REFRESH WAIT** - Prevent the screen from drawing until the next **REFRESH** or user input command.
 
-TIP: Resources are provided to help you create `.sda` screen files using playscii (http://vectorpoem.com/playscii/) See `tools/playscii` in the install directory.
+TIP: Resources are provided to help you create `.sda` screen files using playscii (http://vectorpoem.com/playscii/) - a nice GUI. See `tools/playscii` in the install directory.
 
 ### Unconditional branching
 
@@ -809,7 +810,7 @@ Note that unlike some other BASIC variants, string positions start at *0*.
 The functions are:
 
 * **ASC**(x$) - Returns the character code for *x$*. *x$* is expected to be a single character.
-Note that despite the name, this function can return codes outside the ASCII range.
+Note that despite the name, this function can return codes outside the ASCII range, up to 255.
 * **CHR$**(x) - Returns the character specified by character code *x*.
 * **INSTR**(x$, y$[, start[, end]]) - Returns position of *y$* inside *x$*, optionally start searching
 at position *start* and end at *end*. Returns -1 if no match found.
@@ -835,7 +836,7 @@ A - 65
 
 ### Saving and Loading from disk
 
-Variables can be saved and retrieved from disk using a similar method to the **DATA** and **READ** commands. This can be used for example for savegames, or referencing pre-created data you don't wish to define in code.
+Variables can be saved and retrieved from disk using a similar method to the **DATA** and **READ** commands. This can be used for example for save games, or referencing pre-created data you don't wish to define in code.
 
 Files are written to a read from the currently selected disk. See "Disk system and commands", above.
 
@@ -877,9 +878,11 @@ Music is actually played via pygame which uses your system's midi. It may sound 
 * **WAIT** x - Pauses execution for *x* seconds. *x* can include a decimal point to allow sub-second waiting. Note: this command is not particularly accurate and you should expect the actual wait time to be +/-0.04 seconds at the least.
 * **SYSTIME** - Return the time the system has been active in seconds. This value includes fractions of a second.
 
-### A note about system timing
+#### A note about system timing
 
-The screen can be drawn at most 30 times a second. This is a 'tick'. The **PRINT**, **BORDER**, **KEY** and **CLS** commands cause a tick, unless **REFRESH WAIT** is called first. Executing 10,000 lines of code since the last tick will also cause a tick.
+The screen can be drawn at most 30 times a second. This is a 'tick'. The **PRINT**, **BORDER**, **KEY** and **CLS** commands cause the screen to draw, unless **REFRESH WAIT** is called first.
+
+Executing 10,000 lines of code since the last tick will also cause a tick, but will not cause the screen to draw.
 
 JiBASIC is not particularly optimised. Your program may get far less than 30 ticks/second. You should NOT assume you can draw the screen in a timely manner.
 
