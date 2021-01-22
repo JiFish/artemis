@@ -17,7 +17,7 @@ import midiutil
 __MIDI_BUILDER = None
 __POSITION = 0
 __CURRENT_OCTAVE = 5
-__CURRENT_NOTE_LEN = 0.25
+__CURRENT_NOTE_LEN = 1
 __NOTES_UNSORTED = {'C':0,  'C#':1, 'C+':1,  'D-':1,  'D':2,   'D#':3, 'D+':3,   'E-': 3,
                     'E':4,  'F':5,  'F#':6,  'F+':6,  'G-':6,  'G':7,  'G#':8,   'G+':8,
                     'A-':8, 'A':9,  'A#':10, 'A+':10, 'B-':10, 'B':11, 'P':-999, 'R':-999}
@@ -43,7 +43,7 @@ def __new_song():
     __MIDI_BUILDER.addProgramChange(0, 0, 0, 80)
     __POSITION = 0
     __CURRENT_OCTAVE = 5
-    __CURRENT_NOTE_LEN = 0.25
+    __CURRENT_NOTE_LEN = 1
 
 def __add_tempo(tempo):
     if (__MIDI_BUILDER == None): __new_song()
