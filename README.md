@@ -450,6 +450,7 @@ Hello world!
 * **CLS** - Clears the screen. This command can also be used in the main interface.
 * **BORDER** x - Set the screen's border color to *x*
 * **CURSOR** x, y - Move the cursor to position *x*, *y*
+* **PLOT** x, y - Draws a psuedo-pixel using the current text color in position *x*, *y*. Treats each screen text-cell as 4 pixels giving a psuedo-pixel mode with dimensions twice that of the text mode. (e.g. 80 x 50 pixels in the default mode 1.) _(Note: A limitation of this is PLOT will overwrite the color of previous pixels within the same text-cell. This phenomenon is known as "Color Clash.")_
 * **PRINTW** t$, x1, y1, x2, y2[, wrap] - Print text *t$* to a virtual "Window" on-screen. The window's top-left position is defined by *x1* and *y1*, and it's bottom-right by *x2* and *y2*. If *wrap* is non-zero, *t$* will be wrapped cleanly - avoiding line-breaks in the middle of words. (This is the default behaviour.) If *t$* is too long, it will be cropped, if it is too short it will be padded with spaces.
 
 ### Redefining characters and colors
@@ -881,11 +882,13 @@ Music is actually played via pygame which uses your system's midi. It may sound 
 
 #### A note about system timing
 
-The screen can be drawn at most 30 times a second. This is a 'tick'. The **PRINT**, **BORDER**, **KEY** and **CLS** commands cause the screen to draw, unless **REFRESH WAIT** is called first.
+Artemis can 'tick' at most 30 times a second. This is a hard limit of the speed of the system.
 
-Executing 10,000 lines of code since the last tick will also cause a tick, but will not cause the screen to draw.
+Drawing the screen causes a tick. The **BORDER**, **CLS**, **KEY**, **PLOT** and **PRINT** commands cause the screen to draw, unless **REFRESH WAIT** is used first. **REFRESH** forces the screen to draw.
 
-JiBASIC is not particularly optimised. Your program may get far less than 30 ticks/second. You should NOT assume you can draw the screen in a timely manner.
+Executing 10,000 lines of code since the last tick will also cause a tick.
+
+JiBASIC is not particularly optimised. Your program may get less than 30 ticks/second. You should NOT assume you can draw the screen in a timely manner.
 
 Commands that halt execution of the program such as **INPUT** and **WAIT** will cause many ticks before control is handed back to the program.
 

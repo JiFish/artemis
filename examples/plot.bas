@@ -1,0 +1,16 @@
+10 CLS
+20 COL 1
+30 FOR I = 0 TO 400
+40 X = I / 5
+50 Y = ( COS ( X / 2 ) * 10 ) + 25
+60 PLOT X , Y
+70 NEXT I
+
+120 COL 4
+130 FOR I = 0 TO 400
+140 X = I / 5
+150 Y = ( COS ( X / 4 ) * 10 ) + 25
+160 PLOT X , Y
+170 NEXT I
+
+200 COL 1

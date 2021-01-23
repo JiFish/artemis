@@ -366,6 +366,36 @@ def ui_print(text, do_draw = None, pos = None):
         draw()
         tick()
 
+def ui_psuedo_plot(x, y):
+    # Round to int values
+    x = round(x)
+    y = round(y)
+
+    # Invalid plot position, fail silently
+    if x >= __SCREEN_WIDTH*2 or x < 0 or y >= __SCREEN_HEIGHT*2 or y < 0:
+        return
+
+    # Work out in_nibble
+    in_nibble = 2**(((y%2)*2)+x%2)
+
+    # Fetch current cell
+    cellpos = x//2 + ((y//2)*__SCREEN_WIDTH)
+    [current_nibble, _, background] = get_cell(cellpos)
+    # Calculate current_nibble
+    current_nibble -= 128
+    # Treat all characters outside range as blank
+    if current_nibble < 0 or current_nibble > 15:
+        current_nibble = 0
+
+    # Calculate and set new character cell
+    out_nibble = (in_nibble | current_nibble)+128
+    set_cell(cellpos, [out_nibble, __FOREGROUND_COL, background])
+
+    if __AUTO_DRAW:
+        draw()
+        tick()
+
+
 def ui_print_window(text, x1, y1, x2, y2, wrap = True):
     if y2 < y1 or x2 < y1 or x1 < 0 or x2 >= __SCREEN_WIDTH or y1 < 0 or y2 >= __SCREEN_HEIGHT:
         raise ValueError("Invalid window position")

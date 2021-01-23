@@ -287,6 +287,10 @@ class BASICParser:
             self.__musicstopstmt()
             return None
 
+        elif self.__token.category == Token.PLOT:
+            self.__plotstmt()
+            return None
+
         else:
             # Ignore comments, but raise an error
             # for anything else
@@ -633,6 +637,19 @@ class BASICParser:
                 self.__advance()  # Advance past comma
                 self.__expr()
                 self.__data_values.append(self.__operand_stack.pop())
+
+    def __plotstmt(self):
+        """Parses a PLOT statement
+        """
+        self.__advance()   # Advance past PLOT token
+
+        self.__expr()
+        xpos = self.__operand_stack.pop()
+        self.__consume(Token.COMMA)
+        self.__expr()
+        ypos = self.__operand_stack.pop()
+
+        artemis.ui_psuedo_plot(xpos, ypos)
 
     def __musicplaystmt(self):
         """Parses a MUSICPLAY statement"""
