@@ -288,9 +288,9 @@ def tick():
     return events
 
 def wait(secs = 1):
+    loops = max(1,round(secs*30))
     if __AUTO_DRAW:
         draw()
-    loops = round(secs*30)
     for _ in range(loops):
         tick()
 
