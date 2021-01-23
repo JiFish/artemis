@@ -400,20 +400,25 @@ def ui_print_breaking_list(plist):
     # Blank link at end
     plist.append("")
     pak_str = "- PRESS ANY KEY TO CONTINUE -"[:__SCREEN_WIDTH-1]
-    pak_str = (" "*((__SCREEN_WIDTH-len(pak_str))//2)) + pak_str + "\n"
+    pak_str = (" "*((__SCREEN_WIDTH-len(pak_str))//2)) + pak_str
     # Loop the list,
     # pausing when we reach the height of the screen
     for line in plist:
         lines_in_row = max(1,-(-len(line)//__SCREEN_WIDTH))
         line_row += lines_in_row
-        if line_row >= __SCREEN_HEIGHT-1:
+        if line_row >= __SCREEN_HEIGHT:
             ui_print(pak_str, do_draw=False)
             ui_input_key()
-            set_cursor(0,__SCREEN_HEIGHT-2)
-            ui_print(" "*__SCREEN_WIDTH, do_draw=False)
-            set_cursor(0,__SCREEN_HEIGHT-2)
+            set_cursor(0,__SCREEN_HEIGHT-1)
+            ui_print(" "*len(pak_str), do_draw=False)
+            set_cursor(0,__SCREEN_HEIGHT-1)
             line_row = lines_in_row
-        ui_print(line+"\n", do_draw=False)
+        # Special case, where the line is exactly divisible by
+        # the screen width, no newline is needed unless the
+        # line is empty
+        if line == "" or len(line) % 40 != 0:
+            line += "\n"
+        ui_print(line, do_draw=False)
     draw()
     tick()
 
