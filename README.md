@@ -446,9 +446,9 @@ Hello world!
 
 ### Additional Screen Commands
 
-* **COL** x[, y] - Sets the text color to *x* and optionally the background color to *y*.
-* **CLS** - Clears the screen. This command can also be used in the main interface.
 * **BORDER** x - Set the screen's border color to *x*
+* **CLS** - Clears the screen. This command can also be used in the main interface.
+* **COL** x[, y] - Sets the text color to *x* and optionally the background color to *y*.
 * **CURSOR** x, y - Move the cursor to position *x*, *y*
 * **PLOT** x, y - Draws a psuedo-pixel using the current text color in position *x*, *y*. Treats each screen text-cell as 4 pixels giving a psuedo-pixel mode with dimensions twice that of the text mode. (e.g. 80 x 50 pixels in the default mode 1.) _(Note: A limitation of this is PLOT will overwrite the color of previous pixels within the same text-cell. This phenomenon is known as "Color Clash.")_
 * **PRINTW** t$, x1, y1, x2, y2[, wrap] - Print text *t$* to a virtual "Window" on-screen. The window's top-left position is defined by *x1* and *y1*, and it's bottom-right by *x2* and *y2*. If *wrap* is non-zero, *t$* will be wrapped cleanly - avoiding line-breaks in the middle of words. (This is the default behaviour.) If *t$* is too long, it will be cropped, if it is too short it will be padded with spaces.
@@ -460,7 +460,16 @@ Hello world!
 * **SYMBOL** x, b1[, b2] ... [, b8] - Alternate syntax for above, more like classic BASIC variants. Provide 1 - 8 integers from 0 - 255. Each integer's binary value defines one row of pixels, top to bottom. Missing rows are considered empty.
 * **SYMBOLIMG** x$ - Load a complete set of characters from image with filename specified by *x$*. This image should be 128 x 128 pixels, with each 8x8 cell containing a character. Black is treated as the background and any other color as foreground. The file should be placed in a disk directory and using a artemis-friendly filename (alphanumeric, maximum 32 characters.) A number of image types are supported, but a PNG is recommended.
 
-Tip: if you change the symbol for character 239, you will also change Artemis' icon.
+#### Artemis Character Codes
+
+Artemis' character map is very close to the AMSTRAD character map. See `tools/characterset.png` for the complete list.
+
+Partial Breakdown:
+----------|----------------------
+0 - 127   | ASCII
+128 - 143 | Pseudo-pixels used for PLOT command
+165       | Copyleft Symbol
+239       | Artemis' icon. If you redefine this symbol, it will change the program icon
 
 ### Screen Modes
 
