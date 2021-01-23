@@ -912,7 +912,7 @@ class BASICParser:
                 artemis.manipulate_cell(pos, 2, param_three)
 
         except ValueError as e:
-            raise ValueError(e+" in POKES in line " +
+            raise ValueError(str(e)+" in POKES in line " +
                              str(self.__line_number))
 
 
