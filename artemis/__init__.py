@@ -515,7 +515,7 @@ def load_screen(filename):
 
         # INK, presence of ink in a dump is optional
         if 'ink' in screendump:
-            for i, cols in enumerate(screendump['ink']):
+            for i, cols in enumerate(screendump['ink'][:__SCREEN_COLS]):
                 set_palette(i, *cols)
 
         # BORDER, also optional
@@ -524,10 +524,11 @@ def load_screen(filename):
 
         pos = 0
         for i in screendump['data']:
-            char = min(255,max(0,i[0]))
-            fg = min(__SCREEN_COLS-1,max(0,i[1]))
-            bg = min(__SCREEN_COLS-1,max(0,i[2]))
-            screen[pos] = [char,fg,bg]
+            if i != None:
+                char = min(255,max(0,i[0]))
+                fg = min(__SCREEN_COLS-1,max(0,i[1]))
+                bg = min(__SCREEN_COLS-1,max(0,i[2]))
+                screen[pos] = [char,fg,bg]
             pos += 1
             if pos == __SCREEN_BUFFER_SIZE:
                 break
