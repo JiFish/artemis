@@ -110,12 +110,14 @@ def main():
                 elif tokenlist[0].category == Token.LIST:
                     try:
                         type = tokenlist[1].lexeme[0].upper()
-                        assert type in ['P','F','D']
+                        assert type in ['P','F','D','S']
                     except:
                         type = 'P'
 
                     if type == 'F':     # List files on the disk
                         list = dos.list_disk()
+                    elif type == 'S':     # List files on the disk
+                        list = dos.list_disk(ext=".pfa")
                     elif type == 'D':   # List all disks
                         list = dos.list_all_disks()
                     else:               # List Program

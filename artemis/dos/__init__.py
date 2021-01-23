@@ -53,13 +53,16 @@ def format_disk():
     for f in get_valid_files():
         os.remove(f['name'])
 
-def list_disk():
+def list_disk(ext = ""):
+    ext = ext.lower()
     filelist = []
     filelist.append('Listing contents of "'+__CURRENT_DISK+'".')
     filelist.append('')
     tsize = 0
     fcount = 0
     for f in get_valid_files():
+        if not f['name'].lower().endswith(ext):
+            continue
         fcount += 1
         tsize += f['size']
         size = "{:,} B".format(f['size'])

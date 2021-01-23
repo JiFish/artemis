@@ -148,6 +148,7 @@ The disk's contents are stored in your documents directory in a folder called `a
 
 The following disk commands are available:
 - **LIST F** - Lists all the files on the current disk.
+- **LIST S** - Lists all saved programs on the current disk.
 - **LIST D** - Lists available disks.
 - **MOUNT** x - Set the current disk to *x*. If it doesn't exist, you will be asked if you want to create it.
 - **UNLINK** x - Delete the file called *x* on the current disk. The file extension must be included.
