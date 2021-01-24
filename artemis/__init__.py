@@ -291,7 +291,7 @@ def wait(secs = 1):
     loops = max(1,round(secs*30))
     if __AUTO_DRAW:
         draw()
-    for _ in range(loops):
+    for _ in range(loops-1):
         tick()
 
 def scroll_screen():
