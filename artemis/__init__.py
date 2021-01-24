@@ -269,7 +269,7 @@ def tick():
     __INSTRUCTIONS_COUNT = 0
 
     if fps_flag:
-        print ("{:.0f} fps   ".format(1/max(0.00000000001,time.time()-__ticktime)), end='\r')
+        print ("{:.2f} fps   ".format(__CLOCK.get_fps()), end='\r')
         __ticktime = time.time()
 
     __CLOCK.tick(30)
