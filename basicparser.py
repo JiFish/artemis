@@ -701,7 +701,7 @@ class BASICParser:
         fn = self.__operand_stack.pop()
 
         try:
-            artemis.load_screen(fn)
+            artemis.load_screen(dos.read_data_file(fn, "sda"))
         except Exception as e:
             raise Exception(str(e) + ' in line '+ str(self.__line_number))
 

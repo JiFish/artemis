@@ -539,10 +539,13 @@ def ui_input_numb():
 def get_system_time():
     return time.time()-_activation_time
 
-def load_screen(filename):
-    global screen
+def easter_egg():
+    with open(os.path.dirname(os.path.realpath(__file__))+'/easter.sda') as easter_file:
+        ee = json.load(easter_file)
+    load_screen(ee)
 
-    screendump = dos.read_data_file(filename, "sda")
+def load_screen(screendump):
+    global screen
 
     try:
         # Screen Mode

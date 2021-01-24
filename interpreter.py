@@ -254,6 +254,10 @@ def main():
                 elif tokenlist[0].category == Token.HELP:
                     webbrowser.open(_help_url)
 
+                # Easter Egg
+                elif tokenlist[0].category == Token.PI:
+                    artemis.easter_egg()
+
                 # Unrecognised input
                 else:
                     artemis.ui_print("Unrecognised input: ")
