@@ -140,7 +140,14 @@ Program terminated
 >
 ```
 
-## Disk system and commands
+### Screen commands
+
+A couple of screen commands can be typed in to the main interface.
+
+- **CLS** - Clear the screen.
+- **RSTS** - Resets the screen. Some programs may redefine colors, text mode and symbols. This command resets everything back to normal.
+
+### Disk system and commands
 
 Artemis uses a virtual disk system. By default, the disk HOME is selected. Files will be saved and loaded from the currently selected disk. Disk names and file names are limited to 32-characters. There are no directories.
 
@@ -459,6 +466,7 @@ Hello world!
 * **SYMBOL** x, y$ - Redefine the bitmap of the character with the code *x*. *y$* is a string that represents the new bitmap. Each character in the string represents one pixel starting at the top-left. Use a space for the background and any other character for the foreground. If *y$* is an empty string, the character will be reset to the default.
 * **SYMBOL** x, b1[, b2] ... [, b8] - Alternate syntax for above, more like classic BASIC variants. Provide 1 - 8 integers from 0 - 255. Each integer's binary value defines one row of pixels, top to bottom. Missing rows are considered empty.
 * **SYMBOLIMG** x$ - Load a complete set of characters from image with filename specified by *x$*. This image should be 128 x 128 pixels, with each 8x8 cell containing a character. Black is treated as the background and any other color as foreground. The file should be placed in a disk directory and using a artemis-friendly filename (alphanumeric, maximum 32 characters.) A number of image types are supported, but a PNG is recommended.
+* **RSTS** - Reset the screen parameters. Mode is set to 1, colors, ink and symbols are all set to the default.
 
 #### Artemis Character Codes
 

@@ -142,6 +142,7 @@ class BASICToken:
         DSKEXPORT       = 130 # DSKEXPORT command
         DSKIMPORT       = 131 # DSKIMPORT command
         PLOT            = 132 # PLOT command
+        RSTS            = 133 # RSTS command
 
 
         # Displayable names for each token category
@@ -170,7 +171,8 @@ class BASICToken:
         'EXPORT', 'FILEIN', 'FILEOUT', 'FILEREAD',
         'SYMBOLIMG', 'MOUNT', 'FORMAT', 'UNLINK',
         'MUSICPLAY', 'MUSICSTOP', 'KEY', 'SYSTIME',
-        'LOADS', 'DUMPS', 'HELP', 'PRINTW', 'PLOT']
+        'LOADS', 'DUMPS', 'HELP', 'PRINTW', 'PLOT',
+        'RSTS']
 
         smalltokens = {'=': ASSIGNOP, '(': LEFTPAREN, ')': RIGHTPAREN,
                        '+': PLUS, '-': MINUS, '*': TIMES, '/': DIVIDE,
@@ -219,7 +221,8 @@ class BASICToken:
                     'MUSICPLAY': MUSICPLAY, 'MUSICSTOP': MUSICSTOP,
                     'KEY': KEY, 'SYSTIME': SYSTIME,
                     'LOADS': LOADS, 'DUMPS': DUMPS,
-                    'HELP': HELP, 'PRINTW': PRINTW, 'PLOT': PLOT}
+                    'HELP': HELP, 'PRINTW': PRINTW, 'PLOT': PLOT,
+                    'RSTS': RSTS}
 
         # Functions
         functions = {ABS, ATN, COS, EXP, INT, LOG, POW, RND, SIN, SQR, TAN,

@@ -235,6 +235,10 @@ class BASICParser:
             self.__clsstmt()
             return None
 
+        elif self.__token.category == Token.RSTS:
+            self.__rstsstmt()
+            return None
+
         elif self.__token.category == Token.BORDER:
             self.__borderstmt()
             return None
@@ -854,6 +858,13 @@ class BASICParser:
         self.__advance()  # Advance past CLS token
 
         artemis.cls()
+
+    def __rstsstmt(self):
+        """Parses a RSTS statement"""
+
+        self.__advance()  # Advance past RSTS token
+
+        artemis.reset_screen()
 
     def __colstmt(self):
         """Parses a COL statement"""

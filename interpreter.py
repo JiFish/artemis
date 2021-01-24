@@ -184,6 +184,10 @@ def main():
                 elif tokenlist[0].category == Token.CLS:
                     artemis.cls()
 
+                # Reset the screen
+                elif tokenlist[0].category == Token.RSTS:
+                    artemis.reset_screen()
+
                 # Mount a new or existing disk
                 elif tokenlist[0].category == Token.MOUNT:
                     if len(tokenlist) == 1: raise ValueError("MOUNT command missing input")

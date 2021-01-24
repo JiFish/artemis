@@ -612,3 +612,16 @@ def flip_fullscreen():
 def disable_auto_draw():
     global __AUTO_DRAW
     __AUTO_DRAW = False
+
+def reset_screen():
+    global __PALLETTE, __CHR_TILE_TABLE
+
+    set_mode(1)
+    set_border(0)
+    set_color(1, 0)
+    # Reset pallete
+    for i in range(__SCREEN_COLS-1):
+        __PALLETTE[i] = __MASTER_PALLETTE[i]
+    # Reset tile table
+    __CHR_TILE_TABLE = [chr.copy() for chr in __MASTER_CHR_TILE_TABLE]
+    set_icon()
