@@ -10,10 +10,10 @@ A Fantasy Computer is neither a recreation of a computer that never existed. Pro
 
 Artemis is supposed to be a challenging fantasy computer. Can you create a fun game with the following limitations?
 
-- Using a fairly limited and slow BASIC language. (Though improvements to the language may be incoming...)
-- With no graphical commands at all, only text
-- 125 possible colors and 255 redefinable character glyphs
+- Using a fairly limited and slow Unstructured BASIC language. (Though improvements to the language may be incoming...)
 - 7 text modes to choose from, each a different compromise between number of characters and colors on the screen
+- 125 possible colors and 255 redefinable character glyphs
+- No graphical modes at all
 
 As mentioned above JiBASIC is slow. This isn't a bug, it's a feature (or to be more accurate not a priority.) Artemis is explicitly not designed to be friendly to developing real-time action games. Turn-based, menu-driven and text-heavy games would be ideal.
 
@@ -37,9 +37,13 @@ Artemis is also powered by pygame2 (https://www.pygame.org/) and midiutil (https
 
 ### To start...
 
-Run `artemis.exe` under Windows.
+#### Windows
 
-Other platforms will require you to install Python 3, then use pip to install the required libraries:
+Run `artemis.exe` under Windows. If you used the installer, an icon will be placed on your desktop.
+
+#### Other platforms
+
+Install Python 3, then use pip to install the required libraries:
 ```
 pip install pygame midiutil
 ```
@@ -48,6 +52,8 @@ Then to start...
 ```
 python interpreter.py
 ```
+
+pypresence for discord presence is an optional library. It will be used if present.
 
 ## The Main Interface
 
@@ -161,7 +167,7 @@ The following disk commands are available:
 - **UNLINK** x - Delete the file called *x* on the current disk. The file extension must be included.
 - **FORMAT** - Delete all files on the current disk.
 
-## Importing and Exporting
+### Importing and Exporting
 
 Unlike other commands, these allow you to specify a path anywhere on your computer and are not subject to the Disk system rules above. Paths must be in quotes. The default directory is `artemis` in your Documents directory.
 
@@ -181,11 +187,43 @@ Program exported to "c:\users\you\Documents\artemis\myfile.bas"
 
 **DSKEXPORT** [x] - Exports the currently selected disk to an file called *x*. This is intended method for sharing your software. All filenames recognised by Artemis will be included. This means no subdirectories. If *x* is not provided, the current disk's name will be used. Uses `.dia` if an extension is not provided.
 
-TIP: `.dia` files are simply zip files, allowing easy creation outside Artemis. You can also drag and drop `.dia` and `.zip` files on to the Artemis window to import them.
+TIP: `.dia` files are simply zip files, allowing easy creation outside Artemis. **You can also drag and drop `.dia` and `.zip` files on to the Artemis window to import them.**
 
-# Programming language
+## Example programs
 
-## Operators
+A number of example programs are provided, you can find them on the EXAMPLES disk. Type `MOUNT EXAMPLES` to switch to the disk and `LIST S` to show the programs. Load using example using `LOAD <name>`, view it's source-code with `LIST` and run it with `RUN`.
+
+Example programs
+------------|----------------------
+`CHARS`     | Prints every available character symbol
+`CODERAIN`  | 'Matrix' inspired falling characters visual. Demonstrates POKES
+`FACTORAL`  | Calculates a factorial from user input
+`FONT`      | Demonstrates replacing the entire symbol set using SYMBOLIMG
+`INK`       | Demonstrates INK command and shows all possible 125 colors
+`INPUT`     | Demonstrates INPUT command
+`KEYCODES`  | Prints key-codes when keys are pushed
+`LOADS`     | Loads a screen-dump file on to the screen using the LOADS command
+`MAZE`      | Demonstrates RND and RNDINT by drawing a random maze
+`MODES`     | Shows every available text mode and default palette
+`MUSIC`     | Demonstrates MUSICPLAY and MUSICSTOP commands
+`PLOT`      | Demonstrates pseudo-pixel plotting using PLOT command
+`PRINTW`    | Demonstrates printing to a window using PRINTW command
+`REFRESH`   | Demonstrates how to control screen drawing with REFRESH WAIT
+`RESETFONT` | Resets to the default character set. (Use after running `FONT`)
+`ROCKPAPERSCISSORS` | Rock, Paper, Scissors game versus the computer
+`SYMBOL`    | Demonstrates changing a single text symbol using the SYMBOL command
+
+Text files containing these examples can be found with the .bas extension in `document\artemis\EXAMPLES\`.
+
+### The Maze
+
+The Maze is a very simple puzzle game serving a proof-of-concept. If you type `MOUNT MAZE` the game will begin automatically.
+
+You can use CTRL-C to exit the game, then use `LIST` to see the program source.
+
+## Programming language
+
+### Operators
 
 A limited range of arithmetic expressions are provided. Addition and subtraction have the lowest precedence,
 but this can be changed with parentheses.
@@ -462,7 +500,7 @@ Hello world!
 
 ### Redefining characters and colors
 
-* **INK** x, red, green, blue - Sets the color of palette entry *x*. *red*,*green* and *blue* can be from 0 to 4, giving a total of 125 possible colors.
+* **INK** x, r, g, b - Sets the color of palette entry *x*. *r*, *g* and *b* can be from 0 to 4, giving a total of 125 possible colors.
 * **SYMBOL** x, y$ - Redefine the bitmap of the character with the code *x*. *y$* is a string that represents the new bitmap. Each character in the string represents one pixel starting at the top-left. Use a space for the background and any other character for the foreground. If *y$* is an empty string, the character will be reset to the default.
 * **SYMBOL** x, b1[, b2] ... [, b8] - Alternate syntax for above, more like classic BASIC variants. Provide 1 - 8 integers from 0 - 255. Each integer's binary value defines one row of pixels, top to bottom. Missing rows are considered empty.
 * **SYMBOLIMG** x$ - Load a complete set of characters from image with filename specified by *x$*. This image should be 128 x 128 pixels, with each 8x8 cell containing a character. Black is treated as the background and any other color as foreground. The file should be placed in a disk directory and using a artemis-friendly filename (alphanumeric, maximum 32 characters.) A number of image types are supported, but a PNG is recommended.
@@ -500,9 +538,9 @@ Mode | Characters | Colors | Pixel shape | Notes
 
 These commands allow you to access and modify the current contents of the screen and control when the screen is drawn.
 
-* **PEEKS**(x, mode) - Inspect screen cell in position *x*. Where *0* is the top-left of the screen. Return value depends on *mode*. *0*: The code of the character. *1*: The foreground color. *2*: The background color.
+* **PEEKS**(x, mode) - Inspect screen cell in position *x*. Where *0* is the top-left of the screen. Return value depends on *mode*. *0*: The character code. *1*: The foreground color code. *2*: The background color code.
 * **POKES** x, mode, val - Change the values of screen cell. *x* and *mode* use the same values as **PEEK**, above. *val* is the value that will be set. Note that any changes made won't be visible until the screen is next drawn.
-* **POKES** x, c, f, b - Alternate syntax of the above, allows you to set the *c*haracter, *f*oreground and *b*ackground all at once.
+* **POKES** x, c, f, b - Alternate syntax of the above, allows you to set the *c*haracter, *f*oreground and *b*ackground codes all at once.
 * **DUMPS** x$ - Dump the screen to a file with name *x$*. Do not provide an extension, `.sda` will be added automatically.
 * **LOADS** x$ - Load screen data from a file with name *x$* in to the screen. `.sda` will be added automatically. The screen mode, ink and border color is changed if needed. Like **POKES** the change won't be visible until the screen is next drawn.
 * **REFRESH** - Force the screen to draw.
@@ -785,6 +823,8 @@ Allowable numeric functions are:
 > -2
 ```
 
+* **PI** - Returns the value of pi.
+
 * **POW**(x, y) - Calculates *x* to the power *y*
 
 * **RND** - Generates a pseudo random number N, where *0 <= N < 1*. Can be
@@ -810,6 +850,8 @@ Random integers can be generated by combining **RND** and **INT**: e.g.
 ```
 
 Seeds may not produce the same result on another platform.
+
+* **RNDINT**(*lo*, *hi*) - Generates a pseudo random integer N, where *lo* <= N <= *hi*. Uses the same seed as above.
 
 * **ROUND**(x) - Rounds number to the nearest integer.
 
@@ -908,10 +950,6 @@ Executing 10,000 lines of code since the last tick will also cause a tick.
 JiBASIC is not particularly optimised. Your program may get less than 30 ticks/second. You should NOT assume you can draw the screen in a timely manner.
 
 Commands that halt execution of the program such as **INPUT** and **WAIT** will cause many ticks before control is handed back to the program.
-
-## Example programs
-
-TODO
 
 ## License
 
