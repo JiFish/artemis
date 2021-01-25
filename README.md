@@ -194,24 +194,24 @@ TIP: `.dia` files are simply zip files, allowing easy creation outside Artemis. 
 A number of example programs are provided, you can find them on the EXAMPLES disk. Type `MOUNT EXAMPLES` to switch to the disk and `LIST S` to show the programs. Load using example using `LOAD <name>`, view it's source-code with `LIST` and run it with `RUN`.
 
 Example programs
---------------------|----------------------
-`CHARS`             | Prints every available character symbol
-`CODERAIN`          | 'Matrix' inspired falling characters visual. Demonstrates POKES
-`FACTORAL`          | Calculates a factorial from user input
-`FONT`              | Demonstrates replacing the entire symbol set using SYMBOLIMG
-`INK`               | Demonstrates INK command and shows all possible 125 colors
-`INPUT`             | Demonstrates INPUT command
-`KEYCODES`          | Prints key-codes when keys are pushed
-`LOADS`             | Loads a screen-dump file on to the screen using the LOADS command
-`MAZE`              | Demonstrates RND and RNDINT by drawing a random maze
-`MODES`             | Shows every available text mode and default palette
-`MUSIC`             | Demonstrates MUSICPLAY and MUSICSTOP commands
-`PLOT`              | Demonstrates pseudo-pixel plotting using PLOT command
-`PRINTW`            | Demonstrates printing to a window using PRINTW command
-`REFRESH`           | Demonstrates how to control screen drawing with REFRESH WAIT
-`RESETFONT`         | Resets to the default character set. (Use after running `FONT`)
-`ROCKPAPERSCISSORS` | Rock, Paper, Scissors game versus the computer
-`SYMBOL`            | Demonstrates changing a single text symbol using the SYMBOL command
+|--------------------|----------------------
+|`CHARS`             | Prints every available character symbol
+|`CODERAIN`          | 'Matrix' inspired falling characters visual. Demonstrates POKES
+|`FACTORAL`          | Calculates a factorial from user input
+|`FONT`              | Demonstrates replacing the entire symbol set using SYMBOLIMG
+|`INK`               | Demonstrates INK command and shows all possible 125 colors
+|`INPUT`             | Demonstrates INPUT command
+|`KEYCODES`          | Prints key-codes when keys are pushed
+|`LOADS`             | Loads a screen-dump file on to the screen using the LOADS command
+|`MAZE`              | Demonstrates RND and RNDINT by drawing a random maze
+|`MODES`             | Shows every available text mode and default palette
+|`MUSIC`             | Demonstrates MUSICPLAY and MUSICSTOP commands
+|`PLOT`              | Demonstrates pseudo-pixel plotting using PLOT command
+|`PRINTW`            | Demonstrates printing to a window using PRINTW command
+|`REFRESH`           | Demonstrates how to control screen drawing with REFRESH WAIT
+|`RESETFONT`         | Resets to the default character set. (Use after running `FONT`)
+|`ROCKPAPERSCISSORS` | Rock, Paper, Scissors game versus the computer
+|`SYMBOL`            | Demonstrates changing a single text symbol using the SYMBOL command
 
 Text files containing these examples can be found with the .bas extension in `document\artemis\EXAMPLES\`.
 
@@ -511,11 +511,11 @@ Hello world!
 Artemis' character map is very close to the AMSTRAD character map. See `tools/characterset.png` for the complete list.
 
 Partial Breakdown:
-----------|----------------------
-0 - 127   | ASCII
-128 - 143 | Pseudo-pixels used for PLOT command
-165       | Copyleft Symbol
-239       | Artemis' icon. If you redefine this symbol, it will change the program icon
+|----------|----------------------
+|0 - 127   | ASCII
+|128 - 143 | Pseudo-pixels used for PLOT command
+|165       | Copyleft Symbol
+|239       | Artemis' icon. If you redefine this symbol, it will change the program icon
 
 ### Screen Modes
 
