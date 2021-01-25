@@ -1,5 +1,5 @@
-* TOC
-{:toc}
+**[Home](/)**
+**[Programming Reference](/programming)**
 
 # The Main Interface
 

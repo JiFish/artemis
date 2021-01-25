@@ -1,7 +1,9 @@
-* TOC
-{:toc}
+**[The Main Interface](/main)**
+**[Programming Reference](/programming)**
 
 # Artemis - A Fantasy Microcomputer
+
+![Artemis Screen](/artemis_screen.gif)
 
 ## What is a Fantasy Computer?
 
@@ -30,11 +32,11 @@ Artemis is also free open-source software and should work on many platforms.
 
 Artemis is currently beta software. However, an important goal is to maintain forward compatibility for programs.
 
-JiBASIC is a fork of PyBasic by richpl (https://github.com/richpl/PyBasic) with many platform-dependent features added. Fixes and improvements from PyBasic will be pulled in to JiBASIC, and any fixes here will be sent back via pull-request. Much of the following documentation is also forked from PyBasic.
+JiBASIC is a fork of [PyBasic](https://github.com/richpl/PyBasic) by richpl with many platform-dependent features added. Fixes and improvements from PyBasic will be pulled in to JiBASIC, and any fixes here will be sent back via pull-request. Much of the following documentation is also forked from PyBasic.
 
 Currently most programs written for, or saved in, PyBasic will run in Artemis. But this may not be the case in the future.
 
-Artemis is also powered by pygame2 (https://www.pygame.org/) and midiutil (https://github.com/MarkCWirt/MIDIUtil)
+Artemis is also powered by [pygame2](https://www.pygame.org/) and [midiutil](https://github.com/MarkCWirt/MIDIUtil)
 
 ## To start...
 

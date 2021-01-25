@@ -1,9 +1,10 @@
-* TOC
-{:toc}
+**[Home](/)**
+**[The Main Interface](/main)**
 
 # JiBASIC Programming language
 
-(A fork of PyBasic.)
+* TOC
+{:toc}
 
 ## Operators
 
