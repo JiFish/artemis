@@ -263,14 +263,12 @@ def set_border(col):
         draw()
         tick()
 
-__ticktime = __activation_time
 def tick():
-    global __INSTRUCTIONS_COUNT, __ticktime
+    global __INSTRUCTIONS_COUNT
     __INSTRUCTIONS_COUNT = 0
 
     if fps_flag:
         print ("{:.2f} fps   ".format(__CLOCK.get_fps()), end='\r')
-        __ticktime = time.time()
 
     __CLOCK.tick(30)
 
