@@ -47,13 +47,13 @@ except ImportError:
 def main():
     artemis.set_caption("Artemis Fantasy Microcomputer")
     artemis.set_color(6)
-    artemis.ui_print("Artemis Fantasy Microcomputer {}{}\n\n".format(chr(176), date.today().year), do_draw=False)
+    artemis.ui_print("Artemis Microcomputer {}{}\n\n".format(chr(176), date.today().year), do_draw=False)
     artemis.ui_print(" JiBASIC {}\n\n".format(artemis.version), do_draw=False)
     artemis.set_color(1)
     artemis.ui_print("Type HELP to open documentation.\n\n", do_draw=False)
     artemis.ui_print("READY\n", do_draw=False)
     for i in range(0,8):
-        artemis.screen[111+i] = [214,(i+1)%8,i]
+        artemis.screen[31+i] = [214,(i+1)%8,i]
 
     lexer = Lexer()
     program = Program()
