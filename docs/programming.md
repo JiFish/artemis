@@ -1,3 +1,5 @@
+* TOC {:toc}
+
 # JiBASIC Programming language
 
 (A fork of PyBasic.)

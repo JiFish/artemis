@@ -1,3 +1,5 @@
+* TOC {:toc}
+
 # Artemis - A Fantasy Microcomputer
 
 ## What is a Fantasy Computer?

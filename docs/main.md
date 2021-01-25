@@ -1,3 +1,5 @@
+* TOC {:toc}
+
 # The Main Interface
 
 When Artemis is loaded, you will be presented with a command input screen. From here you can create, load or save programs and a few perform a few other tasks.
