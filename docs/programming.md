@@ -1,4 +1,5 @@
-* TOC {:toc}
+* TOC
+{:toc}
 
 # JiBASIC Programming language
 
