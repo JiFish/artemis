@@ -288,11 +288,12 @@ def tick():
     return events
 
 def wait(secs = 1):
-    loops = max(1,round(secs*30))
     if __AUTO_DRAW:
         draw()
-    for _ in range(loops-1):
-        tick()
+    secs = max(1,int(secs*1000))
+    while secs > 0:
+        events = tick()
+        secs -= __CLOCK.get_time()
 
 def scroll_screen():
     global screen, __CURSOR_POS
