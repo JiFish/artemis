@@ -107,6 +107,10 @@ class BASICToken:
         OR              = 74  # OR operator
         NOT             = 75  # NOT operator
         PI              = 76  # PI constant
+        RNDINT          = 77  # RNDINT function
+        #PUSH            = 78  # PUSH command
+        #POP             = 79  # POP function
+        #DEQUEUE         = 80  # DEQUEUE function
 
         # JiBasic specific from here. Leaving gap for easier code sharing with PyBasic
         COL             = 100 # Set colors command
@@ -115,7 +119,7 @@ class BASICToken:
         IMPORT          = 103 # Import program from text command
         BORDER          = 104 # Set border colour command
         CURSOR          = 105 # Set cursor position command
-        RNDINT          = 106 # RNDINT function
+
         WAITKEY         = 107 # WAITKEY command
         PEEKS           = 108 # PEEKS function
         POKES           = 109 # POKES command
@@ -159,14 +163,15 @@ class BASICToken:
         'LOG', 'SIN', 'TAN', 'DATA', 'READ', 'INT',
         'CHR', 'ASC', 'STR', 'MID', 'MODULO', 'TERNARY',
         'VAL', 'LEN', 'UPPER', 'LOWER', 'ROUND',
-        'MAX', 'MIN', 'INSTR', 'AND', 'OR', 'NOT', 'PI']
+        'MAX', 'MIN', 'INSTR', 'AND', 'OR', 'NOT', 'PI',
+        'RNDINT']
 
         # Pad the list up to 99
         catnames += [''] * (99 - len(catnames))
 
         # Add JiBasic Cat Names
         catnames += ['COL', 'CLS', 'WAIT', 'IMPORT',
-        'BORDER', 'CURSOR', 'RNDINT', 'WAITKEY', 'PEEKS',
+        'BORDER', 'CURSOR', 'WAITKEY', 'PEEKS',
         'POKES', 'SYMBOL', 'REFRESH', 'INK', 'MODE',
         'EXPORT', 'FILEIN', 'FILEOUT', 'FILEREAD',
         'SYMBOLIMG', 'MOUNT', 'FORMAT', 'UNLINK',
@@ -203,13 +208,13 @@ class BASICToken:
                     'ROUND': ROUND, 'MAX': MAX, 'MIN': MIN,
                     'INSTR': INSTR, 'END': STOP,
                     'AND': AND, 'OR': OR, 'NOT': NOT,
-                    'PI': PI}
+                    'PI': PI, 'RNDINT': RNDINT}
 
         # JiBasic Dictionary of BASIC reserved words
         keywords = {**keywords,
                     'COL': COL, 'CLS': CLS, 'WAIT': WAIT,
                     'IMPORT': IMPORT, 'BORDER': BORDER,
-                    'CURSOR': CURSOR, 'RNDINT': RNDINT,
+                    'CURSOR': CURSOR,
                     'WAITKEY': WAITKEY, 'PEEKS': PEEKS,
                     'POKES': POKES, 'SYMBOL': SYMBOL,
                     'REFRESH': REFRESH, 'INK':INK, 'MODE':MODE,
@@ -227,10 +232,10 @@ class BASICToken:
         # Functions
         functions = {ABS, ATN, COS, EXP, INT, LOG, POW, RND, SIN, SQR, TAN,
                      CHR, ASC, MID, TERNARY, STR, VAL, LEN, UPPER, LOWER,
-                     ROUND, MAX, MIN, INSTR, PI}
+                     ROUND, MAX, MIN, INSTR, PI, RNDINT}
 
         # JiBasic Functions
-        functions = functions.union({RNDINT, PEEKS, WAITKEY, KEY, SYSTIME})
+        functions = functions.union({PEEKS, WAITKEY, KEY, SYSTIME})
 
         def __init__(self, column, category, lexeme):
 
