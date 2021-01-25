@@ -194,6 +194,7 @@ TIP: `.dia` files are simply zip files, allowing easy creation outside Artemis. 
 A number of example programs are provided, you can find them on the EXAMPLES disk. Type `MOUNT EXAMPLES` to switch to the disk and `LIST S` to show the programs. Load using example using `LOAD <name>`, view it's source-code with `LIST` and run it with `RUN`.
 
 Example programs
+|                    | 
 |--------------------|----------------------
 |`CHARS`             | Prints every available character symbol
 |`CODERAIN`          | 'Matrix' inspired falling characters visual. Demonstrates POKES
@@ -511,6 +512,7 @@ Hello world!
 Artemis' character map is very close to the AMSTRAD character map. See `tools/characterset.png` for the complete list.
 
 Partial Breakdown:
+|          | 
 |----------|----------------------
 |0 - 127   | ASCII
 |128 - 143 | Pseudo-pixels used for PLOT command
