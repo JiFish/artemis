@@ -1,2 +1,9 @@
+name: Artemis
+description: A Fantasy Microcomputer
 theme: jekyll-theme-dinky
 markdown: kramdown
+
+kramdown:
+  syntax_highlighter_opts:
+      # This might be 'close enough'
+      default_lang: bbcbasic

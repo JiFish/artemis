@@ -28,7 +28,7 @@ Artemis' specifications (and name) were inspired by the Amstrad CPC line of mach
 
 ## Development
 
-Artemis is also free open-source software and should work on many platforms.
+Artemis is also free open-source software and should work on many platforms. Artemis / JiBASIC is made available under the GNU General Public License, version 3.0 or later (GPL-3.0-or-later).
 
 Artemis is currently beta software. However, an important goal is to maintain forward compatibility for programs.
 
@@ -78,7 +78,6 @@ Example programs
 * `PLOT` - Demonstrates pseudo-pixel plotting using PLOT command
 * `PRINTW` - Demonstrates printing to a window using PRINTW command
 * `REFRESH` - Demonstrates how to control screen drawing with REFRESH WAIT
-* `RESETFONT` - Resets to the default character set. (Use after running `FONT`)
 * `ROCKPAPERSCISSORS` - Rock, Paper, Scissors game versus the computer
 * `SYMBOL` - Demonstrates changing a single text symbol using the SYMBOL command
 

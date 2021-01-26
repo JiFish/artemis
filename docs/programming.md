@@ -332,7 +332,7 @@ These commands allow you to access and modify the current contents of the screen
 * **REFRESH** - Force the screen to draw.
 * **REFRESH WAIT** - Prevent the screen from drawing until the next **REFRESH** or user input command.
 
-TIP: Resources are provided to help you create `.sda` screen files using playscii (http://vectorpoem.com/playscii/) - a nice GUI. See `tools/playscii` in the install directory.
+TIP: Resources are provided to help you create `.sda` screen files using [playscii](http://vectorpoem.com/playscii/) - a nice GUI. See `tools/playscii` in the install directory.
 
 ## Unconditional branching
 
