@@ -3,6 +3,9 @@ description: A Fantasy Microcomputer
 theme: jekyll-theme-dinky
 markdown: kramdown
 
+plugins:
+  - jekyll-sitemap
+
 kramdown:
   syntax_highlighter_opts:
       # This might be 'close enough'

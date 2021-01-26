@@ -1,4 +1,4 @@
-# A Fantasy Microcomputer
+# Artemis - A Fantasy Microcomputer
 
 Artemis is supposed to be a challenging fantasy computer. Can you create a fun game with the following limitations?
 
