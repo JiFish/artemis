@@ -39,4 +39,6 @@ The full documentation, including programming reference, is available at https:/
 
 ## License
 
-Artemis / JiBASIC is made available under the GNU General Public License, version 3.0 or later (GPL-3.0-or-later).
+Artemis contains a fork of [PyBasic](https://github.com/richpl/PyBasic) by richpl.
+
+Artemis / JiBASIC is available under the GNU General Public License, version 3.0 or later (GPL-3.0-or-later).
