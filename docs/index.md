@@ -3,7 +3,7 @@
 
 # Artemis - A Fantasy Microcomputer
 
-![Artemis Screen](/artemis_screen.gif)
+![Artemis Screen](artemis_screen.gif)
 
 ## What is a Fantasy Computer?
 

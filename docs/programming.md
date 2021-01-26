@@ -291,7 +291,9 @@ Hello world!
 
 ### Artemis Character Codes
 
-Artemis' character map is very close to the AMSTRAD character map. See `tools/characterset.png` for the complete list.
+Artemis' character map is very close to the AMSTRAD character map.
+
+![Artemis Character Codes](characterset.png)
 
 Partial Breakdown:
 
