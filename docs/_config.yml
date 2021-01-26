@@ -6,4 +6,4 @@ markdown: kramdown
 kramdown:
   syntax_highlighter_opts:
       # This might be 'close enough'
-      default_lang: bbcbasic
+      default_lang: basic
