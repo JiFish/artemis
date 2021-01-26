@@ -1,5 +1,5 @@
-**[Home](/)**
-**[Programming Reference](/programming)**
+- **[Home](.)**
+- **[Programming Reference](programming)**
 
 # The Main Interface
 

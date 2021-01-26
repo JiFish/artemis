@@ -1,5 +1,5 @@
-**[Home](/)**
-**[The Main Interface](/main)**
+- **[Home](.)**
+- **[The Main Interface](main)**
 
 # JiBASIC Programming language
 

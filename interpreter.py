@@ -33,7 +33,7 @@ from datetime import date
 
 dos = artemis.dos
 
-_help_url = "https://github.com/JiFish/artemis#the-main-interface"
+_help_url = "https://jifish.github.io/artemis/main"
 
 # Discord Presence. Fails gracefully if module does not exist
 try:

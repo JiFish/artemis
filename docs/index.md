@@ -1,5 +1,5 @@
-**[The Main Interface](/main)**
-**[Programming Reference](/programming)**
+- **[The Main Interface](main)**
+- **[Programming Reference](programming)**
 
 # Artemis - A Fantasy Microcomputer
 
