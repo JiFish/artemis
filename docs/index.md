@@ -7,7 +7,7 @@
 
 ## Downloading
 
-Download the latest release from the [Releases](https://github.com/JiFish/artemis/releases) page. See [To Start](to-start) for more instructions.
+Download the latest release from the [Releases](https://github.com/JiFish/artemis/releases) page. See [To Start](#to-start) for more instructions.
 
 ## What is a Fantasy Computer?
 
