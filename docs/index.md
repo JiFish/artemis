@@ -5,6 +5,10 @@
 
 ![Artemis Screen](artemis_screen.gif)
 
+## Downloading
+
+Download the latest release from the [Releases](https://github.com/JiFish/artemis/releases) page. See [To Start](to-start) for more instructions.
+
 ## What is a Fantasy Computer?
 
 A Fantasy Computer is neither a recreation of a computer that never existed. Providing a platform to create software with the limitations of older machines. The idea is to be inspired and challenged by these constants.
@@ -42,7 +46,9 @@ Artemis is also powered by [pygame2](https://www.pygame.org/) and [midiutil](htt
 
 ### Windows
 
-Run `artemis.exe` under Windows. If you used the installer, an icon will be placed on your desktop.
+If you select the msi, run the installation and a shortcut will be placed on the desktop.
+
+Otherwise, unzip the download and run `artemis.exe`.
 
 ### Other platforms
 
@@ -58,7 +64,11 @@ python interpreter.py
 
 pypresence for discord presence is an optional library. It will be used if present.
 
-## Example programs
+## First Steps!
+
+Try typing `HELP` to open the [main interface documentation](main).
+
+### Example programs
 
 A number of example programs are provided, you can find them on the EXAMPLES disk. Type `MOUNT EXAMPLES` to switch to the disk and `LIST S` to show the programs. Load using example using `LOAD <name>`, view it's source-code with `LIST` and run it with `RUN`.
 
@@ -83,7 +93,7 @@ Example programs
 
 Text files containing these examples can be found with the .bas extension in `document\artemis\EXAMPLES\`.
 
-## The Maze
+### The Maze
 
 The Maze is a very simple puzzle game serving a proof-of-concept. If you type `MOUNT MAZE` the game will begin automatically.
 
