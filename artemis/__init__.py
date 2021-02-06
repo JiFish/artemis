@@ -55,7 +55,9 @@ __BORDER_COL = 0;
 screen = [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_BUFFER_SIZE)]
 __CURSOR = ord("_")
 __CURSOR_POS = 0
+__CURSOR_I_POS = 0
 __CURSOR_VISIBLE = False
+__INPUT_BUFFER = [[]]
 
 __ICON_CHARACTER = 239
 
@@ -109,6 +111,7 @@ __MASTER_CHR_TILE_TABLE = [chr.copy() for chr in __CHR_TILE_TABLE]
 
 __MASTER_CHR_TILE_TABLE = __load_tile_table(os.path.dirname(os.path.realpath(__file__))+"/charset.png", 8, 8)
 __CLOCK = pygame.time.Clock()
+pygame.scrap.init()
 
 # Maximum instructions before forcing a tick
 __MAX_INSTRUCTIONS = 10000
@@ -297,13 +300,14 @@ def wait(secs = 1):
         secs -= __CLOCK.get_time()
 
 def scroll_screen():
-    global screen, __CURSOR_POS
+    global screen, __CURSOR_POS, __CURSOR_I_POS
 
-    while __CURSOR_POS < __SCREEN_BUFFER_SIZE: return
+    if __CURSOR_POS < __SCREEN_BUFFER_SIZE: return
 
     screen = screen[__SCREEN_WIDTH:]
     screen += [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_WIDTH)]
     __CURSOR_POS -= __SCREEN_WIDTH
+    __CURSOR_I_POS -= __SCREEN_WIDTH
 
 def draw():
     global __AUTO_DRAW
@@ -362,7 +366,7 @@ def set_color_safe(f, b = -1):
     if b >= __SCREEN_COLS: b = -1
     set_color(f, b)
 
-def ui_print(text, do_draw = None, pos = None):
+def ui_print(text, do_draw = None):
     global screen, __CURSOR_POS
 
     if do_draw == None: do_draw = __AUTO_DRAW
@@ -467,49 +471,108 @@ def ui_print_breaking_list(plist):
     draw()
     tick()
 
+def flip_edit_mode():
+    global __CURSOR_VISIBLE, __CURSOR_I_POS
+
+    __CURSOR_VISIBLE = not __CURSOR_VISIBLE
+    if __CURSOR_VISIBLE:
+        __CURSOR_I_POS = __CURSOR_POS
+        pygame.key.set_repeat(500,33)
+    else:
+        __CURSOR_I_POS = 0
+        pygame.key.set_repeat(0)
+
 def ui_input(prompt = "", max_len = 0, file_drop = False):
-    global screen, __CURSOR_POS, __CURSOR_VISIBLE
-    global __FOREGROUND_COL, __BACKGROUND_COL
+    global screen, __CURSOR_POS, __INPUT_BUFFER
+
     ui_print(prompt, do_draw=False)
+    flip_edit_mode()
+
     if max_len < 1:
         max_len = __SCREEN_BUFFER_SIZE - __SCREEN_WIDTH
-    input = ''
-    pygame.key.set_repeat(500,33)
-    __CURSOR_VISIBLE = True
-    draw()
+    input_pos = 0
+    buffer_pos = len(__INPUT_BUFFER)-1
+    last_draw_len = 0
+    input = []
+    dirty = True
     while True:
+        # Redraw
+        if dirty:
+            __CURSOR_POS = __CURSOR_I_POS
+            ui_print("".join(input).ljust(last_draw_len, ' '), do_draw=False)
+            __CURSOR_POS = __CURSOR_I_POS + input_pos
+            draw()
+            last_draw_len = len(input)
+            dirty = False
+
+        # Get input
         events = tick()
         for event in events:
             if event.type == pygame.KEYDOWN:
+                dirty = True
+
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-                    pygame.key.set_repeat(0)
-                    __CURSOR_VISIBLE = False
-                    return input
-                elif event.key == pygame.K_BACKSPACE or event.key == pygame.K_DELETE:
-                    if (input != ''):
-                        __CURSOR_POS -= 1
-                        clear_cell(__CURSOR_POS)
-                        input = input[:-1]
-                        draw()
-                elif event.unicode != '' and ord(event.unicode) < 255 and event.unicode != "\n" and len(input) < max_len:
-                    screen[__CURSOR_POS] = [ord(event.unicode), __FOREGROUND_COL, __BACKGROUND_COL]
-                    __CURSOR_POS += 1
-                    scroll_screen()
-                    input = input + event.unicode
-                    draw()
+                    input_str = "".join(input)
+                    # Add non-empty inputs to the buffer
+                    if input_str.strip() != "":
+                        __INPUT_BUFFER.insert(-1, input)
+                    flip_edit_mode()
+                    return input_str
+
+                elif event.key == pygame.K_UP and buffer_pos > 0:
+                    buffer_pos -= 1
+                    input = __INPUT_BUFFER[buffer_pos]
+                    input_pos = len(input)
+
+                elif event.key == pygame.K_DOWN and buffer_pos <= len(__INPUT_BUFFER):
+                    buffer_pos += 1
+                    input = __INPUT_BUFFER[buffer_pos]
+                    input_pos = len(input)
+
+                elif event.key == pygame.K_LEFT and input_pos > 0:
+                    input_pos -= 1
+
+                elif event.key == pygame.K_RIGHT and input_pos < len(input):
+                    input_pos += 1
+
+                elif event.key == pygame.K_BACKSPACE and input_pos > 0:
+                    input_pos -= 1
+                    input.pop(input_pos)
+
+                elif event.key == pygame.K_DELETE and len(input) > 0 and input_pos < len(input):
+                    input.pop(input_pos)
+
+                elif event.key == pygame.K_v and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                    clip = pygame.scrap.get("text/plain;charset=utf-8")
+                    if not clip: clip = pygame.scrap.get(pygame.SCRAP_TEXT)
+                    if clip:
+                        clip = list(clip.decode('charmap'))
+                        clip = list(filter(lambda c: ord(c) >= 32, clip))
+                        if len(clip)+len(input) <= max_len:
+                            input = input[:input_pos]+clip+input[input_pos:]
+                            input_pos += len(clip)
+
+                elif event.unicode != '' and ord(event.unicode) >= 32 and ord(event.unicode) < 255 \
+                     and len(input) < max_len:
+                    input = input[:input_pos] + [event.unicode] + input[input_pos:]
+                    input_pos += 1
+
+                else:
+                    dirty = False
+
             # Drag and drop .bas file
             elif file_drop and event.type == pygame.DROPFILE:
                 extension = os.path.basename(event.file)
                 extension = os.path.splitext(extension)[-1].lower()
+
                 # Detected BASIC text file (BAS)
                 if extension == '.bas':
-                    pygame.key.set_repeat(0)
-                    __CURSOR_VISIBLE = False
+                    flip_edit_mode()
                     return 'IMPORT "{}"'.format(event.file)
+
                 # Detected Artemis Disk Image (ADI)
                 elif extension in ['.adi', '.zip']:
-                    pygame.key.set_repeat(0)
-                    __CURSOR_VISIBLE = False
+                    flip_edit_mode()
                     return 'DSKIMPORT "{}"'.format(event.file)
 
 def ui_input_key(impatient = False):
