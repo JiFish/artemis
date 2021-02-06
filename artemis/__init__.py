@@ -282,6 +282,8 @@ def tick():
             elif event.key == pygame.K_RETURN and pygame.key.get_mods() & pygame.KMOD_ALT:
                 flip_fullscreen()
                 return []
+            elif event.key == pygame.K_F12:
+                dump_screen()
 
     return events
 
@@ -577,7 +579,9 @@ def load_screen(screendump):
     except:
         raise Exception("Invalid File Format")
 
-def dump_screen(filename):
+def dump_screen(filename = None):
+    if filename == None:
+        filename = time.strftime("%y%m%d%H%M%S")
     # v is format version number
     data = {'v': 1, 'mode': __SCREEN_MODE,
             'ink': [rgb_to_ink(i) for i in __PALLETTE],

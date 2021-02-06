@@ -92,6 +92,14 @@ Program terminated
 >
 ```
 
+## Hotkeys
+
+You can use these keys at any time.
+
+- **Ctrl-C** - Terminate program, or close Artemis if nothing is running
+- **Alt-Enter** - Toggle fullscreen mode
+- **F12** - Dump screen to sda file on current disk
+
 ## Screen commands
 
 A couple of screen commands can be typed in to the main interface.
@@ -135,4 +143,3 @@ Program exported to "c:\users\you\Documents\artemis\myfile.bas"
 **DSKEXPORT** [x] - Exports the currently selected disk to an file called *x*. This is intended method for sharing your software. All filenames recognised by Artemis will be included. This means no subdirectories. If *x* is not provided, the current disk's name will be used. Uses `.dia` if an extension is not provided.
 
 TIP: `.dia` files are simply zip files, allowing easy creation outside Artemis. **You can also drag and drop `.dia` and `.zip` files on to the Artemis window to import them.**
-
