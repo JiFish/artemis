@@ -276,7 +276,7 @@ Hello world!
 
 * **BORDER** x - Set the screen's border color to *x*
 * **CLS** - Clears the screen. This command can also be used in the main interface.
-* **COL** x[, y] - Sets the text color to *x* and optionally the background color to *y*.
+* **COL** x[, y] - Sets the text color to *x* and optionally the background color to *y*. If you just want to set the background, use -1 for *x*.
 * **CURSOR** x, y - Move the cursor to position *x*, *y*
 * **PLOT** x, y - Draws a psuedo-pixel using the current text color in position *x*, *y*. Treats each screen text-cell as 4 pixels giving a psuedo-pixel mode with dimensions twice that of the text mode. (e.g. 80 x 50 pixels in the default mode 1.) _(Note: A limitation of this is PLOT will overwrite the color of previous pixels within the same text-cell. This phenomenon is known as "Color Clash.")_
 * **PRINTW** t$, x1, y1, x2, y2[, wrap] - Print text *t$* to a virtual "Window" on-screen. The window's top-left position is defined by *x1* and *y1*, and it's bottom-right by *x2* and *y2*. If *wrap* is non-zero, *t$* will be wrapped cleanly - avoiding line-breaks in the middle of words. (This is the default behaviour.) If *t$* is too long, it will be cropped, if it is too short it will be padded with spaces.

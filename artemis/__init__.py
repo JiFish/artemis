@@ -341,10 +341,15 @@ def set_cursor(x, y):
 
 def set_color(f, b = -1):
     global __FOREGROUND_COL, __BACKGROUND_COL
-    if f >= __SCREEN_COLS or b >= __SCREEN_COLS or f < 0 or b < -1:
+    if f >= __SCREEN_COLS or b >= __SCREEN_COLS:
         raise ValueError("Invalid color")
-    __FOREGROUND_COL = f
-    if (b != -1): __BACKGROUND_COL = b
+    if (f > -1): __FOREGROUND_COL = f
+    if (b > -1): __BACKGROUND_COL = b
+
+def set_color_safe(f, b = -1):
+    if f >= __SCREEN_COLS: f = -1
+    if b >= __SCREEN_COLS: b = -1
+    set_color(f, b)
 
 def ui_print(text, do_draw = None, pos = None):
     global screen, __CURSOR_POS
