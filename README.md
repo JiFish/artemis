@@ -7,6 +7,12 @@ Artemis is supposed to be a challenging fantasy computer. Can you create a fun g
 - 125 possible colors and 255 redefinable character glyphs
 - No graphical modes at all
 
+Although limited, Artemis allows you develop using some modern tools:
+
+- IMPORT programs from a text-file, so you to write your code in your favourite editor
+- Integration with [playscii](http://vectorpoem.com/playscii/), a GUI you can design screens in
+- Load the character set from a PNG image
+
 ![Artemis Screen](https://jifish.github.io/artemis/artemis_screen.gif)
 
 ## Downloading and Running

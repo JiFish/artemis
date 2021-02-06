@@ -24,6 +24,12 @@ Artemis is supposed to be a challenging fantasy computer. Can you create a fun g
 
 As mentioned above JiBASIC is slow. This isn't a bug, it's a feature (or to be more accurate not a priority.) Artemis is explicitly not designed to be friendly to developing real-time action games. Turn-based, menu-driven and text-heavy games would be ideal.
 
+Although limited, Artemis allows you develop using some modern tools:
+
+- IMPORT programs from a text-file, so you to write your code in your favourite editor
+- Integration with [playscii](http://vectorpoem.com/playscii/), a GUI you can design screens in
+- Load the character set from a PNG image
+
 ## Inspirations
 
 This project was inspired by Basic8 and Ozapell Basic, nether of which was _quite_ what I was after.
