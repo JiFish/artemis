@@ -35,7 +35,6 @@ version = "0.7 beta"
 # automatically draw after some commands
 __AUTO_DRAW = True
 
-__CURSOR = ord("_")
 __SPACE = ord(" ")
 
 __SCREEN_WIDTH = 40
@@ -54,7 +53,9 @@ __BACKGROUND_COL = 0;
 __BORDER_COL = 0;
 # Screen buffer, a tuplet for each cell
 screen = [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_BUFFER_SIZE)]
+__CURSOR = ord("_")
 __CURSOR_POS = 0
+__CURSOR_VISIBLE = False
 
 __ICON_CHARACTER = 239
 
@@ -324,6 +325,14 @@ def draw():
             ypos = ypos + 1
             if ypos == __SCREEN_HEIGHT:
                 break
+    # CURSOR
+    if __CURSOR_VISIBLE:
+        tile = __CHR_TILE_TABLE[__CURSOR]
+        tile.set_palette_at(1, __PALLETTE[screen[__CURSOR_POS][1]])
+        tile.set_colorkey(0)
+        __TEXT_SURFACE.blit(tile, ((__CURSOR_POS%__SCREEN_WIDTH)*8,
+                                   (__CURSOR_POS//__SCREEN_WIDTH)*8))
+        tile.set_colorkey(None)
     pygame.transform.scale(__TEXT_SURFACE, [640,400], __TEXT_SCALED_SURFACE)
     __SCREEN_SURFACE.fill(__PALLETTE[__BORDER_COL])
     __SCREEN_SURFACE.blit(__TEXT_SCALED_SURFACE, [16,16])
@@ -459,34 +468,33 @@ def ui_print_breaking_list(plist):
     tick()
 
 def ui_input(prompt = "", max_len = 0, file_drop = False):
-    global screen, __CURSOR_POS, __FOREGROUND_COL, __BACKGROUND_COL
-    ui_print(prompt + chr(__CURSOR), do_draw=False)
-    __CURSOR_POS -= 1
+    global screen, __CURSOR_POS, __CURSOR_VISIBLE
+    global __FOREGROUND_COL, __BACKGROUND_COL
+    ui_print(prompt, do_draw=False)
     if max_len < 1:
         max_len = __SCREEN_BUFFER_SIZE - __SCREEN_WIDTH
     input = ''
-    draw()
     pygame.key.set_repeat(500,33)
+    __CURSOR_VISIBLE = True
+    draw()
     while True:
         events = tick()
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-                    clear_cell(__CURSOR_POS)
                     pygame.key.set_repeat(0)
+                    __CURSOR_VISIBLE = False
                     return input
                 elif event.key == pygame.K_BACKSPACE or event.key == pygame.K_DELETE:
                     if (input != ''):
-                        clear_cell(__CURSOR_POS)
                         __CURSOR_POS -= 1
-                        screen[__CURSOR_POS] = [__CURSOR, __FOREGROUND_COL, __BACKGROUND_COL]
+                        clear_cell(__CURSOR_POS)
                         input = input[:-1]
                         draw()
                 elif event.unicode != '' and ord(event.unicode) < 255 and event.unicode != "\n" and len(input) < max_len:
                     screen[__CURSOR_POS] = [ord(event.unicode), __FOREGROUND_COL, __BACKGROUND_COL]
                     __CURSOR_POS += 1
                     scroll_screen()
-                    screen[__CURSOR_POS] = [__CURSOR, __FOREGROUND_COL, __BACKGROUND_COL]
                     input = input + event.unicode
                     draw()
             # Drag and drop .bas file
@@ -495,13 +503,13 @@ def ui_input(prompt = "", max_len = 0, file_drop = False):
                 extension = os.path.splitext(extension)[-1].lower()
                 # Detected BASIC text file (BAS)
                 if extension == '.bas':
-                    clear_cell(__CURSOR_POS)
                     pygame.key.set_repeat(0)
+                    __CURSOR_VISIBLE = False
                     return 'IMPORT "{}"'.format(event.file)
                 # Detected Artemis Disk Image (ADI)
                 elif extension in ['.adi', '.zip']:
-                    clear_cell(__CURSOR_POS)
                     pygame.key.set_repeat(0)
+                    __CURSOR_VISIBLE = False
                     return 'DSKIMPORT "{}"'.format(event.file)
 
 def ui_input_key(impatient = False):
