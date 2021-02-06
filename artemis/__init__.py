@@ -58,6 +58,7 @@ __CURSOR_POS = 0
 __CURSOR_I_POS = 0
 __CURSOR_VISIBLE = False
 __INPUT_BUFFER = [[]]
+__INPUT_BUFFER_LIMIT = 128
 
 __ICON_CHARACTER = 239
 
@@ -516,6 +517,8 @@ def ui_input(prompt = "", max_len = 0, file_drop = False):
                     # Add non-empty inputs to the buffer
                     if input_str.strip() != "":
                         __INPUT_BUFFER.insert(-1, input)
+                        if len(__INPUT_BUFFER) == __INPUT_BUFFER_LIMIT:
+                            __INPUT_BUFFER.pop(0)
                     flip_edit_mode()
                     return input_str
 
@@ -524,7 +527,7 @@ def ui_input(prompt = "", max_len = 0, file_drop = False):
                     input = __INPUT_BUFFER[buffer_pos]
                     input_pos = len(input)
 
-                elif event.key == pygame.K_DOWN and buffer_pos <= len(__INPUT_BUFFER):
+                elif event.key == pygame.K_DOWN and buffer_pos < len(__INPUT_BUFFER)-1:
                     buffer_pos += 1
                     input = __INPUT_BUFFER[buffer_pos]
                     input_pos = len(input)
