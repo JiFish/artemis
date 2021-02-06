@@ -555,7 +555,8 @@ def load_screen(screendump):
 
     try:
         # Screen Mode
-        set_mode(screendump['mode'])
+        if 'mode' in screendump:
+            set_mode(screendump['mode'])
 
         # INK, presence of ink in a dump is optional
         if 'ink' in screendump:
@@ -566,16 +567,17 @@ def load_screen(screendump):
         if 'border' in screendump:
             set_border(screendump['border'])
 
-        pos = 0
-        for i in screendump['data']:
-            if i != None:
-                char = min(255,max(0,i[0]))
-                fg = min(__SCREEN_COLS-1,max(0,i[1]))
-                bg = min(__SCREEN_COLS-1,max(0,i[2]))
-                screen[pos] = [char,fg,bg]
-            pos += 1
-            if pos == __SCREEN_BUFFER_SIZE:
-                break
+        if 'data' in screendump:
+            pos = 0
+            for i in screendump['data']:
+                if i != None:
+                    char = min(255,max(0,i[0]))
+                    fg = min(__SCREEN_COLS-1,max(0,i[1]))
+                    bg = min(__SCREEN_COLS-1,max(0,i[2]))
+                    screen[pos] = [char,fg,bg]
+                pos += 1
+                if pos == __SCREEN_BUFFER_SIZE:
+                    break
     except:
         raise Exception("Invalid File Format")
 
