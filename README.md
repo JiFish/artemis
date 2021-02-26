@@ -43,6 +43,15 @@ pypresence for discord presence is an optional library. It will be used if prese
 
 The full documentation, including programming reference, is available at https://jifish.github.io/artemis/
 
+## Powered by
+
+Thank you to the following open source projects:
+
+- [PyBasic](https://github.com/richpl/PyBasic) by richpl
+- [pygame2](https://www.pygame.org/)
+- [MIDIUtil](https://github.com/MarkCWirt/MIDIUtil) by MarkCWirt
+- [python](https://www.python.org/)
+
 ## License
 
 Artemis contains a fork of [PyBasic](https://github.com/richpl/PyBasic) by richpl.
