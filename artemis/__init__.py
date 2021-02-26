@@ -444,31 +444,63 @@ def ui_print_window(text, x1, y1, x2, y2, wrap = True):
         draw()
         tick()
 
-def ui_print_breaking_list(plist):
-    global __AUTO_DRAW
-    line_row = 0
-    # Blank link at end
-    plist.append("")
-    pak_str = "- PRESS ANY KEY TO CONTINUE -"[:__SCREEN_WIDTH-1]
-    pak_str = (" "*((__SCREEN_WIDTH-len(pak_str))//2)) + pak_str
-    # Loop the list,
-    # pausing when we reach the height of the screen
+def ui_print_breaking_list(input, prompt = "- PRESS ANY KEY TO CONTINUE -"):
+    global __CURSOR_POS
+
+    # Input can be string or list of strings
+    if type(input) == list:
+        input = list("\n".join(input))
+    else:
+        input = str(input)
+
+    # Format prompt so it is centered
+    prompt = prompt[:__SCREEN_WIDTH-1]
+    prompt = (" "*((__SCREEN_WIDTH-len(prompt))//2)) + prompt
+
+    # Reconstruct plist
+    instr = list(input)
+    plist = []
+    thisline = ""
+    pos = 0
+    for c in instr:
+        # newline by character
+        if c == chr(10):
+            plist.append(thisline+"\n")
+            pos = 0
+            thisline = ""
+        else:
+            thisline += c
+            pos += 1
+            # newline by length
+            if pos == __SCREEN_WIDTH:
+                plist.append(thisline)
+                pos = 0
+                thisline = ""
+    # last line
+    if pos > 0:
+        plist.append(thisline+"\n")
+
+    # Cursor must start at the beginning of a row
+    # Move back until we are
+    __CURSOR_POS = (__CURSOR_POS//__SCREEN_WIDTH)*__SCREEN_WIDTH
+
+    # Do breaking printing
+    line_countdown = __SCREEN_HEIGHT - 1
     for line in plist:
-        lines_in_row = max(1,-(-len(line)//__SCREEN_WIDTH))
-        line_row += lines_in_row
-        if line_row >= __SCREEN_HEIGHT:
-            ui_print(pak_str, do_draw=False)
+        # Run out of lines, press a key to continue
+        if line_countdown < 1:
+            ui_print(prompt, do_draw=False)
             ui_input_key()
+            # Redraw over message
             set_cursor(0,__SCREEN_HEIGHT-1)
-            ui_print(" "*len(pak_str), do_draw=False)
+            ui_print(" "*len(prompt), do_draw=False)
             set_cursor(0,__SCREEN_HEIGHT-1)
-            line_row = lines_in_row
-        # Special case, where the line is exactly divisible by
-        # the screen width, no newline is needed unless the
-        # line is empty
-        if line == "" or len(line) % 40 != 0:
-            line += "\n"
+            line_countdown = __SCREEN_HEIGHT - 1
+
+        # print this line
         ui_print(line, do_draw=False)
+        line_countdown -= 1
+
     draw()
     tick()
 
