@@ -147,6 +147,9 @@ class BASICToken:
         DSKIMPORT       = 131 # DSKIMPORT command
         PLOT            = 132 # PLOT command
         RSTS            = 133 # RSTS command
+        CURSORX         = 134 # CURSORX function
+        CURSORY         = 135 # CURSORY function
+        PRINTB          = 136 # PRINTB command
 
 
         # Displayable names for each token category
@@ -177,7 +180,7 @@ class BASICToken:
         'SYMBOLIMG', 'MOUNT', 'FORMAT', 'UNLINK',
         'MUSICPLAY', 'MUSICSTOP', 'KEY', 'SYSTIME',
         'LOADS', 'DUMPS', 'HELP', 'PRINTW', 'PLOT',
-        'RSTS']
+        'RSTS', 'CURSORX', 'CURSORY', 'PRINTB']
 
         smalltokens = {'=': ASSIGNOP, '(': LEFTPAREN, ')': RIGHTPAREN,
                        '+': PLUS, '-': MINUS, '*': TIMES, '/': DIVIDE,
@@ -227,7 +230,8 @@ class BASICToken:
                     'KEY': KEY, 'SYSTIME': SYSTIME,
                     'LOADS': LOADS, 'DUMPS': DUMPS,
                     'HELP': HELP, 'PRINTW': PRINTW, 'PLOT': PLOT,
-                    'RSTS': RSTS}
+                    'RSTS': RSTS, 'CURSORX': CURSORX, 'CURSORY': CURSORY,
+                    'PRINTB': PRINTB}
 
         # Functions
         functions = {ABS, ATN, COS, EXP, INT, LOG, POW, RND, SIN, SQR, TAN,
@@ -235,7 +239,8 @@ class BASICToken:
                      ROUND, MAX, MIN, INSTR, PI, RNDINT}
 
         # JiBasic Functions
-        functions = functions.union({PEEKS, WAITKEY, KEY, SYSTIME})
+        functions = functions.union({PEEKS, WAITKEY, KEY, SYSTIME,
+                                     CURSORX, CURSORY})
 
         def __init__(self, column, category, lexeme):
 

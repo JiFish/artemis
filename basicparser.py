@@ -173,6 +173,10 @@ class BASICParser:
             self.__printwstmt()
             return None
 
+        elif self.__token.category == Token.PRINTB:
+            self.__printbstmt()
+            return None
+
         elif self.__token.category == Token.LET:
             self.__letstmt()
             return None
@@ -340,7 +344,7 @@ class BASICParser:
 
         artemis.ui_print(output)
 
-    def __printwstmt(self, wrapped = False):
+    def __printwstmt(self):
         """Parses a PRINTW statement"""
         self.__advance()   # Advance past PRINTW token
 
@@ -362,6 +366,25 @@ class BASICParser:
 
         try:
             artemis.ui_print_window(*printw_args)
+        except ValueError as e:
+            raise Exception(str(e) + ' in line '+ str(self.__line_number))
+
+    def __printbstmt(self):
+        """Parses a PRINTB statement"""
+        self.__advance()   # Advance past PRINTB token
+
+        # Get the string to print
+        self.__logexpr()
+        printb_args = [str(self.__operand_stack.pop())]
+
+        # Optional prompt string
+        if self.__token.category == Token.COMMA:
+            self.__advance()
+            self.__logexpr()
+            printb_args.append(str(self.__operand_stack.pop()))
+
+        try:
+            artemis.ui_print_breaking_list(*printb_args)
         except ValueError as e:
             raise Exception(str(e) + ' in line '+ str(self.__line_number))
 
@@ -899,17 +922,25 @@ class BASICParser:
         self.__advance()  # Advance past CURSOR token
 
         self.__expr()
-        xpos = self.__operand_stack.pop()
+        param1 = self.__operand_stack.pop()
 
-        self.__consume(Token.COMMA)
+        # Setting position
+        if self.__token.category == Token.COMMA:
+            self.__advance()  # Advance past comma
+            self.__expr()
+            ypos = self.__operand_stack.pop()
 
-        self.__expr()
-        ypos = self.__operand_stack.pop()
+            try:
+                artemis.set_cursor(param1, ypos)
+            except ValueError as e:
+                raise ValueError(str(e) + ' in line '+ str(self.__line_number))
 
-        try:
-            artemis.set_cursor(xpos, ypos)
-        except ValueError as e:
-            raise ValueError(str(e) + ' in line '+ str(self.__line_number))
+        # Setting character
+        else:
+            try:
+                artemis.set_cursor_symbol(param1)
+            except ValueError as e:
+                raise ValueError(str(e) + ' in line '+ str(self.__line_number))
 
 
     def __pokesstmt(self):
@@ -1540,6 +1571,12 @@ class BASICParser:
 
         if category == Token.SYSTIME:
             return artemis.get_system_time()
+
+        if category == Token.CURSORX:
+            return artemis.get_cursor_x()
+
+        if category == Token.CURSORY:
+            return artemis.get_cursor_y()
 
         if category == Token.RNDINT:
             self.__consume(Token.LEFTPAREN)

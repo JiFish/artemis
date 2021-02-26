@@ -355,6 +355,22 @@ def set_cursor(x, y):
 
     __CURSOR_POS = (y*__SCREEN_WIDTH)+x
 
+def set_cursor_symbol(symbol):
+    global __CURSOR
+
+    if not isinstance(symbol, str):
+        raise ValueError('Value provided not a string')
+    if symbol == "":
+        raise ValueError('Value provided is an empty string')
+
+    __CURSOR = ord(symbol[:1])
+
+def get_cursor_x():
+    return __CURSOR_POS%__SCREEN_WIDTH
+
+def get_cursor_y():
+    return __CURSOR_POS//__SCREEN_WIDTH
+
 def set_color(f, b = -1):
     global __FOREGROUND_COL, __BACKGROUND_COL
     if f >= __SCREEN_COLS or b >= __SCREEN_COLS:

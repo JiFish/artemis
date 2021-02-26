@@ -226,7 +226,9 @@ expressions:
 Attempts to assign the wrong type (number or string) to a numeric or string array, attempts to assign a value to an array by specifying the wrong number
 of dimensions, and attempts to assign to an array using an out of range index, will all result in an error.
 
-## Printing to screen
+## The Screen
+
+### Printing to screen
 
 The **PRINT** statement is used to print to the screen:
 
@@ -272,16 +274,29 @@ If the print command ends with a comma, a new-line will not be automatically add
 Hello world!
 ```
 
-## Additional Screen Commands
+### Additional Screen Commands
 
 * **BORDER** x - Set the screen's border color to *x*
 * **CLS** - Clears the screen. This command can also be used in the main interface.
 * **COL** x[, y] - Sets the text color to *x* and optionally the background color to *y*. If you just want to set the background, use -1 for *x*.
-* **CURSOR** x, y - Move the cursor to position *x*, *y*
 * **PLOT** x, y - Draws a psuedo-pixel using the current text color in position *x*, *y*. Treats each screen text-cell as 4 pixels giving a psuedo-pixel mode with dimensions twice that of the text mode. (e.g. 80 x 50 pixels in the default mode 1.) _(Note: A limitation of this is PLOT will overwrite the color of previous pixels within the same text-cell. This phenomenon is known as "Color Clash.")_
+* **PRINTB** t$[, prompt$] - This is a convenience command for printing large amounts of text. *t$* is printed until the screen has been filled. The user will then be prompted to "PRESS ANY KEY TO CONTINUE", after which *t$* resumes printing. This process repeats until *t$* has been fully printed. If *prompt$* is provided, it will replace the default prompt. _(Note: Before printing the cursor will be moved back to the start of the current row.)_
 * **PRINTW** t$, x1, y1, x2, y2[, wrap] - Print text *t$* to a virtual "Window" on-screen. The window's top-left position is defined by *x1* and *y1*, and it's bottom-right by *x2* and *y2*. If *wrap* is non-zero, *t$* will be wrapped cleanly - avoiding line-breaks in the middle of words. (This is the default behaviour.) If *t$* is too long, it will be cropped, if it is too short it will be padded with spaces.
 
-## Redefining characters and colors
+### Cursor commands and functions
+
+* **CURSOR** x, y - Move the cursor to position *x*, *y*
+* **CURSOR** symbol$ - Set the character used as the cursor to *symbol$*. *symbol$* is expected to be one character long.
+* **CURSORX**, **CURSORY** - These functions return the current x and y position of the cursor. For more information on functions, see [Functions](#Functions) below.
+
+```
+10 CURSOR CHR$(235)
+20 CURSOR 6, 8
+30 PRINT CURSORX, "-", CURSORY
+40 CURSOR CURSORX+2, CURSORY+2
+```
+
+### Redefining characters and colors
 
 * **INK** x, r, g, b - Sets the color of palette entry *x*. *r*, *g* and *b* can be from 0 to 4, giving a total of 125 possible colors.
 * **SYMBOL** x, y$ - Redefine the bitmap of the character with the code *x*. *y$* is a string that represents the new bitmap. Each character in the string represents one pixel starting at the top-left. Use a space for the background and any other character for the foreground. If *y$* is an empty string, the character will be reset to the default.
@@ -302,7 +317,7 @@ Partial Breakdown:
 * **165**: Copyleft Symbol
 * **239**: Artemis' icon. If you redefine this symbol, it will change the program icon
 
-## Screen Modes
+### Screen Modes
 
 You can change the screen mode with the **MODE** x command. Where *x* is the mode you want to switch to. Changing mode will clear the screen. Different modes offer compromises between number of characters and colors on the screen.
 
@@ -500,7 +515,11 @@ Expressions can be inside brackets to change the order of evaluation. Compare th
 Test failed!
 ```
 
-## Ternary Functions
+## Functions
+
+The built-in functions either set the value of a variable directly, or they return a value as if they were a variable.
+
+### Ternary Functions
 
 As an alternative to branching, Ternary functions are provided.
 
@@ -518,7 +537,7 @@ I is greater than J
 20
 ```
 
-## User input
+### input function
 
 The **INPUT** statement is used to solicit input from the user:
 
@@ -570,7 +589,7 @@ within an **INPUT** statement, only simple variables.
 - **WAITKEY** [x] - Pauses execution until the user presses a key. If variable *x* is provided, it will be set to the key-code of the pressed key.
 - **KEY** x - As **WAITKEY**, but only waits one tick (see timing below). If no key is pressed, gives -1
 
-## Numeric functions
+### Numeric functions
 
 Selected numeric functions are provided, and may be used with any numeric expression. For example,
 the square root function, **SQR**, can be applied expressions consisting of both literals and variables:
@@ -647,7 +666,7 @@ Seeds may not produce the same result on another platform.
 
 * **TAN**(x) - Calculates the tangent of *x*, where *x* is an angle in radians
 
-## String functions
+### String functions
 
 Some functions are provided to help you manipulate strings. Functions that return a string
 have a '$' suffix like string variables.
