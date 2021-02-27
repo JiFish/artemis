@@ -416,16 +416,30 @@ def ui_psuedo_plot(x, y):
 
     # Fetch current cell
     cellpos = x//2 + ((y//2)*__SCREEN_WIDTH)
-    [current_nibble, _, background] = get_cell(cellpos)
+    [current_nibble, foreground, background] = get_cell(cellpos)
     # Calculate current_nibble
     current_nibble -= 128
     # Treat all characters outside range as blank
     if current_nibble < 0 or current_nibble > 15:
         current_nibble = 0
 
-    # Calculate and set new character cell
-    out_nibble = (in_nibble | current_nibble)+128
-    set_cell(cellpos, [out_nibble, __FOREGROUND_COL, background])
+    # Calculate new character cell
+    out_nibble = (in_nibble | current_nibble)
+
+    # Special case, you are trying to plot using background color
+    # flip the foreground and background colors of this cell
+    if __FOREGROUND_COL == background and current_nibble > 0:
+        out_nibble = ((~current_nibble & 0x0F) | in_nibble)
+        set_cell(cellpos, [out_nibble+128, background, foreground])
+
+    # Special case, if every pixel in the cell is filled and we
+    # are drawing a pixel of a different color, we can reduce
+    # color-clash by changing the background
+    elif foreground != __FOREGROUND_COL and out_nibble == 15:
+        set_cell(cellpos, [in_nibble+128, __FOREGROUND_COL, foreground])
+
+    else:
+        set_cell(cellpos, [out_nibble+128, __FOREGROUND_COL, background])
 
     if __AUTO_DRAW:
         draw()
