@@ -2,16 +2,16 @@
 
 Artemis is supposed to be a challenging fantasy computer. Can you create a fun game with the following limitations?
 
-- Using a fairly limited and slow Unstructured BASIC language. (Though improvements to the language may be incoming...)
 - 7 text modes to choose from, each a different compromise between number of characters and colors on the screen
 - 125 possible colors and 255 redefinable character glyphs
-- No graphical modes at all
+- No bitmap modes or sprites
+- Using an Unstructured BASIC language. (Python scripts are supported as an alternative.)
 
 Although limited, Artemis allows you develop using some modern tools:
 
-- IMPORT programs from a text-file, so you to write your code in your favourite editor
-- Integration with [playscii](http://vectorpoem.com/playscii/), a GUI you can design screens in
-- Load the character set from a PNG image
+- Integration with [playscii](http://vectorpoem.com/playscii/), a GUI you can design screens in.
+- Loading of the character set from a PNG image.
+- Importing BASIC programs and Python scripts from text-files. (Allowing development in your favourite editor.)
 
 ![Artemis Screen](https://jifish.github.io/artemis/artemis_screen.gif)
 
