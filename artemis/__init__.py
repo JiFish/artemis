@@ -474,25 +474,24 @@ def ui_print_window(text, x1, y1, x2, y2, wrap = True):
         draw()
         tick()
 
-def ui_print_breaking_list(input, prompt = "- PRESS ANY KEY TO CONTINUE -"):
+def ui_print_breaking_list(text, prompt = "- PRESS ANY KEY TO CONTINUE -"):
     global __CURSOR_POS
 
     # Input can be string or list of strings
-    if type(input) == list:
-        input = list("\n".join(input))
+    if type(text) == list:
+        text = list("\n".join(text))
     else:
-        input = str(input)
+        text = list(str(text))
 
     # Format prompt so it is centered
     prompt = prompt[:__SCREEN_WIDTH-1]
     prompt = (" "*((__SCREEN_WIDTH-len(prompt))//2)) + prompt
 
-    # Reconstruct plist
-    instr = list(input)
+    # Construct plist
     plist = []
     thisline = ""
     pos = 0
-    for c in instr:
+    for c in text:
         # newline by character
         if c == chr(10):
             plist.append(thisline+"\n")
