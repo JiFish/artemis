@@ -212,14 +212,14 @@ def set_caption(caption):
 
 def redefine_char(chr, charstring):
     global __CHR_TILE_TABLE
+    if chr < 0 or chr > 255:
+        raise ValueError()
     # Reset character
     if charstring == "":
         __CHR_TILE_TABLE[chr] = __MASTER_CHR_TILE_TABLE[chr].copy()
     # Redfine character
     else:
         charstring = list(charstring.ljust(8*8))
-        if chr < 0 or chr > 255:
-            raise ValueError()
         for i in range(8*8):
             pix = 0 if charstring[i] == ' ' else 1
             __CHR_TILE_TABLE[chr].set_at((i % 8, i // 8), pix)
