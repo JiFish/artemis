@@ -150,7 +150,7 @@ class BASICToken:
         CURSORX         = 134 # CURSORX function
         CURSORY         = 135 # CURSORY function
         PRINTB          = 136 # PRINTB command
-
+        PY              = 137 # PY command
 
         # Displayable names for each token category
         catnames = ['EOF', 'LET', 'LIST', 'PRINT', 'RUN',
@@ -180,7 +180,7 @@ class BASICToken:
         'SYMBOLIMG', 'MOUNT', 'FORMAT', 'UNLINK',
         'MUSICPLAY', 'MUSICSTOP', 'KEY', 'SYSTIME',
         'LOADS', 'DUMPS', 'HELP', 'PRINTW', 'PLOT',
-        'RSTS', 'CURSORX', 'CURSORY', 'PRINTB']
+        'RSTS', 'CURSORX', 'CURSORY', 'PRINTB', 'PY']
 
         smalltokens = {'=': ASSIGNOP, '(': LEFTPAREN, ')': RIGHTPAREN,
                        '+': PLUS, '-': MINUS, '*': TIMES, '/': DIVIDE,
@@ -231,7 +231,7 @@ class BASICToken:
                     'LOADS': LOADS, 'DUMPS': DUMPS,
                     'HELP': HELP, 'PRINTW': PRINTW, 'PLOT': PLOT,
                     'RSTS': RSTS, 'CURSORX': CURSORX, 'CURSORY': CURSORY,
-                    'PRINTB': PRINTB}
+                    'PRINTB': PRINTB, 'PY': PY}
 
         # Functions
         functions = {ABS, ATN, COS, EXP, INT, LOG, POW, RND, SIN, SQR, TAN,

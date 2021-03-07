@@ -26,9 +26,9 @@ again.
 from basictoken import BASICToken as Token
 from lexer import Lexer
 from program import Program
-from sys import stderr
+from sys import stderr, version_info
 import artemis
-import os, io, webbrowser
+import os, io, webbrowser, sys, traceback
 from datetime import date
 
 dos = artemis.dos
@@ -45,15 +45,15 @@ except ImportError:
     RPC = None
 
 def main():
-    artemis.set_caption("Artemis Fantasy Microcomputer")
+    artemis.set_caption("Artemis Fantasy Microcomputer ({})".format(artemis.version))
     artemis.set_color(6)
     artemis.ui_print("Artemis Microcomputer {}{}\n\n".format(chr(176), date.today().year), do_draw=False)
-    artemis.ui_print(" JiBASIC {}\n\n".format(artemis.version), do_draw=False)
+    artemis.ui_print(" JiBASIC / Python {}.{}.{}\n\n".format(version_info.major, version_info.minor, version_info.micro), do_draw=False)
     artemis.set_color(1)
     artemis.ui_print("Type HELP to open documentation.\n\n", do_draw=False)
     artemis.ui_print("READY\n", do_draw=False)
     for i in range(0,8):
-        artemis.screen[31+i] = [214,(i+1)%8,i]
+        artemis.screen[31+i].set((214,(i+1)%8,i))
 
     lexer = Lexer()
     program = Program()
@@ -253,6 +253,27 @@ def main():
                 # HELP!
                 elif tokenlist[0].category == Token.HELP:
                     webbrowser.open(_help_url)
+
+
+                # Run Python script
+                elif tokenlist[0].category == Token.PY:
+                    with open(tokenlist[1].lexeme, 'r') as infile:
+                        pyprog = infile.read()
+                        infile.close()
+                    from artemis import pybox
+                    try:
+                        exec(pyprog, {"__builtins__":pybox.pyboxbuiltins})
+                    except SyntaxError as err:
+                        error_class = err.__class__.__name__
+                        detail = err.args[0]
+                        line_number = err.lineno
+                        raise err.__class__("{} at line {}: {}".format(error_class, line_number, detail))
+                    except Exception as err:
+                        error_class = err.__class__.__name__
+                        detail = err.args[0]
+                        _, _, tb = sys.exc_info()
+                        line_number = traceback.extract_tb(tb)[-1][1]
+                        raise err.__class__("{} at line {}: {}".format(error_class, line_number, detail))
 
                 # Easter Egg
                 elif tokenlist[0].category == Token.PI:

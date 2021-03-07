@@ -17,18 +17,18 @@ A Fantasy Computer is neither a recreation of a computer that never existed. Pro
 
 Artemis is supposed to be a challenging fantasy computer. Can you create a fun game with the following limitations?
 
-- Using a fairly limited and slow Unstructured BASIC language. (Though improvements to the language may be incoming...)
 - 7 text modes to choose from, each a different compromise between number of characters and colors on the screen
 - 125 possible colors and 255 redefinable character glyphs
-- No graphical modes at all
+- No bitmap modes or sprites
+- Using an Unstructured BASIC language. (Python scripts are also supported for the squeamish.)
 
-As mentioned above JiBASIC is slow. This isn't a bug, it's a feature (or to be more accurate not a priority.) Artemis is explicitly not designed to be friendly to developing real-time action games. Turn-based, menu-driven and text-heavy games would be ideal.
+Interpreted languages are slow and Artemis is explicitly not designed to be friendly to developing real-time action games. Turn-based, menu-driven and text-heavy games would be ideal.
 
 Although limited, Artemis allows you develop using some modern tools:
 
-- IMPORT programs from a text-file, so you to write your code in your favourite editor
-- Integration with [playscii](http://vectorpoem.com/playscii/), a GUI you can design screens in
-- Load the character set from a PNG image
+- Integration with [playscii](http://vectorpoem.com/playscii/), a GUI you can design screens in.
+- Loading of the character set from a PNG image.
+- Importing BASIC programs and Python scripts from text-files. (Allowing development in your favourite editor.)
 
 ## Inspirations
 
@@ -74,7 +74,7 @@ pypresence for discord presence is an optional library. It will be used if prese
 
 Try typing `HELP` to open the [main interface documentation](main).
 
-### Example programs
+### Example BASIC programs
 
 A number of example programs are provided, you can find them on the EXAMPLES disk. Type `MOUNT EXAMPLES` to switch to the disk and `LIST S` to show the programs. Load using example using `LOAD <name>`, view it's source-code with `LIST` and run it with `RUN`.
 
