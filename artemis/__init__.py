@@ -716,14 +716,16 @@ def load_screen(screendump):
     except:
         raise Exception("Invalid File Format")
 
+def get_screen_dump():
+    # v is format version number
+    return {'v': 1, 'mode': __SCREEN_MODE,
+            'ink': [rgb_to_ink(i) for i in __PALLETTE],
+            'border': __BORDER_COL, 'data': screen}
+
 def dump_screen(filename = None):
     if filename == None:
         filename = time.strftime("%y%m%d%H%M%S")
-    # v is format version number
-    data = {'v': 1, 'mode': __SCREEN_MODE,
-            'ink': [rgb_to_ink(i) for i in __PALLETTE],
-            'border': __BORDER_COL, 'data': screen}
-    dos.write_data_file(data, filename, "sda")
+    dos.write_data_file(get_screen_dump(), filename, "sda")
 
 def rgb_to_ink(rgb):
     return [
