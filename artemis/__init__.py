@@ -131,9 +131,9 @@ def set_palette(index, r, g, b):
             raise ValueError("Invalid RGB value")
     if index < 0 or index > 15:
         raise ValueError("Invalid palette index")
-    __PALLETTE[index] = [int(round(r*63.75)),
-                         int(round(g*63.75)),
-                         int(round(b*63.75))]
+    __PALLETTE[index] = [int(round(int(r)*63.75)),
+                         int(round(int(g)*63.75)),
+                         int(round(int(b)*63.75))]
 
 def cls():
     global screen, __FOREGROUND_COL, __BACKGROUND_COL, __CURSOR_POS
