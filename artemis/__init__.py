@@ -51,8 +51,6 @@ __PALLETTE = __MASTER_PALLETTE[:__SCREEN_COLS]
 __FOREGROUND_COL = 1;
 __BACKGROUND_COL = 0;
 __BORDER_COL = 0;
-# Screen buffer, a tuplet for each cell
-screen = [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_BUFFER_SIZE)]
 __CURSOR = ord("_")
 __CURSOR_POS = 0
 __CURSOR_I_POS = 0
@@ -63,6 +61,68 @@ __INPUT_BUFFER_LIMIT = 128
 __ICON_CHARACTER = 239
 
 __FULLSCREEN = False
+
+# Screen buffer objects
+class ScreenCell():
+    def __init__(self, colors, data):
+        object.__setattr__(self, 'max_colors', int(colors))
+        self.set(data)
+
+    def set(self, data):
+        self.character = int(data[0])
+        self.foreground = int(data[1])
+        self.background = int(data[2])
+
+    def __setattr__(self, name, value):
+        if name == 'character':
+            if value < 0 or value > 255:
+                raise ValueError("Invalid character value, valid values are 0 - 255")
+        elif name == 'foreground' or name == 'background':
+            if value < 0 or value > self.max_colors:
+                raise ValueError("Invalid color value, valid values are 0 - {}".format(self.max_colors))
+        else:
+            raise AttributeError("ScreenCell has no attribute {}".format(name))
+        object.__setattr__(self, name, value)
+
+    def __setitem__(self, index, value):
+        if index == 0:
+            self.character = value
+            return
+        if index == 1:
+            self.foreground = value
+            return
+        if index == 2:
+            self.background = value
+            return
+        # Process anything else
+        __setattr__(self, index, value)
+
+    def __getitem__(self, index):
+        if index == 0:
+            return self.character
+        if index == 1:
+            return self.foreground
+        if index == 2:
+            return self.background
+        raise IndexError("Invalid index, ScreenCells have index 0 - 2")
+
+    def __len__(self):
+        return 3
+
+    def __repr__(self):
+        return "({},{},{})".format(
+            self.character,
+            self.foreground,
+            self.background
+        )
+
+def BuildNewScreen():
+    s = []
+    for _ in range(__SCREEN_BUFFER_SIZE):
+        s.append(ScreenCell(__SCREEN_COLS,(__SPACE, __FOREGROUND_COL, __BACKGROUND_COL)))
+    return s
+
+screen = BuildNewScreen()
 
 def __load_tile_table(filename, width = 8, height = 8):
     image = pygame.image.load(filename)
@@ -136,8 +196,9 @@ def set_palette(index, r, g, b):
                          int(round(int(b)*63.75))]
 
 def cls():
-    global screen, __FOREGROUND_COL, __BACKGROUND_COL, __CURSOR_POS
-    screen = [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_BUFFER_SIZE)]
+    global __CURSOR_POS, screen
+    screen.clear()
+    screen += BuildNewScreen()
     __CURSOR_POS = 0
 
     if __AUTO_DRAW:
@@ -243,7 +304,7 @@ def get_cell(pos):
 def set_cell(pos, cell):
     if pos < 0 or pos >= __SCREEN_BUFFER_SIZE:
         raise IndexError()
-    screen[pos] = cell
+    screen[pos].set(cell)
 
 def manipulate_cell(pos, key, val):
     global screen
@@ -259,7 +320,7 @@ def manipulate_cell(pos, key, val):
 def clear_cell(pos):
     if pos < 0 or pos >= __SCREEN_BUFFER_SIZE:
         raise IndexError()
-    screen[pos] = [__SPACE,  __FOREGROUND_COL, __BACKGROUND_COL]
+    screen[pos].set((__SPACE,  __FOREGROUND_COL, __BACKGROUND_COL))
 
 def set_border(col):
     global __BORDER_COL
@@ -305,8 +366,8 @@ def scroll_screen():
 
     if __CURSOR_POS < __SCREEN_BUFFER_SIZE: return
 
-    screen = screen[__SCREEN_WIDTH:]
-    screen += [[__SPACE,__FOREGROUND_COL,__BACKGROUND_COL] for _ in range(__SCREEN_WIDTH)]
+    del screen[:__SCREEN_WIDTH]
+    screen += [ScreenCell(__SCREEN_COLS,(__SPACE,__FOREGROUND_COL,__BACKGROUND_COL)) for _ in range(__SCREEN_WIDTH)]
     __CURSOR_POS -= __SCREEN_WIDTH
     __CURSOR_I_POS -= __SCREEN_WIDTH
 
@@ -338,6 +399,7 @@ def draw():
         __TEXT_SURFACE.blit(tile, ((__CURSOR_POS%__SCREEN_WIDTH)*8,
                                    (__CURSOR_POS//__SCREEN_WIDTH)*8))
         tile.set_colorkey(None)
+
     pygame.transform.scale(__TEXT_SURFACE, [640,400], __TEXT_SCALED_SURFACE)
     __SCREEN_SURFACE.fill(__PALLETTE[__BORDER_COL])
     __SCREEN_SURFACE.blit(__TEXT_SCALED_SURFACE, [16,16])
@@ -362,8 +424,11 @@ def set_cursor_symbol(symbol):
         raise ValueError('Value provided not a string')
     if symbol == "":
         raise ValueError('Value provided is an empty string')
+    cursor_ord = ord(symbol[:1])
+    if ord > 255:
+        raise ValueError('Character out of range')
 
-    __CURSOR = ord(symbol[:1])
+    __CURSOR = cursor_ord
 
 def get_cursor_x():
     return __CURSOR_POS%__SCREEN_WIDTH
@@ -389,12 +454,12 @@ def ui_print(text, do_draw = None):
     if do_draw == None: do_draw = __AUTO_DRAW
     text = str(text)
 
-    for i in list(text):
+    for i in [ord(c) for c in text]:
         # Deal with newlines
-        if i == "\n":
+        if i == 10:
             __CURSOR_POS +=  __SCREEN_WIDTH - (__CURSOR_POS % __SCREEN_WIDTH)
         else:
-            screen[__CURSOR_POS] = [ord(i), __FOREGROUND_COL, __BACKGROUND_COL]
+            screen[__CURSOR_POS].set((i if i <= 255 else 0, __FOREGROUND_COL, __BACKGROUND_COL))
             __CURSOR_POS += 1
         scroll_screen()
 
@@ -709,7 +774,7 @@ def load_screen(screendump):
                     char = min(255,max(0,i[0]))
                     fg = min(__SCREEN_COLS-1,max(0,i[1]))
                     bg = min(__SCREEN_COLS-1,max(0,i[2]))
-                    screen[pos] = [char,fg,bg]
+                    screen[pos].set(char,fg,bg)
                 pos += 1
                 if pos == __SCREEN_BUFFER_SIZE:
                     break
