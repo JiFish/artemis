@@ -704,12 +704,7 @@ class BASICParser:
                              + str(self.__line_number))
 
         try:
-            tass.process_string(notestr)
-            # Mode 2 -> loop the track
-            tass.play(-1 if mode == 2 else 1)
-            # Mode 1 -> wait until track finished
-            if mode == 1:
-                tass.wait_for_song()
+            tass.play_string(notestr, mode)
         except ValueError as e:
             raise ValueError(str(e) + ' in line '+ str(self.__line_number))
 

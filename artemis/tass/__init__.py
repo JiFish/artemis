@@ -139,6 +139,14 @@ def play(loops):
 def stop():
     pygame.mixer.music.stop()
 
+def play_string(notestr, mode):
+    process_string(notestr)
+    # Mode 2 -> loop the track
+    play(-1 if mode == 2 else 1)
+    # Mode 1 -> wait until track finished
+    if mode == 1:
+        wait_for_song()
+
 def wait_for_song():
     try:
         while pygame.mixer.music.get_busy():
