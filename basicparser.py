@@ -646,10 +646,13 @@ class BASICParser:
 
                 elif not left.endswith('$'):
                     try:
-                        self.__symbol_table[left] = int(right)
+                        if '.' in right:
+                           self.__symbol_table[left] = float(right)
+                       else:
+                           self.__symbol_table[left] = int(right)
 
                     except ValueError:
-                        raise ValueError('String input provided to a numeric variable ' +
+                        raise ValueError('Non-numeric input provided to a numeric variable ' +
                                          'in line ' + str(self.__line_number))
 
             except IndexError:
@@ -870,10 +873,13 @@ class BASICParser:
 
             elif not left.endswith('$'):
                 try:
-                    self.__symbol_table[left] = int(right)
+                    if '.' in right:
+                       self.__symbol_table[left] = float(right)
+                   else:
+                       self.__symbol_table[left] = int(right)
 
                 except ValueError:
-                    raise ValueError('String input provided to a numeric variable ' +
+                    raise ValueError('Non-numeric input provided to a numeric variable ' +
                                      'in line ' + str(self.__line_number))
 
     def __clsstmt(self):
