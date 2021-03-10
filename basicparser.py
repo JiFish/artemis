@@ -648,7 +648,7 @@ class BASICParser:
                     try:
                         if '.' in right:
                            self.__symbol_table[left] = float(right)
-                       else:
+                        else:
                            self.__symbol_table[left] = int(right)
 
                     except ValueError:
@@ -875,7 +875,7 @@ class BASICParser:
                 try:
                     if '.' in right:
                        self.__symbol_table[left] = float(right)
-                   else:
+                    else:
                        self.__symbol_table[left] = int(right)
 
                 except ValueError:
