@@ -257,34 +257,7 @@ def main():
 
                 # Easter Egg
                 elif tokenlist[0].category == Token.PI:
-                    from telnetlib import Telnet
-
-                    def getnext():
-                        global stritr
-                        out = next(stritr, None)
-                        while out == None:
-                            stritr = iter(list(tn.read_very_eager().decode('ascii')))
-                            out = next(stritr, None)
-                            artemis.draw()
-                            artemis.tick()
-                        return out
-
-                    artemis.set_mode(2)
-                    global stritr
-                    with Telnet('towel.blinkenlights.nl', 23) as tn:
-                        stritr = iter(list(tn.read_some().decode('ascii')))
-                        while 1:
-                            c = getnext()
-                            if c == chr(27):
-                                if getnext() == "[":
-                                    c = getnext()
-                                    if c == "H":
-                                        artemis.set_cursor(0,0)
-                            elif c == chr(13):
-                                pass
-                            else:
-                                artemis.ui_print(c, do_draw=False)
-                    #artemis.easter_egg()
+                    artemis.easter_egg()
 
                 # Unrecognised input
                 else:
