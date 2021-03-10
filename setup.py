@@ -17,7 +17,7 @@ bdist_msi_options = {
 
 base = 'Win32GUI' if sys.platform == 'win32' else None
 executables = [
-    Executable('interpreter.py', base=base, targetName="artemis",
+    Executable('run.py', base=base, targetName="artemis",
                icon="icon.ico", shortcutName="Artemis",
                shortcutDir="DesktopFolder")
 ]

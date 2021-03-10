@@ -21,9 +21,9 @@ line number.
 
 """
 
-from basictoken import BASICToken as Token
-from basicparser import BASICParser
-from flowsignal import FlowSignal
+from . import BASICToken as Token
+from . import BASICParser
+from . import FlowSignal
 import artemis
 
 dos = artemis.dos

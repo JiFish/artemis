@@ -119,7 +119,7 @@ class BASICToken:
         IMPORT          = 103 # Import program from text command
         BORDER          = 104 # Set border colour command
         CURSOR          = 105 # Set cursor position command
-
+        DIAL            = 106 # DIAL command
         WAITKEY         = 107 # WAITKEY command
         PEEKS           = 108 # PEEKS function
         POKES           = 109 # POKES command
@@ -174,7 +174,7 @@ class BASICToken:
 
         # Add JiBasic Cat Names
         catnames += ['COL', 'CLS', 'WAIT', 'IMPORT',
-        'BORDER', 'CURSOR', 'WAITKEY', 'PEEKS',
+        'BORDER', 'CURSOR', 'DIAL', 'WAITKEY', 'PEEKS',
         'POKES', 'SYMBOL', 'REFRESH', 'INK', 'MODE',
         'EXPORT', 'FILEIN', 'FILEOUT', 'FILEREAD',
         'SYMBOLIMG', 'MOUNT', 'FORMAT', 'UNLINK',
@@ -217,7 +217,7 @@ class BASICToken:
         keywords = {**keywords,
                     'COL': COL, 'CLS': CLS, 'WAIT': WAIT,
                     'IMPORT': IMPORT, 'BORDER': BORDER,
-                    'CURSOR': CURSOR,
+                    'CURSOR': CURSOR, 'DIAL': DIAL,
                     'WAITKEY': WAITKEY, 'PEEKS': PEEKS,
                     'POKES': POKES, 'SYMBOL': SYMBOL,
                     'REFRESH': REFRESH, 'INK':INK, 'MODE':MODE,

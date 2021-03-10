@@ -1,32 +1,7 @@
-#! /usr/bin/python
-
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-"""This class implements a BASIC interpreter that
-presents a prompt to the user. The user may input
-program statements, list them and run the program.
-The program may also be saved to disk and loaded
-again.
-
-"""
-
-from basictoken import BASICToken as Token
-from lexer import Lexer
-from program import Program
+import JiBASIC
+from JiBASIC import BASICToken as Token
 from sys import stderr, version_info
+
 import artemis
 import os, io, webbrowser, sys, traceback
 from datetime import date
@@ -43,20 +18,22 @@ try:
     RPC.update(state="On the CLI", large_image="artemis_icon")
 except ImportError:
     RPC = None
+except Exception:
+    pass
 
 def main():
     artemis.set_caption("Artemis Fantasy Microcomputer ({})".format(artemis.version))
     artemis.set_color(6)
     artemis.ui_print("Artemis Microcomputer {}{}\n\n".format(chr(176), date.today().year), do_draw=False)
-    artemis.ui_print(" JiBASIC / Python {}.{}.{}\n\n".format(version_info.major, version_info.minor, version_info.micro), do_draw=False)
+    artemis.ui_print("JiBASIC {} & Python {}.{}.{}\n\n".format(JiBASIC.version,version_info.major, version_info.minor, version_info.micro), do_draw=False)
     artemis.set_color(1)
     artemis.ui_print("Type HELP to open documentation.\n\n", do_draw=False)
     artemis.ui_print("READY\n", do_draw=False)
     for i in range(0,8):
         artemis.screen[31+i].set((214,(i+1)%8,i))
 
-    lexer = Lexer()
-    program = Program()
+    lexer = JiBASIC.Lexer()
+    program = JiBASIC.Program()
 
     # Continuously accept user input and act on it until
     # the user enters 'EXIT'
@@ -115,15 +92,15 @@ def main():
                         type = 'P'
 
                     if type == 'F':     # List files on the disk
-                        list = dos.list_disk()
+                        plist = dos.list_disk()
                     elif type == 'S':     # List files on the disk
-                        list = dos.list_disk(ext=".pfa")
+                        plist = dos.list_disk(ext=".pfa")
                     elif type == 'D':   # List all disks
-                        list = dos.list_all_disks()
+                        plist = dos.list_all_disks()
                     else:               # List Program
-                        list = program.list().splitlines()
+                        plist = program.list().splitlines()
 
-                    artemis.ui_print_breaking_list(list)
+                    artemis.ui_print_breaking_list(plist)
 
                 # Export the program to disk
                 elif tokenlist[0].category == Token.EXPORT:
@@ -254,15 +231,18 @@ def main():
                 elif tokenlist[0].category == Token.HELP:
                     webbrowser.open(_help_url)
 
+                # Online / DIAL
+                elif tokenlist[0].category == Token.DIAL:
+                    artemis.online.supply_basic(program, lexer)
+                    artemis.online.start(tokenlist[1].lexeme)
 
                 # Run Python script
                 elif tokenlist[0].category == Token.PY:
                     with open(tokenlist[1].lexeme, 'r') as infile:
                         pyprog = infile.read()
                         infile.close()
-                    from artemis import pybox
                     try:
-                        exec(pyprog, {"__builtins__":pybox.pyboxbuiltins})
+                        exec(pyprog, {"__builtins__":artemis.pybox.pyboxbuiltins})
                     except SyntaxError as err:
                         error_class = err.__class__.__name__
                         detail = err.args[0]
@@ -277,7 +257,34 @@ def main():
 
                 # Easter Egg
                 elif tokenlist[0].category == Token.PI:
-                    artemis.easter_egg()
+                    from telnetlib import Telnet
+
+                    def getnext():
+                        global stritr
+                        out = next(stritr, None)
+                        while out == None:
+                            stritr = iter(list(tn.read_very_eager().decode('ascii')))
+                            out = next(stritr, None)
+                            artemis.draw()
+                            artemis.tick()
+                        return out
+
+                    artemis.set_mode(2)
+                    global stritr
+                    with Telnet('towel.blinkenlights.nl', 23) as tn:
+                        stritr = iter(list(tn.read_some().decode('ascii')))
+                        while 1:
+                            c = getnext()
+                            if c == chr(27):
+                                if getnext() == "[":
+                                    c = getnext()
+                                    if c == "H":
+                                        artemis.set_cursor(0,0)
+                            elif c == chr(13):
+                                pass
+                            else:
+                                artemis.ui_print(c, do_draw=False)
+                    #artemis.easter_egg()
 
                 # Unrecognised input
                 else:
@@ -292,8 +299,3 @@ def main():
             artemis.ui_print(str(e)[1:-1]+"\n")
         except Exception as e:
             artemis.ui_print(str(e)+"\n")
-
-
-
-if __name__ == "__main__":
-    main()
