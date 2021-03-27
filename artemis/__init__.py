@@ -694,13 +694,8 @@ def ui_input(prompt = "", max_len = 0, file_drop = False):
                 extension = os.path.basename(event.file)
                 extension = os.path.splitext(extension)[-1].lower()
 
-                # Detected BASIC text file (BAS)
-                if extension == '.bas':
-                    flip_edit_mode()
-                    return 'IMPORT "{}"'.format(event.file)
-
                 # Detected Artemis Disk Image (ADI)
-                elif extension in ['.adi', '.zip']:
+                if extension in ['.adi', '.zip']:
                     flip_edit_mode()
                     return 'DSKIMPORT "{}"'.format(event.file)
 

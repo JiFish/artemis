@@ -8,22 +8,19 @@
 
 import os
 import json
-import pickle
-import zlib
 import zipfile
 from shutil import copy
 
 __HOME = os.path.expanduser('~/Documents/artemis')
-#_disc_capacity = 360 * 1024
 __MAX_NAME_SIZE = 32
-__DEFAULT_DISK = "HOME"
+__DEFAULT_DISK = "home"
 __CURRENT_DISK = __DEFAULT_DISK
 __EXAMPLES_PATH = 'examples/'
-__MAZE_PATH = 'MAZE/'
+__MAZE_PATH = 'maze/'
 
 def change_disk(diskname):
     global __CURRENT_DISK
-    diskname = clean_filename(diskname)
+    test_filename(diskname)
     path = __HOME+"/"+diskname
     if os.path.isfile(path):
         raise OSError("Given diskname is a file.")
@@ -91,17 +88,16 @@ def list_all_disks():
                     fcount, 's' if fcount != 1 else ''))
     return filelist
 
-def file_get_contents(filename, ext = None):
-    filename = clean_filename(filename)
-    filename += "." + ext
+def file_get_contents(filename):
+    test_filename(filename)
     if not os.path.isfile(filename):
-        raise OSError("File not found")
-    with open(filename) as f:
+        raise OSError("{}: File not found".format(filename))
+    with open(filename, 'r', encoding="latin-1") as f:
         return f.read()
 
-def file_put_contents(filename, ext, data):
-    filename = clean_filename(filename)
-    with open(filename + "." + ext, 'w') as f:
+def file_put_contents(filename, data):
+    test_filename(filename)
+    with open(filename, 'w', encoding="latin-1") as f:
         f.write(data)
 
 def file_remove(filename):
@@ -110,28 +106,6 @@ def file_remove(filename):
         raise OSError("File not found")
     os.remove(filename)
 
-def file_unpickle(filename, ext):
-    filename = clean_filename(filename)
-    filename += "." + ext
-    if not os.path.isfile(filename):
-        raise OSError("File not found")
-    with open(filename, 'rb') as infile:
-        obj = infile.read()
-        infile.close()
-    try:
-        obj = zlib.decompress(obj)
-    except: pass # Allow loading of PyBasic files... for now
-    obj = pickle.loads(obj)
-    return obj
-
-def file_pickle(filename, ext, obj):
-    filename = clean_filename(filename)
-    obj = pickle.dumps(obj)
-    obj = zlib.compress(obj)
-    with open(filename + "." + ext, 'wb') as outfile:
-        outfile.write(obj)
-        outfile.close()
-
 # Tester userinputted filename, INCLUDING extension
 def test_filename(filename):
     if filename.count(".") > 1:
@@ -139,16 +113,11 @@ def test_filename(filename):
     if not filename.replace(".","").isalnum():
         raise OSError("Invalid filename")
 
-def clean_filename(filename):
-    if not filename.isalnum() or len(filename) > __MAX_NAME_SIZE:
-        raise OSError("Invalid filename")
-    return filename.upper()
-
 def read_data_file(filename, ext = "dfa"):
-    return json.loads(file_get_contents(filename, ext))
+    return json.loads(file_get_contents(filename+"."+ext))
 
 def write_data_file(data, filename, ext = "dfa"):
-    file_put_contents(filename, ext,
+    file_put_contents(filename+"."+ext,
                       json.dumps(data, separators=(',', ':')))
 
 def append_data_file(data, filename, ext = "dfa"):
@@ -157,7 +126,7 @@ def append_data_file(data, filename, ext = "dfa"):
     write_data_file(data, filename, ext)
 
 def disk_has_autorun():
-    return os.path.isfile("AUTORUN.pfa")
+    return os.path.isfile("autorun.bas")
 
 def disk_export(fn = None):
     if fn == None: fn = __HOME+'/'+__CURRENT_DISK+'.adi'
@@ -188,16 +157,16 @@ def chdir_disk():
     os.chdir(__HOME+"/"+__CURRENT_DISK)
 
 # Import examples disk
-if not os.path.exists(__HOME+"/EXAMPLES") and os.path.exists(__EXAMPLES_PATH):
-    os.makedirs(__HOME+"/EXAMPLES")
+if not os.path.exists(__HOME+"/examples") and os.path.exists(__EXAMPLES_PATH):
+    os.makedirs(__HOME+"/examples")
     for entry in os.scandir(__EXAMPLES_PATH):
-        copy(__EXAMPLES_PATH+"/"+entry.name, __HOME+"/EXAMPLES")
+        copy(__EXAMPLES_PATH+"/"+entry.name, __HOME+"/examples")
 
 # Import MAZE disk
-if not os.path.exists(__HOME+"/MAZE") and os.path.exists(__MAZE_PATH):
-    os.makedirs(__HOME+"/MAZE")
+if not os.path.exists(__HOME+"/maze") and os.path.exists(__MAZE_PATH):
+    os.makedirs(__HOME+"/maze")
     for entry in os.scandir(__MAZE_PATH):
-        copy(__MAZE_PATH+"/"+entry.name, __HOME+"/MAZE")
+        copy(__MAZE_PATH+"/"+entry.name, __HOME+"/maze")
 
 # Switch to, and create, HOME disk
 change_disk(__CURRENT_DISK)

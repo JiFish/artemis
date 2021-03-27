@@ -94,7 +94,7 @@ def main():
                     if type == 'F':     # List files on the disk
                         plist = dos.list_disk()
                     elif type == 'S':     # List files on the disk
-                        plist = dos.list_disk(ext=".pfa")
+                        plist = dos.list_disk(ext=".bas")
                     elif type == 'D':   # List all disks
                         plist = dos.list_all_disks()
                     else:               # List Program
@@ -102,56 +102,22 @@ def main():
 
                     artemis.ui_print_breaking_list(plist)
 
-                # Export the program to disk
-                elif tokenlist[0].category == Token.EXPORT:
-                    # Use home dir as default instead of current disk
-                    dos.chdir_home()
-                    try:
-                        if len(tokenlist) == 1: raise ValueError("EXPORT command missing input")
-                        fn = tokenlist[1].lexeme
-                        if '.' not in fn: fn += ".bas"
-                        fn = os.path.realpath(fn)
-                        with open(fn, 'w') as outfile:
-                            outfile.write(program.list())
-                        artemis.ui_print('Program exported to "{}"\n'.format(fn))
-                    finally:    # Make sure we set the default location back
-                        dos.chdir_disk()
-
-                # Load the program from disk
                 # Save the program to disk
                 elif tokenlist[0].category == Token.SAVE:
                     if len(tokenlist) == 1: raise ValueError("SAVE command missing input")
-                    program.save(tokenlist[1].lexeme)
-                    artemis.ui_print("Program written to file\n")
+                    fn = tokenlist[1].lexeme
+                    if '.' not in fn: fn += ".bas"
+                    dos.file_put_contents(fn, program.list())
+                    artemis.ui_print('Program exported to "{}"\n'.format(fn))
 
                 # Load the program from disk
                 elif tokenlist[0].category == Token.LOAD:
                     if len(tokenlist) == 1: raise ValueError("LOAD command missing input")
-                    program.load(tokenlist[1].lexeme)
+                    fn = tokenlist[1].lexeme
+                    if '.' not in fn: fn += ".bas"
+                    lines = dos.file_get_contents(fn)
+                    program.load_full_program(lexer, lines)
                     artemis.ui_print("Program read from file\n")
-
-                # Load the program from disk
-                elif tokenlist[0].category == Token.IMPORT:
-                    if len(tokenlist) == 1: raise ValueError("IMPORT command missing input")
-                    # Use home dir as default instead of current disk
-                    dos.chdir_home()
-                    try:
-                        with open(tokenlist[1].lexeme, 'r') as infile:
-                            lines = infile.readlines()
-                            infile.close()
-                        program.delete()
-                        for line in lines:
-                            line = line.strip()
-                            if line == "": continue
-                            artemis.ui_print(line+"\n")
-                            program.add_stmt(lexer.tokenize(line))
-                        artemis.ui_print("\nProgram imported from file\n")
-
-                    except OSError:
-                        raise OSError("File not found")
-
-                    finally:    # Make sure we set the default location back
-                        dos.chdir_disk()
 
                 # Delete the program from memory
                 elif tokenlist[0].category == Token.NEW:
@@ -178,7 +144,8 @@ def main():
                     artemis.ui_print('Diskette "'+diskname+'" mounted.\n')
 
                     if dos.disk_has_autorun():
-                        program.load("AUTORUN")
+                        lines = dos.file_get_contents("autorun.bas")
+                        program.load_full_program(lexer, lines)
                         if RPC: RPC.update(state="Running disk "+diskname, large_image="artemis_icon")
                         try:
                             program.execute()

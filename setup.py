@@ -5,7 +5,7 @@ import sys
 # fine tuning.
 buildOptions = dict(packages = [],
                     excludes = ['email', 'html', 'http', 'pydoc_data', 'unittest', 'urllib', 'xml', 'numpy'],
-                    include_files = ['README.md', 'examples/', 'MAZE/', 'tools/'])
+                    include_files = ['README.md', 'examples/', 'maze/', 'tools/'])
 
 bdist_msi_options = {
     'upgrade_code': '{555c685a-f4ff-4d2b-a6e2-77e4ed4df05a}',

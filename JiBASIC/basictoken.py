@@ -116,7 +116,7 @@ class BASICToken:
         COL             = 100 # Set colors command
         CLS             = 101 # Clear screen command
         WAIT            = 102 # Wait command
-        IMPORT          = 103 # Import program from text command
+
         BORDER          = 104 # Set border colour command
         CURSOR          = 105 # Set cursor position command
         DIAL            = 106 # DIAL command
@@ -127,7 +127,7 @@ class BASICToken:
         REFRESH         = 111 # REFRESH command
         INK             = 112 # INK command
         MODE            = 113 # MODE command
-        EXPORT          = 114 # EXPORT command
+
         FILEIN          = 115 # FILEIN command
         FILEOUT         = 116 # FILEOUT command
         FILEREAD        = 117 # FILEREAD command
@@ -173,10 +173,10 @@ class BASICToken:
         catnames += [''] * (99 - len(catnames))
 
         # Add JiBasic Cat Names
-        catnames += ['COL', 'CLS', 'WAIT', 'IMPORT',
+        catnames += ['COL', 'CLS', 'WAIT',
         'BORDER', 'CURSOR', 'DIAL', 'WAITKEY', 'PEEKS',
         'POKES', 'SYMBOL', 'REFRESH', 'INK', 'MODE',
-        'EXPORT', 'FILEIN', 'FILEOUT', 'FILEREAD',
+        'FILEIN', 'FILEOUT', 'FILEREAD',
         'SYMBOLIMG', 'MOUNT', 'FORMAT', 'UNLINK',
         'MUSICPLAY', 'MUSICSTOP', 'KEY', 'SYSTIME',
         'LOADS', 'DUMPS', 'HELP', 'PRINTW', 'PLOT',
@@ -216,12 +216,12 @@ class BASICToken:
         # JiBasic Dictionary of BASIC reserved words
         keywords = {**keywords,
                     'COL': COL, 'CLS': CLS, 'WAIT': WAIT,
-                    'IMPORT': IMPORT, 'BORDER': BORDER,
+                    'BORDER': BORDER,
                     'CURSOR': CURSOR, 'DIAL': DIAL,
                     'WAITKEY': WAITKEY, 'PEEKS': PEEKS,
                     'POKES': POKES, 'SYMBOL': SYMBOL,
                     'REFRESH': REFRESH, 'INK':INK, 'MODE':MODE,
-                    'EXPORT':EXPORT, 'FILEIN':FILEIN,
+                    'FILEIN':FILEIN,
                     'FILEOUT': FILEOUT, 'FILEREAD': FILEREAD,
                     'SYMBOLIMG': SYMBOLIMG,
                     'MOUNT': MOUNT, 'FORMAT': FORMAT, 'UNLINK': UNLINK,

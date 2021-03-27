@@ -1,7 +1,7 @@
 import yaml, json, os
 from shutil import copy2
 
-outpath = 'build/MAZE/'
+outpath = 'build/maze/'
 
 if not os.path.exists(outpath):
     os.makedirs(outpath)
@@ -20,12 +20,13 @@ def lu(path, default):
     except KeyError:
         return default
 
-def add(path, default, upper = False):
+def add(path, default, upper = False, lower = False):
     global out
     o = lu(path, default)
     if upper: o = o.capitalize()
+    if lower: o = o.lower()
     out.append(o)
-    
+
 def item(path):
     global out, itemlist
     name = lu(path, False)
@@ -36,7 +37,7 @@ def item(path):
         if name not in itemlist:
             itemlist.append(name)
         out.append(itemlist.index(name))
-        
+
 
 # Rooms
 for i in y:
@@ -50,10 +51,10 @@ for i in y:
     add([i,'puzzle','new_desc'], "")
     item([i,'puzzle','reward'])
     for d in list("nesw"):
-        add([i,'exits',d,'load'], "", upper=True)
+        add([i,'exits',d,'load'], "", lower=True)
         add([i,'exits',d,'desc'], "")
         item([i,'exits',d,'prereq'])
-    
+
     # Import image
     try:
         with open('miniscreens/'+y[i]['img']) as json_file:
@@ -64,16 +65,15 @@ for i in y:
             out.append(c['bg']-1)
     except:
         out += [0]*5*5*3
-    
-    with open(outpath+i.upper()+".dfa", 'w') as f:
+
+    with open(outpath+i.lower()+".dfa", 'w') as f:
         f.write(json.dumps(out, separators=(',', ':')))
 
 # Items
 itemlist = [len(itemlist)] + itemlist
-with open(outpath+"ITEMS.dfa", 'w') as f:
+with open(outpath+"items.dfa", 'w') as f:
     f.write(json.dumps(itemlist, separators=(',', ':')))
 
 # Other files
-copy2('UI.sda', outpath)
-copy2('MAZE.bas', outpath)
-copy2('AUTORUN.pfa', outpath)
+copy2('ui.sda', outpath)
+copy2('autorun.bas', outpath)

@@ -26,8 +26,6 @@ from . import BASICParser
 from . import FlowSignal
 import artemis
 
-dos = artemis.dos
-
 
 class Program:
 
@@ -62,28 +60,6 @@ class Program:
             list = list+line+"\n"
 
         return list
-
-    def save(self, file):
-        """Save the program
-
-        :param file: The name and path of the save file
-
-        """
-        try:
-            dos.file_pickle(file, "pfa", self.__program)
-
-        except OSError as e:
-            raise OSError("Could not save to file: " + str(e))
-
-    def load(self, file):
-        """Load the program
-
-        :param file: The name and path of the file to be loaded"""
-        try:
-            self.__program = dos.file_unpickle(file, "pfa")
-
-        except OSError as e:
-            raise OSError("Could not read file: " + str(e))
 
     def add_stmt(self, tokenlist):
         """
@@ -324,3 +300,16 @@ class Program:
 
         """
         self.__next_stmt = line_number
+
+    def load_full_program(self, lexer, program):
+        self.delete()
+        lines = program.splitlines()
+        for line in lines:
+            line = line.strip()
+            if line == "": continue
+            try:
+                self.add_stmt(lexer.tokenize(line))
+            except Exception as e:
+                self.delete()
+                artemis.ui_print(line)
+                raise Exception("LOAD Error") from e

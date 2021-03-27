@@ -5,6 +5,8 @@
 
 When Artemis is loaded, you will be presented with a command input screen. From here you can create, load or save programs and a few perform a few other tasks.
 
+Actually writing a large program in this interface is not recommended. You can always write your program in a text editor and load it using **LOAD**.
+
 Programs may be listed using the **LIST** command:
 
 ```
@@ -30,7 +32,7 @@ Program written to file
 >
 ```
 
-Note the saved file is *not* a textual copy of the program statements. For that see **EXPORT**.
+Note the saved program may be formatted differently from as entered. The reformatting is the same used with the **LIST** command.
 
 The program may be re-loaded from disk using the **LOAD** command:
 
@@ -40,9 +42,9 @@ Program read from file
 >
 ```
 
-Actually writing a large program in this interface is not recommended. See the **IMPORT** command below to load a text file of program statements.
+If an error is detected while loading a program, the offending line will be printed along with the error and no program will be loaded.
 
-Files are saved to the user's documents directory in the subdirectory `artemis/HOME/`. See below for more information.
+Files are saved to the user's documents directory in the subdirectory `artemis/HOME/` with the `.bas` extension. See below for more information.
 
 Individual program statements may be deleted by entering their line number only:
 
@@ -122,21 +124,13 @@ The following disk commands are available:
 - **UNLINK** x - Delete the file called *x* on the current disk. The file extension must be included.
 - **FORMAT** - Delete all files on the current disk.
 
-## Importing and Exporting
+### autorun.bas
+
+If you mount a disk containing a file named `autorun.bas`, that program will be automatically loaded and run. Please note this will also clear any program currently in memory, so take care when switching disks.
+
+## Importing and Exporting disks
 
 Unlike other commands, these allow you to specify a path anywhere on your computer and are not subject to the Disk system rules above. Paths must be in quotes. The default directory is `artemis` in your Documents directory.
-
-**IMPORT** x - Load *x*, a text file of basic instructions as a program. Note that no interpretation is done as such. Instead this file in fed in line by line, aborting on an error. The file extension must be included.
-
-**TIP: You can also drag and drop `.bas` files on to the Artemis window to import them.**
-
-**EXPORT** x - Export the current program's instructions to text file *x*. This is not a recommended way of saving a program. Uses `.bas` if an extension is not provided.
-
-```
-> 10 PRINT "HELLO WORLD"
-> EXPORT "myfile.bas"
-Program exported to "c:\users\you\Documents\artemis\myfile.bas"
-```
 
 **DSKIMPORT** x - Imports *x*, an `.dia` Artemis disk file. This will overwrite an existing disk with the same name if one exists. Once the disk has been imported, it is automatically mounted.
 
