@@ -5,7 +5,7 @@ Artemis is supposed to be a challenging fantasy computer. Can you create a fun g
 - 7 text modes to choose from, each a different compromise between number of characters and colors on the screen
 - 125 possible colors and 255 redefinable character glyphs
 - No bitmap modes or sprites
-- Using an Unstructured BASIC language. (Python scripts are supported as an alternative.)
+- Using an Unstructured BASIC language (or Python if you prefer.)
 
 Although limited, Artemis allows you develop using some modern tools:
 

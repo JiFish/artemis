@@ -39,7 +39,7 @@ The following additional functions are available to help you control Artemis.
 - **system_time**() - Return the time the system has been active in seconds. This value includes fractions of a second.
 - **wait**(secs) - Pauses execution for *secs* seconds. *secs* can include a decimal point to allow sub-second waiting. Note: this command is not particularly accurate and you should expect the actual wait time to be +/-0.04 seconds at the least.
 
-### Screen module
+## Screen module
 
 Screen functions are accessed via `screen`, e.g. `screen.cls()`.
 
@@ -52,7 +52,7 @@ Screen functions are accessed via `screen`, e.g. `screen.cls()`.
 - **cursor_y**() - Returns the cursor's Y position
 - **dumps**() - Returns a dictionary representing the current state of the screen, including mode, ink, border and previously printed characters.
 - **ink**(index, r, g, b) - Change the pallete at _index_. _r_, _g_ and _b_ can be integers from 0 - 4, giving 125 possible colors.
-- **loads**(screendump) - Load screen data from dictionary *screendump* in to the screen. This data is in the same format as created by the **dumps** funtion. The screen mode, ink and border color is changed if needed. The change won't be visible until the screen is next drawn.
+- **loads**(screendump) - Load screen data from dictionary *screendump* in to the screen. This data is in the same format as created by the **dumps** function. The screen mode, ink and border color is changed if needed. The change won't be visible until the screen is next drawn.
 - **mode**(mode) - Change the screen mode to _mode_.
 
 Available modes:
@@ -76,13 +76,13 @@ Mode | Characters | Colors | Pixel shape | Notes
 - **symbol**(chr, charstring) - Redefine the bitmap of the character with the code *chr*. *charstring* is a string that represents the new bitmap. Each character in the string represents one pixel starting at the top-left. Use a space for the background and any other character for the foreground. If *y$* is an empty string, the character will be reset to the default.
 - **symbol_image**(filename) - Load a complete set of characters from image with filename specified by *filename*. This image should be 128 x 128 pixels, with each 8x8 cell containing a character. Black is treated as the background and any other color as foreground. The file should be placed in a disk directory and using a artemis-friendly filename. A number of image types are supported, but a PNG is recommended.
 
-#### Direct screen access
+### Direct screen access
 
 Direct access to the screen cells is provided via the `screen.screen` object, which contains a ScreenCell object for each cell. You can access cells with their Index, which starts with 0 at the top left of the screen. The total number of cells is determined by the current screen mode. `screen.screen` can be iterated.
 
 Don't hold on to the returned ScreenCell objects as they may become stale.
 
-##### ScreenCell Objects
+#### ScreenCell Objects
 
 Each ScreenCell contains the character, foreground and background colors for that cell.
 
@@ -136,7 +136,7 @@ for i in range(len(scr)-1,0,-1):
     scr[i].set(scr[i-1])
 ```
 
-### Sound module
+## Sound module
 
 Sound functions are accessed via `sound`. e.g. `sound.stop()`
 
