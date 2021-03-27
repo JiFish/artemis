@@ -769,7 +769,7 @@ def load_screen(screendump):
                     char = min(255,max(0,i[0]))
                     fg = min(__SCREEN_COLS-1,max(0,i[1]))
                     bg = min(__SCREEN_COLS-1,max(0,i[2]))
-                    screen[pos].set(char,fg,bg)
+                    screen[pos].set((char,fg,bg))
                 pos += 1
                 if pos == __SCREEN_BUFFER_SIZE:
                     break
