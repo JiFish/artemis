@@ -405,17 +405,25 @@ def draw():
     __SCREEN_SURFACE.blit(__TEXT_SCALED_SURFACE, [16,16])
     pygame.display.flip()
 
-def set_cursor(x, y):
+def set_cursor(x, y = None):
     global __CURSOR_POS
 
-    if not isinstance(x, int) or not isinstance(y, int):
-        raise ValueError('Value provided not a number')
-    if (x < 0 or x >= __SCREEN_WIDTH):
-        raise ValueError('X position out of range')
-    if (y < 0 or y >= __SCREEN_HEIGHT):
-        raise ValueError('Y position out of range')
+    if not isinstance(x, int):
+        raise ValueError('Value provided not an integer')
 
-    __CURSOR_POS = (y*__SCREEN_WIDTH)+x
+    if y == None:
+        if (x < 0 or x >= __SCREEN_BUFFER_SIZE):
+            raise ValueError('Position out of range')
+        __CURSOR_POS = x
+
+    else:
+        if not isinstance(y, int):
+            raise ValueError('Value provided not an integer')
+        if (x < 0 or x >= __SCREEN_WIDTH):
+            raise ValueError('X position out of range')
+        if (y < 0 or y >= __SCREEN_HEIGHT):
+            raise ValueError('Y position out of range')
+        __CURSOR_POS = (y*__SCREEN_WIDTH)+x
 
 def set_cursor_symbol(symbol):
     global __CURSOR
@@ -435,6 +443,9 @@ def get_cursor_x():
 
 def get_cursor_y():
     return __CURSOR_POS//__SCREEN_WIDTH
+
+def get_cursor():
+    return __CURSOR_POS
 
 def set_color(f, b = -1):
     global __FOREGROUND_COL, __BACKGROUND_COL
@@ -555,7 +566,7 @@ def ui_print_breaking_list(text, prompt = "- PRESS ANY KEY TO CONTINUE -"):
     # Construct plist
     plist = []
     thisline = ""
-    pos = 0
+    pos = get_cursor_x()
     for c in text:
         # newline by character
         if c == chr(10):
@@ -573,10 +584,6 @@ def ui_print_breaking_list(text, prompt = "- PRESS ANY KEY TO CONTINUE -"):
     # last line
     if pos > 0:
         plist.append(thisline+"\n")
-
-    # Cursor must start at the beginning of a row
-    # Move back until we are
-    __CURSOR_POS = (__CURSOR_POS//__SCREEN_WIDTH)*__SCREEN_WIDTH
 
     # Do breaking printing
     line_countdown = __SCREEN_HEIGHT - 1
@@ -689,7 +696,7 @@ def ui_input(prompt = "", max_len = 0, file_drop = False):
                 else:
                     dirty = False
 
-            # Drag and drop .bas file
+            # Drag and drop file
             elif file_drop and event.type == pygame.DROPFILE:
                 extension = os.path.basename(event.file)
                 extension = os.path.splitext(extension)[-1].lower()
