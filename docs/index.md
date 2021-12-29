@@ -1,5 +1,6 @@
 - **[The Main Interface](main)**
-- **[Programming Reference](programming)**
+- **[BASIC Programming Reference](programming)**
+- **[Python Programming Reference](python)**
 
 # Artemis - A Fantasy Microcomputer
 

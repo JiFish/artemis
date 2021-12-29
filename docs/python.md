@@ -1,3 +1,7 @@
+- **[Home](.)**
+- **[The Main Interface](main)**
+- **[BASIC Programming Reference](programming)**
+
 # Artemis and Python
 
 You can write your programs for Artemis using the python language. This is an easier and more modern way to develop your program.

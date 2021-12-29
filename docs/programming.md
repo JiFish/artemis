@@ -1,5 +1,6 @@
 - **[Home](.)**
 - **[The Main Interface](main)**
+- **[Python Programming Reference](python)**
 
 # JiBASIC Programming language
 

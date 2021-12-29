@@ -1,5 +1,6 @@
 - **[Home](.)**
-- **[Programming Reference](programming)**
+- **[BASIC Programming Reference](programming)**
+- **[Python Programming Reference](python)**
 
 # The Main Interface
 
