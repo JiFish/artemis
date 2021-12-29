@@ -4,6 +4,12 @@ You can write your programs for Artemis using the python language. This is an ea
 
 This documentation is not intended to be a python tutorial. Instead it will instruct those who are already familiar with python on what features are available.
 
+Run python scripts using the **PY** command on the main interface. e.g.
+
+```
+> PY "MYPROGRAM.PY"
+```
+
 ## Builtins
 
 Most of the standard builtins are provided with a few differences:
