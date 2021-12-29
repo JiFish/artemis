@@ -646,10 +646,10 @@ class BASICParser:
 
                 elif not left.endswith('$'):
                     try:
-                        if '.' in right:
-                           self.__symbol_table[left] = float(right)
-                        else:
-                           self.__symbol_table[left] = int(right)
+                        numeric = float(right)
+                        if numeric.is_integer():
+                            numeric = int(numeric)
+                        self.__symbol_table[left] = numeric
 
                     except ValueError:
                         raise ValueError('Non-numeric input provided to a numeric variable ' +
@@ -873,10 +873,10 @@ class BASICParser:
 
             elif not left.endswith('$'):
                 try:
-                    if '.' in right:
-                       self.__symbol_table[left] = float(right)
-                    else:
-                       self.__symbol_table[left] = int(right)
+                    numeric = float(right)
+                    if numeric.is_integer():
+                        numeric = int(numeric)
+                    self.__symbol_table[left] = numeric
 
                 except ValueError:
                     raise ValueError('Non-numeric input provided to a numeric variable ' +
