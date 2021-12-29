@@ -11,7 +11,7 @@ Download the latest release from the [Releases](https://github.com/JiFish/artemi
 
 ## What is a Fantasy Computer?
 
-A Fantasy Computer is neither a recreation of a computer that never existed. Providing a platform to create software with the limitations of older machines. The idea is to be inspired and challenged by these constants.
+A Fantasy Computer is a recreation of a computer that never existed. Providing a platform to create software with the limitations of older machines. The idea is to be inspired and challenged by these constants.
 
 ## Why Artemis?
 
