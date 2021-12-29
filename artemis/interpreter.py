@@ -115,7 +115,11 @@ def main():
                     if len(tokenlist) == 1: raise ValueError("LOAD command missing input")
                     fn = tokenlist[1].lexeme
                     if '.' not in fn: fn += ".bas"
-                    lines = dos.file_get_contents(fn)
+                    try:
+                        lines = dos.file_get_contents(fn)
+                    except OSError:
+                        artemis.ui_print("Program not found.\n")
+                        continue
                     program.load_full_program(lexer, lines)
                     artemis.ui_print("Program read from file\n")
 
