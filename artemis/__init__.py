@@ -9,6 +9,10 @@
 # This is something I want to improve, but the whole thing needs a refactor first.
 #
 
+debug = False
+fps_flag = False
+version = "0.7 beta"
+
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
@@ -27,10 +31,6 @@ from artemis import dos
 from artemis import tass
 
 __activation_time = time.time()
-
-debug = False
-fps_flag = False
-version = "0.7 beta"
 
 # automatically draw after some commands
 __AUTO_DRAW = True
