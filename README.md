@@ -34,7 +34,7 @@ pip install pygame midiutil
 
 Then to start...
 ```
-python interpreter.py
+python run.py
 ```
 
 pypresence for discord presence is an optional library. It will be used if present.
